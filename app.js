@@ -26,8 +26,17 @@ $$("[data-auth]").forEach(b=>b.addEventListener("click",()=>openAuth(b.dataset.a
 // DATOVA Supabase connection (publishable key is designed for browser use; RLS protects data).
 const SUPABASE_URL="https://lqfmgzfdpamaenrtbjat.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_jnPRVfYqcu2W0DCdTYX3_g_SMJte69z";
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+let supabaseClient=null;
+let supabaseReady=false;
 let currentUser=null;
+try{
+ if(window.supabase&&typeof window.supabase.createClient==="function"){
+  supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+  supabaseReady=true;
+ }else{
+  console.warn("Supabase library did not load; DATOVA will open in preview mode.");
+ }
+}catch(initError){console.error("Supabase initialization failed:",initError);}
 function renderAccount(user){
  currentUser=user||null;
  const signedIn=!!user;
@@ -37,8 +46,10 @@ function renderAccount(user){
  $(".profile-main p").textContent=signedIn?(user.email||"You're signed in to DATOVA."):"Sign in or create an account to manage your DATOVA profile.";
  $("#accountBtn").textContent=signedIn?(user.user_metadata?.full_name||user.email||"D").trim().charAt(0).toUpperCase():"G";
 }
-supabaseClient.auth.getSession().then(({data,error})=>{if(error)toast(error.message);renderAccount(data?.session?.user||null)});
-supabaseClient.auth.onAuthStateChange((_event,session)=>renderAccount(session?.user||null));
+if(supabaseReady){
+ supabaseClient.auth.getSession().then(({data,error})=>{if(error)toast(error.message);renderAccount(data?.session?.user||null)}).catch(()=>toast("Account service is temporarily unavailable."));
+ supabaseClient.auth.onAuthStateChange((_event,session)=>renderAccount(session?.user||null));
+}else{renderAccount(null);}
 $("#authForm").addEventListener("submit",async e=>{
  e.preventDefault();
  const mode=$('[data-auth].selected')?.dataset.auth||"login";
@@ -48,6 +59,7 @@ $("#authForm").addEventListener("submit",async e=>{
  const submit=$("#authForm button[type="submit]");
  submit.disabled=true;submit.textContent="Please wait…";
  try{
+  if(!supabaseReady)throw new Error("Account service could not load. Please refresh and try again.");
   if(mode==="signup"){
    if(!fullName){toast("Enter your full name.");return}
    const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:fullName}}});
@@ -63,6 +75,7 @@ $("#authForm").addEventListener("submit",async e=>{
  finally{submit.disabled=false;submit.innerHTML='Continue <b>→</b>';}
 });
 $("#profileSignOut").addEventListener("click",async()=>{
+ if(!supabaseReady){toast("Account service is unavailable.");return}
  const {error}=await supabaseClient.auth.signOut();
  if(error)toast(error.message);else{renderAccount(null);toast("You have signed out.");}
 });
