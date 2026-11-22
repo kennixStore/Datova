@@ -66,7 +66,7 @@ $("#authForm").addEventListener("submit",async e=>{
  const email=$('#authForm input[type="email"]').value.trim();
  const password=$('#authForm input[type="password"]').value;
  const fullName=$("#fullName").value.trim();
- const submit=$("#authForm button[type="submit]");
+ const submit=$("#authForm button[type='submit']");
  submit.disabled=true;submit.textContent="Please wait…";
  try{
   if(!supabaseReady)throw new Error("Account service could not load. Please refresh and try again.");
