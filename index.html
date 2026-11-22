@@ -9,27 +9,9 @@
 <link rel="stylesheet" href="styles.css"><title>DATOVA — Digital services, made easy</title>
 </head>
 <body>
-<div id="splash" class="splash">
- <div class="splash-glow"></div>
- <div class="splash-mark">
-  <svg class="morph-logo" viewBox="0 0 128 128" role="img" aria-label="DATOVA symbol">
-   <defs><linearGradient id="logoGlow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b8efff"/><stop offset=".52" stop-color="#2588ff"/><stop offset="1" stop-color="#e2f8ff"/></linearGradient></defs>
-   <circle class="orbit-ring" cx="64" cy="64" r="49"/>
-   <path class="morph-path" d="M64 15 C91 15 113 37 113 64 C113 91 91 113 64 113 C37 113 15 91 15 64 C15 37 37 15 64 15">
-    <animate attributeName="d" begin=".55s" dur="1.25s" fill="freeze" calcMode="spline" keySplines=".42 0 .58 1" values="M64 15 C91 15 113 37 113 64 C113 91 91 113 64 113 C37 113 15 91 15 64 C15 37 37 15 64 15;M43 15 C82 15 113 36 113 64 C113 92 82 113 43 113 C43 80 43 48 43 15"/>
-   </path>
-   <path class="logo-core" d="M55 34 C78 34 94 46 94 64 C94 82 78 94 55 94"/>
-  </svg>
- </div>
- <div class="splash-name">DATOVA</div>
- <div class="splash-tag">Data Made Easy. Connections Made Better.</div>
- <div class="splash-loader" aria-label="Loading"><i></i><i></i><i></i></div>
-</div>
-<div id="onboarding" class="onboarding hidden">
- <button class="skip" id="skipIntro">Skip</button><div class="intro-art"><div class="orbit o1"></div><div class="orbit o2"></div><div class="intro-icon" id="introIcon">⌁</div></div>
- <div class="intro-copy"><div class="eyebrow" id="introStep">WELCOME TO DATOVA</div><h1 id="introTitle">Your digital world,<br><span>made easier.</span></h1><p id="introText">A simpler way to stay connected. Get the essentials you need, all in one place.</p></div>
- <div class="intro-bottom"><div class="dots" id="introDots"><i class="active"></i><i></i><i></i><i></i></div><div class="intro-actions"><button class="back hidden" id="introBack">Back</button><button class="primary" id="introNext">Next <b>→</b></button></div></div>
-</div>
+<div id="splash" class="splash"><div class="splash-ambient"></div><div class="splash-brand"><img src="datova-mark.svg" class="splash-logo" alt="DATOVA logo"><div class="splash-name">DATOVA</div><div class="splash-tag">Data Made Easy. Connections Made Better.</div><div class="splash-loader" aria-label="Loading"><i></i><i></i><i></i></div></div><div class="splash-earth" aria-hidden="true"><div class="earth-grid"></div><div class="earth-glow"></div></div></div>
+<div id="onboarding" class="onboarding hidden"><button class="skip" id="skipIntro">Skip</button><div class="intro-art" id="introArt" data-art="globe"><div class="art-scene" id="introVisual"></div></div><div class="intro-copy"><div class="eyebrow" id="introStep">YOUR DIGITAL WORLD</div><h1 id="introTitle">Your Digital<br><span>World, Made Easier.</span></h1><p id="introText">Stay connected and enjoy the best services.</p></div><div class="intro-bottom"><div class="dots" id="introDots"><i class="active"></i><i></i><i></i></div><div class="intro-actions"><button class="back hidden" id="introBack">← Back</button><button class="primary" id="introNext">Next <b>→</b></button></div></div></div>
+<div id="welcomeGate" class="welcome-gate hidden"><div class="gate-city" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="gate-content"><img src="datova-mark.svg" class="gate-logo" alt="DATOVA logo"><h1>Welcome to<br><span>DATOVA</span></h1><p>Everything you need,<br>one place.</p><button class="gate-primary" id="gateCreate">Create Account</button><button class="gate-secondary" id="gateLogin">Log In</button><div class="gate-or"><span></span>or<span></span></div><button class="google-button" id="googleAuth"><b>G</b> Continue with Google</button><button class="guest-link" id="exploreGuest">Explore as Guest →</button></div></div>
 <div id="app" class="app hidden">
 <header class="topbar"><a class="brand" href="#"><img class="brand-icon" src="icon.svg" alt=""><span>DATOVA</span></a><div class="top-actions"><button class="icon-btn" id="themeToggle" aria-label="Toggle theme">◐</button><button class="avatar" id="accountBtn">G</button></div></header>
 <main class="layout">
