@@ -112,5 +112,5 @@ $("#airContinue").addEventListener("click",()=>{const n=$("#airNetwork").value,p
 $$(".filter-chip").forEach(b=>b.addEventListener("click",()=>{$$(".filter-chip").forEach(x=>x.classList.remove("active"));b.classList.add("active");toast("Transaction filters will work when account history is connected.")}));
 renderSlide();
 const sessionCheck=supabaseReady?supabaseClient.auth.getSession().then(({data})=>data?.session?.user||null).catch(()=>null):Promise.resolve(null);
-setTimeout(async()=>{splash.classList.add("out");const signedInUser=await sessionCheck;setTimeout(()=>{splash.remove();if(signedInUser){renderAccount(signedInUser);showApp()}else if(localStorage.getItem("datova_intro_seen"))showWelcomeGate();else intro.classList.remove("hidden")},550)},2200);
+setTimeout(async()=>{splash.classList.add("out");const signedInUser=await sessionCheck;setTimeout(()=>{splash.remove();if(signedInUser){renderAccount(signedInUser);showApp()}else if(localStorage.getItem("datova_intro_seen"))showApp();else intro.classList.remove("hidden")},550)},2200);
 if("serviceWorker" in navigator&&location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
