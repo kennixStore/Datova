@@ -105,8 +105,21 @@ $("#profileSignOut").addEventListener("click",async()=>{
  const {error}=await supabaseClient.auth.signOut();
  if(error)toast(error.message);else{renderAccount(null);toast("You have signed out.");}
 });
-$("#themeToggle").addEventListener("click",()=>{document.body.classList.toggle("dark");localStorage.setItem("datova_theme",document.body.classList.contains("dark")?"dark":"light")});
-if(localStorage.getItem("datova_theme")==="dark")document.body.classList.add("dark");
+function applyTheme(isDark,save=true){
+ document.body.classList.toggle("dark",isDark);
+ const control=$("#themeToggle");
+ if(control){
+  control.setAttribute("aria-checked",String(isDark));
+  control.setAttribute("aria-label",isDark?"Switch to light mode":"Switch to dark mode");
+  const icon=control.querySelector(".theme-switch-icon");
+  const label=control.querySelector(".theme-switch-label");
+  if(icon)icon.textContent=isDark?"☾":"☀";
+  if(label)label.textContent=isDark?"Dark":"Light";
+ }
+ if(save)localStorage.setItem("datova_theme",isDark?"dark":"light");
+}
+$("#themeToggle").addEventListener("click",()=>applyTheme(!document.body.classList.contains("dark")));
+applyTheme(localStorage.getItem("datova_theme")==="dark",false);
 const plans={MTN:["500 MB — 30 days","1 GB — 30 days","2 GB — 30 days","5 GB — 30 days"],Airtel:["500 MB — 30 days","1 GB — 30 days","2 GB — 30 days","5 GB — 30 days"],Glo:["1 GB — 30 days","2 GB — 30 days","3 GB — 30 days","5 GB — 30 days"],"9mobile":["500 MB — 30 days","1 GB — 30 days","2 GB — 30 days"]};
 $("#dataNetwork").addEventListener("change",e=>{$("#dataPlan").innerHTML='<option value="">Select a sample plan</option>'+(plans[e.target.value]||[]).map(p=>'<option>'+p+'</option>').join("")});
 $("#dataContinue").addEventListener("click",()=>{const n=$("#dataNetwork").value,p=$("#dataPhone").value,plan=$("#dataPlan").value;if(!n||!/^0\d{10}$/.test(p)||!plan){toast("Select a network, enter a valid 11-digit number and choose a plan.");return}toast("Preview only: data purchases are not connected yet.")});
