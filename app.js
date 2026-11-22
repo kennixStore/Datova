@@ -152,6 +152,23 @@ $("#dataNetwork").addEventListener("change",e=>{$("#dataPlan").innerHTML='<optio
 $("#dataContinue").addEventListener("click",()=>{const n=$("#dataNetwork").value,p=$("#dataPhone").value,plan=$("#dataPlan").value;if(!n||!/^0\d{10}$/.test(p)||!plan){toast("Select a network, enter a valid 11-digit number and choose a plan.");return}toast("Preview only: data purchases are not connected yet.")});
 $("#airContinue").addEventListener("click",()=>{const n=$("#airNetwork").value,p=$("#airPhone").value,a=Number($("#airAmount").value);if(!n||!/^0\d{10}$/.test(p)||!Number.isFinite(a)||a<50||a>50000){toast("Check the network, phone number and amount (₦50–₦50,000).");return}toast("Preview only: airtime purchases are not connected yet.")});
 $$(".filter-chip").forEach(b=>b.addEventListener("click",()=>{$$(".filter-chip").forEach(x=>x.classList.remove("active"));b.classList.add("active");toast("Transaction filters will work when account history is connected.")}));
+// Wallet balance visibility preview. Live wallet data is not connected yet.
+let walletBalanceVisible=false;
+function updateWalletBalanceVisibility(){
+ const amount=$("#walletAmountValue");
+ const control=$("#walletVisibility");
+ if(amount)amount.textContent=walletBalanceVisible?"0.00":"••••••";
+ if(control){
+  control.setAttribute("aria-pressed",String(walletBalanceVisible));
+  control.setAttribute("aria-label",walletBalanceVisible?"Hide balance":"Show balance");
+  control.innerHTML=walletBalanceVisible?'◉ <span>Hide</span>':'◎ <span>Show</span>';
+ }
+}
+$("#walletVisibility")?.addEventListener("click",()=>{
+ walletBalanceVisible=!walletBalanceVisible;
+ updateWalletBalanceVisibility();
+});
+updateWalletBalanceVisibility();
 renderSlide();
 // Do not let a slow or blocked auth request keep the splash screen open.
 const sessionCheck=supabaseReady
