@@ -28,28 +28,48 @@
 <div class="side-bottom"><div class="help-card"><div class="help-orb">?</div><b>Need a hand?</b><p>Find answers and get help with DATOVA.</p><button class="help-link" data-screen="support">Visit support →</button></div><button class="nav-item" id="loginSide">⇥ <span>Sign in</span></button></div></aside>
 <section class="content">
 <div class="screen active" id="screen-overview">
-<div class="welcome-row"><div><div class="eyebrow" id="greetingEyebrow">YOUR DIGITAL SPACE</div><h1 id="greetingTitle">Good afternoon, Guest</h1><p id="greetingSubtitle">Your everyday digital services, in one place.</p></div><div class="date-pill"><span class="live-dot"></span> Your space is ready</div></div>
+<div class="welcome-row">
+ <div class="welcome-copy">
+  <div class="eyebrow" id="greetingEyebrow">YOUR DIGITAL SPACE</div>
+  <div class="greeting-line"><button class="greeting-avatar" id="greetingAvatar" aria-label="Open profile">G</button><div><h1 id="greetingTitle">Good afternoon, Guest</h1><p id="greetingSubtitle">Your everyday digital services, in one place.</p></div></div>
+ </div>
+ <div class="date-pill"><span class="live-dot"></span> Your space is ready</div>
+</div>
+<section class="mini-account-row">
+ <button class="mini-wallet-card" data-screen="wallet"><span class="mini-wallet-icon">◈</span><span class="mini-wallet-copy"><small>YOUR DATOVA WALLET</small><strong id="miniWalletValue">Sign in to view balance</strong><em>Wallet overview <b>→</b></em></span><span class="mini-wallet-orbit" aria-hidden="true"></span></button>
+ <div class="account-note"><span class="account-note-dot"></span><div><b>Stay in control</b><small>Keep track of your services and activity in one place.</small></div></div>
+</section>
 <section class="dashboard-section service-showcase">
-<div class="section-head"><div><span class="section-kicker">DATOVA SERVICES</span><h2>What would you like to do?</h2><p>Swipe to explore our services.</p></div></div>
-<div class="horizontal-rail service-rail" aria-label="DATOVA services">
-<button class="service-tile data-tile" data-screen="data"><span class="tile-icon">▤</span><span class="tile-label">MOBILE DATA</span><strong>Buy Data</strong><small>Affordable bundles across your favourite networks.</small><i>Explore →</i></button>
-<button class="service-tile airtime-tile" data-screen="airtime"><span class="tile-icon">◉</span><span class="tile-label">INSTANT RECHARGE</span><strong>Buy Airtime</strong><small>Top up MTN, Airtel, Glo and 9mobile.</small><i>Recharge →</i></button>
-<div class="service-tile coming-tile"><span class="tile-icon">✦</span><span class="tile-label">MORE TO COME</span><strong>Other Services</strong><small>More digital essentials are on the way.</small><i class="coming-label">COMING SOON</i></div>
-</div>
+ <div class="section-head"><div><span class="section-kicker">DATOVA SERVICES</span><h2>What would you like to do?</h2><p>Swipe to explore our services.</p></div></div>
+ <div class="horizontal-rail service-rail" aria-label="DATOVA services">
+  <button class="service-tile data-tile" data-screen="data"><span class="tile-icon">▤</span><strong>Buy Data</strong><small>Explore affordable bundles on your preferred network.</small><i>Explore data plans <b>→</b></i></button>
+  <button class="service-tile airtime-tile" data-screen="airtime"><span class="tile-icon">◉</span><strong>Buy Airtime</strong><small>Top up MTN, Airtel, Glo and 9mobile.</small><i>Recharge a line <b>→</b></i></button>
+  <div class="service-tile coming-tile"><span class="tile-icon service-grid-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span><strong>Other Services</strong><small>More digital essentials are being prepared.</small><i class="coming-label">COMING SOON</i></div>
+ </div>
 </section>
-<section class="dashboard-section value-showcase">
-<div class="section-head"><div><span class="section-kicker">THE DATOVA DIFFERENCE</span><h2>More value. Less hassle.</h2><p>Swipe through what makes staying connected easier.</p></div></div>
-<div class="horizontal-rail benefits-rail" aria-label="DATOVA benefits">
-<article class="benefit-card benefit-data"><span>01 / GREAT VALUE</span><h3>Affordable data.</h3><p>Find data bundles designed to help you stay online for less.</p><b>Stay connected for less <i>↗</i></b></article>
-<article class="benefit-card benefit-airtime"><span>02 / EASY TOP-UPS</span><h3>Affordable airtime.</h3><p>Recharge your line with a simple, convenient experience.</p><b>Your next top-up, made easy <i>↗</i></b></article>
-<article class="benefit-card benefit-simple"><span>03 / ONE SIMPLE SPACE</span><h3>Everything made easier.</h3><p>Explore your digital services in one clear, easy-to-use place.</p><b>Welcome to DATOVA <i>↗</i></b></article>
-</div>
+<section class="promo-banner" aria-label="DATOVA service highlight">
+ <div class="promo-copy"><span>THE DATOVA EXPERIENCE</span><h2>Stay connected.<br><em>Make every day count.</em></h2><p>Affordable data and convenient airtime top-ups, all in one place.</p><button data-screen="data">Explore services <b>→</b></button></div>
+ <div class="promo-art" aria-hidden="true"><div class="promo-orbit orbit-one"></div><div class="promo-orbit orbit-two"></div><div class="promo-globe"><span></span></div></div>
 </section>
-<div class="section-head"><div><h2>Quick actions</h2><p>Choose what you want to do.</p></div></div>
-<div class="quick-grid"><button class="quick-card" data-screen="data"><span class="quick-icon data-icon">▤</span><b>Buy Data</b><small>Choose a network and plan</small><i>↗</i></button><button class="quick-card" data-screen="airtime"><span class="quick-icon airtime-icon">◉</span><b>Buy Airtime</b><small>Top up a phone number</small><i>↗</i></button><button class="quick-card" data-screen="wallet"><span class="quick-icon wallet-icon">◈</span><b>Fund Wallet</b><small>Payment options preview</small><i>↗</i></button><button class="quick-card" data-screen="transactions"><span class="quick-icon history-icon">↗</span><b>Transactions</b><small>Review your activity</small><i>↗</i></button></div>
-<div class="section-head"><div><h2>Recent activity</h2><p>Your latest DATOVA transactions will appear here.</p></div><button class="text-action" data-screen="transactions">View all →</button></div>
-<div class="table-panel"><div class="empty-state"><div class="empty-symbol">↗</div><b>No transactions yet</b><p>Your completed purchases and payment records will show here.</p><button class="outline-btn" data-screen="data">Explore data plans</button></div></div>
-
+<section class="dashboard-section network-section">
+ <div class="section-head"><div><span class="section-kicker">YOUR NETWORKS</span><h2>Choose your network</h2><p>Explore supported mobile networks.</p></div></div>
+ <div class="network-grid">
+  <button class="network-card network-mtn" data-network-shortcut="MTN"><span class="network-mark">MTN</span><b>MTN</b><small>Data & airtime</small></button>
+  <button class="network-card network-airtel" data-network-shortcut="Airtel"><span class="network-mark">A</span><b>Airtel</b><small>Data & airtime</small></button>
+  <button class="network-card network-glo" data-network-shortcut="Glo"><span class="network-mark">G</span><b>Glo</b><small>Data & airtime</small></button>
+  <button class="network-card network-nine" data-network-shortcut="9mobile"><span class="network-mark">9</span><b>9mobile</b><small>Data & airtime</small></button>
+ </div>
+</section>
+<section class="dashboard-section popular-section">
+ <div class="section-head"><div><span class="section-kicker">FIND YOUR BUNDLE</span><h2>Explore data plans</h2><p>Plan options and live prices will appear here when provider services are connected.</p></div><button class="text-action" data-screen="data">View plans →</button></div>
+ <div class="plan-preview"><div class="plan-preview-icon">▤</div><div><b>Your next data bundle starts here</b><p>Choose a network to browse its available bundles. Current plan prices are not yet connected.</p></div><button class="outline-btn" data-screen="data">Browse data</button></div>
+</section>
+<div class="section-head"><div><h2>Quick actions</h2><p>Your most-used tools, close at hand.</p></div></div>
+<div class="quick-grid"><button class="quick-card" data-screen="data"><span class="quick-icon data-icon">▤</span><b>Buy Data</b><small>Choose a network and plan</small><i>↗</i></button><button class="quick-card" data-screen="airtime"><span class="quick-icon airtime-icon">◉</span><b>Buy Airtime</b><small>Top up a phone number</small><i>↗</i></button><button class="quick-card" data-screen="wallet"><span class="quick-icon wallet-icon">◈</span><b>My Wallet</b><small>View payment overview</small><i>↗</i></button><button class="quick-card" data-screen="transactions"><span class="quick-icon history-icon">↗</span><b>Transactions</b><small>Review your activity</small><i>↗</i></button></div>
+<div class="section-head"><div><h2>Recent activity</h2><p>Your latest purchases and payment updates.</p></div><button class="text-action" data-screen="transactions">View all →</button></div>
+<div class="table-panel"><div class="empty-state"><div class="empty-symbol">↗</div><b>No transactions yet</b><p>Your completed purchases and payment records will appear here.</p><button class="outline-btn" data-screen="data">Explore data plans</button></div></div>
+<section class="why-datova"><div><span class="section-kicker">WHY DATOVA</span><h2>Everyday connections,<br>made simpler.</h2><p>Discover a more convenient way to manage mobile data and airtime.</p></div><div class="why-points"><div><b>Affordable options</b><small>Explore bundles for different needs and budgets.</small></div><div><b>Multiple networks</b><small>MTN, Airtel, Glo and 9mobile in one place.</small></div><div><b>Clear activity</b><small>Keep your purchases and updates organised.</small></div></div></section>
+<div class="support-strip"><div class="support-strip-icon">?</div><div><b>Need a little help?</b><small>Visit DATOVA support for assistance and useful information.</small></div><button data-screen="support">Get help →</button></div>
 </div>
 <div class="screen" id="screen-data">
 <div class="page-heading"><div class="eyebrow">STAY CONNECTED</div><h1>Buy Data</h1><p>Select a mobile network and data bundle.</p></div>
