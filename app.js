@@ -35,7 +35,8 @@ $("#googleAuth").addEventListener("click",async()=>{
   if(error)throw error;
  }catch(err){toast(err.message||"Google sign-in could not start.");button.disabled=false;}
 });
-$("#year").forEach(el=>el.textContent=new Date().getFullYear());\n$("[data-network-shortcut]").forEach(btn=>btn.addEventListener("click",()=>{const network=btn.dataset.networkShortcut;go("data");$("#dataNetwork").value=network;$("#dataNetwork").dispatchEvent(new Event("change"));}));
+$("#year").textContent=new Date().getFullYear();
+$("[data-network-shortcut]").forEach(btn=>btn.addEventListener("click",()=>{const network=btn.dataset.networkShortcut;go("data");$("#dataNetwork").value=network;$("#dataNetwork").dispatchEvent(new Event("change"));}));
 $$("[data-screen]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.screen)));
 $("#accountBtn").addEventListener("click",()=>go("profile"));
 $("#greetingAvatar")?.addEventListener("click",()=>go("profile"));
