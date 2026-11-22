@@ -221,3 +221,110 @@ body.dark .service-tile.coming-tile{background:linear-gradient(135deg,#182d49,#2
 body.dark .benefit-card,body.dark .benefit-airtime,body.dark .benefit-simple{background:#10233e;border-color:#223653}
 @media(min-width:850px){.service-tile,.benefit-card{flex-basis:calc((100% - 26px)/3)}}
 @media(max-width:700px){#screen-overview .welcome-row{margin-bottom:26px}#screen-overview .welcome-row h1{font-size:26px}.service-tile{flex-basis:78%;min-height:184px}.benefit-card{flex-basis:78%}#screen-overview .quick-grid{margin-top:4px}}
+
+
+/* DATOVA dashboard v2 — light-first, useful and quietly animated */
+:root{--blue:#1677ff;--navy:#0b2347}
+body{background:radial-gradient(ellipse at 8% 12%,#e7f2ff70 0,transparent 34%),radial-gradient(ellipse at 92% 42%,#dceeff55 0,transparent 30%),var(--bg)}
+body:before{content:"";position:fixed;z-index:-1;pointer-events:none;inset:0;background:radial-gradient(ellipse at 18% 22%,#55b8ff12,transparent 35%),radial-gradient(ellipse at 82% 68%,#1677ff0b,transparent 32%);animation:ambientDrift 18s ease-in-out infinite alternate}
+@keyframes ambientDrift{from{transform:translate3d(-1%,0,0) scale(1)}to{transform:translate3d(1%,1.5%,0) scale(1.04)}}
+.wordmark-globe{width:1.18em;height:1.18em;flex:0 0 1.18em;vertical-align:-.18em;filter:drop-shadow(0 2px 7px #1677ff66);animation:globeDrift 14s linear infinite}
+.brand .wordmark{gap:3px;font-size:22px;letter-spacing:.02em}
+.greeting-line{display:flex;align-items:center;gap:12px;margin-top:9px}
+.greeting-line h1{margin:0 0 5px!important}
+.greeting-avatar{width:48px;height:48px;flex:0 0 48px;border:2px solid #fff;border-radius:50%;background:linear-gradient(145deg,#1677ff,#55b8ff);box-shadow:0 5px 16px #1677ff25;color:white;display:grid;place-items:center;font:800 18px Manrope;overflow:hidden;padding:0;animation:avatarIn .65s cubic-bezier(.2,.8,.2,1) both}
+.greeting-avatar img,.avatar img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+@keyframes avatarIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+.mini-account-row{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(190px,.85fr);gap:13px;margin:0 0 26px}
+.mini-wallet-card{position:relative;isolation:isolate;overflow:hidden;min-height:112px;border:0;border-radius:19px;padding:17px 19px;background:linear-gradient(112deg,#092653,#1456a6 68%,#247bd3);color:white;display:flex;align-items:center;gap:13px;text-align:left;box-shadow:0 13px 30px #0d3b7622}
+.mini-wallet-card:before{content:"";position:absolute;z-index:-1;width:170px;height:170px;right:-60px;top:-80px;border:1px solid #ffffff28;border-radius:50%;box-shadow:0 0 0 13px #ffffff0a,0 0 0 28px #ffffff08;animation:walletOrbit 13s linear infinite}
+.mini-wallet-card:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(110deg,transparent 25%,#ffffff12 48%,transparent 68%);transform:translateX(-110%);animation:walletShimmer 8s ease-in-out infinite}
+@keyframes walletOrbit{to{transform:rotate(360deg)}}
+@keyframes walletShimmer{0%,60%,100%{transform:translateX(-110%)}80%{transform:translateX(110%)}}
+.mini-wallet-icon{width:40px;height:40px;flex:none;border-radius:13px;background:#ffffff20;display:grid;place-items:center;font-size:22px}
+.mini-wallet-copy{display:flex;flex-direction:column;gap:4px}
+.mini-wallet-copy small{font-size:8px;letter-spacing:1.2px;color:#c4e1ff;font-weight:800}
+.mini-wallet-copy strong{font:700 14px Manrope}
+.mini-wallet-copy em{font-style:normal;font-size:9px;color:#d6eaff}
+.mini-wallet-copy em b{margin-left:5px}
+.mini-wallet-orbit{position:absolute;right:22px;bottom:-28px;width:105px;height:105px;border:1px solid #ffffff30;border-radius:50%;box-shadow:0 0 0 10px #ffffff08}
+.account-note{display:flex;align-items:center;gap:11px;padding:17px;border:1px solid #dce8f7;border-radius:18px;background:#ffffffb8}
+.account-note-dot{width:9px;height:9px;flex:none;border-radius:50%;background:#27c995;box-shadow:0 0 0 5px #27c99518}
+.account-note div{display:flex;flex-direction:column;gap:5px}
+.account-note b{font:700 12px Manrope;color:var(--ink)}
+.account-note small{font-size:10px;line-height:1.5;color:var(--muted)}
+.promo-banner{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;min-height:210px;overflow:hidden;margin:26px 0;border-radius:22px;padding:25px 28px;background:linear-gradient(110deg,#082653,#104d98 65%,#1677c9);color:#fff;box-shadow:0 16px 35px #0b3b7620}
+.promo-banner:before{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(110deg,transparent 25%,#ffffff0c 50%,transparent 72%);transform:translateX(-100%);animation:promoSweep 10s ease-in-out infinite}
+@keyframes promoSweep{0%,65%,100%{transform:translateX(-100%)}85%{transform:translateX(100%)}}
+.promo-copy{max-width:430px;position:relative;z-index:2}
+.promo-copy>span{font-size:8px;letter-spacing:1.8px;color:#a9d8ff;font-weight:800}
+.promo-copy h2{font:800 clamp(22px,3vw,30px)/1.15 Manrope;margin:12px 0 8px;color:white}
+.promo-copy h2 em{font-style:normal;color:#77d4ff}
+.promo-copy p{font-size:11px;line-height:1.6;color:#c7def8;max-width:330px}
+.promo-copy button{border:0;border-radius:10px;padding:11px 14px;background:#fff;color:#1557a1;font-size:10px;font-weight:800;margin-top:8px}
+.promo-copy button b{margin-left:10px}
+.promo-art{width:180px;height:165px;position:relative;flex:none;display:grid;place-items:center}
+.promo-globe{width:104px;height:104px;position:relative;border-radius:50%;background:radial-gradient(circle at 32% 28%,#b8f2ff,#3b9fff 36%,#0750b5 75%);box-shadow:0 0 35px #65caff65,inset -13px -13px 25px #062c77aa;animation:globeFloat 5s ease-in-out infinite}
+.promo-globe:before,.promo-globe:after{content:"";position:absolute;inset:9px 27px;border:1px solid #e4faff99;border-radius:50%}
+.promo-globe:after{inset:0 9px;border:none;border-top:1px solid #e4faffaa;border-bottom:1px solid #e4faffaa}
+.promo-globe span{position:absolute;inset:0;border-radius:50%;background:linear-gradient(35deg,transparent 42%,#c3f5ff66 50%,transparent 58%)}
+.promo-orbit{position:absolute;width:166px;height:65px;border:1px solid #8adfff8a;border-radius:50%;transform:rotate(-23deg)}
+.orbit-two{width:146px;height:118px;transform:rotate(57deg);border-color:#b2eaff48}
+@keyframes globeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.network-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.network-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:13px 10px;display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0;transition:transform .25s,box-shadow .25s}
+.network-card:active{transform:scale(.97)}
+.network-mark{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font:800 12px Manrope;background:#f0f5fb;color:#1b3456}
+.network-mtn .network-mark{background:#ffdf00;color:#111}
+.network-airtel .network-mark{background:#ed1c24;color:#fff}
+.network-glo .network-mark{background:#00a651;color:#fff}
+.network-nine .network-mark{background:#008b70;color:#fff}
+.network-card>b{font:800 12px Manrope;color:var(--ink)}
+.network-card>small{font-size:9px;color:var(--muted)}
+.plan-preview{display:flex;align-items:center;gap:13px;padding:16px;border:1px solid var(--line);border-radius:17px;background:#ffffffc9}
+.plan-preview-icon{width:42px;height:42px;flex:none;border-radius:13px;background:#e8f2ff;color:#1677ff;display:grid;place-items:center;font-size:20px}
+.plan-preview>div:nth-child(2){flex:1;min-width:0}
+.plan-preview b{font:700 12px Manrope;color:var(--ink)}
+.plan-preview p{font-size:10px;line-height:1.5;color:var(--muted);margin:5px 0 0}
+.plan-preview .outline-btn{white-space:nowrap}
+.why-datova{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:28px 0;padding:25px;border-radius:20px;background:linear-gradient(135deg,#eaf4ff,#f7fbff);border:1px solid #dceafb}
+.why-datova h2{font:800 22px/1.2 Manrope;color:#102c53;margin:8px 0}
+.why-datova p{font-size:11px;line-height:1.6;color:#667d99;max-width:290px}
+.why-points{display:grid;gap:12px}
+.why-points>div{display:flex;flex-direction:column;gap:4px;padding-bottom:10px;border-bottom:1px solid #d8e6f5}
+.why-points>div:last-child{border:0;padding:0}
+.why-points b{font:700 11px Manrope;color:#14345c}
+.why-points small{font-size:10px;line-height:1.5;color:#71849d}
+.support-strip{display:flex;align-items:center;gap:12px;padding:15px 17px;border:1px solid var(--line);border-radius:17px;background:#fff;margin:25px 0}
+.support-strip-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:#eaf3ff;color:#1677ff;font-weight:800}
+.support-strip>div:nth-child(2){display:flex;flex:1;flex-direction:column;gap:4px}
+.support-strip b{font:700 11px Manrope;color:var(--ink)}
+.support-strip small{font-size:9px;color:var(--muted)}
+.support-strip button{border:0;background:transparent;color:#1677ff;font-size:10px;font-weight:800}
+body.dark{background:radial-gradient(ellipse at 10% 15%,#12376555,transparent 36%),#09172b}
+body.dark .account-note,body.dark .network-card,body.dark .plan-preview,body.dark .support-strip{background:#10233e;border-color:#223653}
+body.dark .account-note b,body.dark .network-card>b,body.dark .plan-preview b,body.dark .support-strip b{color:#e9f1ff}
+body.dark .why-datova{background:linear-gradient(135deg,#102847,#122f50);border-color:#223653}
+body.dark .why-datova h2,body.dark .why-points b{color:#e9f1ff}
+body.dark .why-datova p,body.dark .why-points small{color:#a9bad0}
+body.dark .greeting-avatar{border-color:#1b3555}
+@media(max-width:700px){
+ .mini-account-row{grid-template-columns:1fr;gap:9px;margin-bottom:22px}
+ .mini-wallet-card{min-height:98px}
+ .account-note{padding:12px 14px}
+ .promo-banner{min-height:200px;padding:22px 19px}
+ .promo-art{width:112px;height:125px;transform:scale(.78);margin-right:-12px}
+ .promo-copy{max-width:68%}
+ .promo-copy h2{font-size:22px}
+ .network-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+ .network-card{padding:10px 7px}
+ .network-card>small{font-size:8px}
+ .plan-preview{align-items:flex-start;flex-wrap:wrap}
+ .plan-preview>div:nth-child(2){flex-basis:calc(100% - 58px)}
+ .plan-preview .outline-btn{margin-left:55px}
+ .why-datova{grid-template-columns:1fr;gap:15px;padding:20px}
+ .support-strip{align-items:flex-start;flex-wrap:wrap}
+ .support-strip>div:nth-child(2){min-width:calc(100% - 55px)}
+ .support-strip button{margin-left:46px}
+}
+@media(prefers-reduced-motion:reduce){body:before,.mini-wallet-card:before,.mini-wallet-card:after,.promo-banner:before,.promo-globe,.promo-orbit,.wordmark-globe{animation:none!important}}
