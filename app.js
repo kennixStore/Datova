@@ -87,7 +87,9 @@ try{
   console.warn("Supabase library did not load; DATOVA will open in preview mode.");
  }
 }catch(initError){console.error("Supabase initialization failed:",initError);}
-function updateGreeting(){const user=currentUser;const hour=new Date().getHours();const period=hour<12?"morning":hour<17?"afternoon":"evening";const full=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email?.split("@")[0]||"").trim();const first=full?full.split(/\s+/)[0]:"Guest";const title=$("#greetingTitle");if(title)title.textContent=`Good ${period}, ${first}`;const sub=$("#greetingSubtitle");if(sub)sub.textContent=user?"Your DATOVA space is ready. Let’s keep you connected.":"Explore DATOVA’s digital services and stay connected.";const wallet=$("#miniWalletValue");if(wallet)wallet.textContent=user?"Wallet balance is not connected yet":"Sign in to view balance";}
+function updateGreeting(){const user=currentUser;const parts=new Intl.DateTimeFormat("en-NG",{timeZone:"Africa/Lagos",hour:"2-digit",hourCycle:"h23"}).formatToParts(new Date());const hour=Number(parts.find(part=>part.type==="hour")?.value??new Date().getHours());const period=hour<5?"night":hour<12?"morning":hour<17?"afternoon":hour<21?"evening":"night";const full=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email?.split("@")[0]||"").trim();const first=full?full.split(/\s+/)[0]:"Guest";const title=$("#greetingTitle");if(title)title.textContent=`Good ${period}, ${first}`;const sub=$("#greetingSubtitle");if(sub)sub.textContent=user?"Your DATOVA space is ready. Let’s keep you connected.":"Explore DATOVA’s digital services and stay connected.";const wallet=$("#miniWalletValue");if(wallet)wallet.textContent=user?"Wallet balance is not connected yet":"Sign in to view balance";}
+setInterval(updateGreeting,60000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)updateGreeting()});
 function escapeText(value){return String(value).replace(/[&<>"\']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","\'":"&#39;"}[c]));}
 function renderAccount(user){
  currentUser=user||null;
