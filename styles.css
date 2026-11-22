@@ -106,3 +106,27 @@ body.dark .topbar,body.dark .mobile-nav{background:#071a36;border-color:#203b60}
 body.dark .brand{color:#fff}
 @media(max-width:600px){.splash-logo{width:138px;height:138px}.splash-name{font-size:26px}.splash-tag{font-size:10px}.intro-art{height:37vh;min-height:220px}.intro-copy{margin-bottom:24px}.intro-copy h1{font-size:34px}.intro-copy p{font-size:13px}.gate-content{padding-bottom:90px}.gate-city{height:110px}}
 @media(prefers-reduced-motion:reduce){.splash-logo,.splash-loader i,.art-scene{animation:none!important}}
+
+/* DATOVA premium identity, motion system and wordmark */
+.wordmark{display:inline-flex;align-items:center;gap:1px;white-space:nowrap;letter-spacing:.055em;font-family:Manrope,sans-serif;font-weight:800}
+.wordmark-globe{width:1.08em;height:1.08em;display:inline-block;vertical-align:middle;filter:drop-shadow(0 0 7px #269bff88);animation:globeDrift 8s ease-in-out infinite}
+.splash-name.wordmark{font-size:clamp(25px,5vw,34px);letter-spacing:.12em;gap:3px}
+.brand .wordmark{font-size:20px;color:inherit;letter-spacing:.04em}
+.gate-content h1 .wordmark{font-size:.94em;letter-spacing:.035em;color:#1677ff}
+.modal-brand .wordmark{font-size:17px;color:var(--navy)}
+@keyframes globeDrift{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.screen.active{animation:screenReveal .42s cubic-bezier(.2,.75,.25,1) both}
+.screen.screen-exit{animation:screenLeave .2s ease both;pointer-events:none}
+.screen.screen-enter{animation:screenReveal .46s cubic-bezier(.2,.75,.25,1) both}
+@keyframes screenReveal{from{opacity:0;transform:translateY(15px) scale(.992);filter:blur(3px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes screenLeave{to{opacity:0;transform:translateY(-7px);filter:blur(2px)}}
+button,.quick-card,.service-card,.nav-item,.icon-btn{transition:transform .22s ease,box-shadow .22s ease,background-color .22s ease,border-color .22s ease}
+button:active{transform:scale(.975)}
+.quick-card:hover,.service-card:hover{transform:translateY(-4px);box-shadow:0 18px 38px #174b8a16}
+.nav-item{transition:background .22s ease,color .22s ease,transform .22s ease}
+.welcome-row h1{letter-spacing:-.035em}
+.wave{display:inline-block;animation:waveGlow 3s ease-in-out infinite}
+@keyframes waveGlow{0%,100%{text-shadow:0 0 0 transparent}50%{text-shadow:0 0 16px #55b8ff88}}
+.splash-earth{animation:earthRise 2.2s ease both}
+@keyframes earthRise{from{opacity:0;transform:translateY(30px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
