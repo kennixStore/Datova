@@ -23,7 +23,49 @@ $("#profileTheme").addEventListener("click",()=>$("#themeToggle").click());
 $("#closeAuth").addEventListener("click",()=>$("#authModal").classList.add("hidden"));
 $("#authModal").addEventListener("click",e=>{if(e.target.id==="authModal")$("#authModal").classList.add("hidden")});
 $$("[data-auth]").forEach(b=>b.addEventListener("click",()=>openAuth(b.dataset.auth)));
-$("#authForm").addEventListener("submit",e=>{e.preventDefault();toast("Preview only: account services are not connected yet.")});
+// DATOVA Supabase connection (publishable key is designed for browser use; RLS protects data).
+const SUPABASE_URL="https://lqfmgzfdpamaenrtbjat.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_jnPRVfYqcu2W0DCdTYX3_g_SMJte69z";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+let currentUser=null;
+function renderAccount(user){
+ currentUser=user||null;
+ const signedIn=!!user;
+ $("#profileSignIn").classList.toggle("hidden",signedIn);
+ $("#profileSignOut").classList.toggle("hidden",!signedIn);
+ $(".profile-main h3").textContent=signedIn?(user.user_metadata?.full_name||user.email||"DATOVA customer"):"Guest account";
+ $(".profile-main p").textContent=signedIn?(user.email||"You're signed in to DATOVA."):"Sign in or create an account to manage your DATOVA profile.";
+ $("#accountBtn").textContent=signedIn?(user.user_metadata?.full_name||user.email||"D").trim().charAt(0).toUpperCase():"G";
+}
+supabaseClient.auth.getSession().then(({data,error})=>{if(error)toast(error.message);renderAccount(data?.session?.user||null)});
+supabaseClient.auth.onAuthStateChange((_event,session)=>renderAccount(session?.user||null));
+$("#authForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const mode=$('[data-auth].selected')?.dataset.auth||"login";
+ const email=$('#authForm input[type="email"]').value.trim();
+ const password=$('#authForm input[type="password"]').value;
+ const fullName=$("#fullName").value.trim();
+ const submit=$("#authForm button[type="submit]");
+ submit.disabled=true;submit.textContent="Please wait…";
+ try{
+  if(mode==="signup"){
+   if(!fullName){toast("Enter your full name.");return}
+   const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:fullName}}});
+   if(error)throw error;
+   if(data.session){renderAccount(data.user);$("#authModal").classList.add("hidden");toast("Your DATOVA account is ready.");}
+   else{$("#authModal").classList.add("hidden");toast("Account created. Check your email to confirm your address, then log in.");}
+  }else{
+   const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+   if(error)throw error;
+   renderAccount(data.user);$("#authModal").classList.add("hidden");toast("Welcome back to DATOVA.");
+  }
+ }catch(err){toast(err.message||"Authentication failed. Please try again.");}
+ finally{submit.disabled=false;submit.innerHTML='Continue <b>→</b>';}
+});
+$("#profileSignOut").addEventListener("click",async()=>{
+ const {error}=await supabaseClient.auth.signOut();
+ if(error)toast(error.message);else{renderAccount(null);toast("You have signed out.");}
+});
 $("#themeToggle").addEventListener("click",()=>{document.body.classList.toggle("dark");localStorage.setItem("datova_theme",document.body.classList.contains("dark")?"dark":"light")});
 if(localStorage.getItem("datova_theme")==="dark")document.body.classList.add("dark");
 const plans={MTN:["500 MB — 30 days","1 GB — 30 days","2 GB — 30 days","5 GB — 30 days"],Airtel:["500 MB — 30 days","1 GB — 30 days","2 GB — 30 days","5 GB — 30 days"],Glo:["1 GB — 30 days","2 GB — 30 days","3 GB — 30 days","5 GB — 30 days"],"9mobile":["500 MB — 30 days","1 GB — 30 days","2 GB — 30 days"]};
