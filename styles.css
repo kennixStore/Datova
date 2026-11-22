@@ -334,3 +334,16 @@ body.dark .greeting-avatar{border-color:#1b3555}
 
 /* Keep the welcome greeting compact without changing its wording. */
 #greetingTitle{font-size:clamp(17px,2.4vw,22px)!important;line-height:1.2!important;}
+
+/* Directional onboarding slide transitions */
+#introArt,.intro-copy,.intro-bottom{will-change:transform,opacity}
+.intro-exit-left{animation:introExitLeft .19s cubic-bezier(.4,0,1,1) both;pointer-events:none}
+.intro-exit-right{animation:introExitRight .19s cubic-bezier(.4,0,1,1) both;pointer-events:none}
+.intro-enter-right{animation:introEnterRight .46s cubic-bezier(.2,.75,.25,1) both}
+.intro-enter-left{animation:introEnterLeft .46s cubic-bezier(.2,.75,.25,1) both}
+.intro-settling{will-change:auto}
+@keyframes introExitLeft{to{opacity:0;transform:translateX(-42px)}}
+@keyframes introExitRight{to{opacity:0;transform:translateX(42px)}}
+@keyframes introEnterRight{from{opacity:0;transform:translateX(48px)}to{opacity:1;transform:translateX(0)}}
+@keyframes introEnterLeft{from{opacity:0;transform:translateX(-48px)}to{opacity:1;transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){.intro-exit-left,.intro-exit-right,.intro-enter-left,.intro-enter-right{animation-duration:.01ms!important}}
