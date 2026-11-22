@@ -23,7 +23,18 @@ $("#skipIntro").addEventListener("click",showWelcomeGate);
 $("#gateCreate").addEventListener("click",()=>openAuth("signup"));
 $("#gateLogin").addEventListener("click",()=>openAuth("login"));
 $("#exploreGuest").addEventListener("click",showApp);
-$("#googleAuth").addEventListener("click",()=>toast("Google sign-in will be available after Google is enabled in Supabase."));
+$("#googleAuth").addEventListener("click",async()=>{
+ if(!supabaseReady){toast("Account service is unavailable. Please refresh and try again.");return}
+ const button=$("#googleAuth");
+ button.disabled=true;
+ try{
+  const {error}=await supabaseClient.auth.signInWithOAuth({
+   provider:"google",
+   options:{redirectTo:window.location.origin+window.location.pathname}
+  });
+  if(error)throw error;
+ }catch(err){toast(err.message||"Google sign-in could not start.");button.disabled=false;}
+});
 $("#year").textContent=new Date().getFullYear();
 $$("[data-screen]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.screen)));
 $("#accountBtn").addEventListener("click",()=>go("profile"));
