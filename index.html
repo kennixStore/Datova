@@ -142,6 +142,10 @@ window.setTimeout(function(){
     if(!screen)return;
     var target=document.getElementById("screen-"+screen);
     if(!target)return;
+    if(typeof window.datovaNavigate==="function"){window.datovaNavigate(screen);return;}
+    var active=document.querySelector(".screen.active");
+    var current=active&&active.id.replace("screen-","");
+    if(current!==screen)history.pushState({datovaScreen:screen,datovaApp:true},"",location.href);
     document.querySelectorAll(".screen").forEach(function(panel){panel.classList.toggle("active",panel===target);panel.classList.remove("screen-enter","screen-exit")});
     document.querySelectorAll("[data-screen]").forEach(function(nav){nav.classList.toggle("active",nav.dataset.screen===screen)});
     if(button.dataset.networkShortcut){
