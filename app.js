@@ -7,7 +7,7 @@ const slides=[
 let slide=0;
 let screenHistoryReady=false,screenStack=["overview"];
 function initScreenHistory(){if(screenHistoryReady)return;screenHistoryReady=true;const current=document.querySelector(".screen.active")?.id.replace("screen-","")||"overview";screenStack=[current];history.replaceState({datovaScreen:"root",datovaRoot:true},"",location.href);history.pushState({datovaScreen:current,datovaApp:true},"",location.href)}
-function goBack(){if(screenStack.length>1){history.back();return}if($(".screen.active")?.id!=="screen-overview"){go("overview");return}toast("You're already on the DATOVA home screen.")}
+function goBack(){if(screenStack.length>1){const previous=screenStack[screenStack.length-2];screenStack.pop();go(previous,{fromPopState:true});if(history.state?.datovaApp)history.back();return}if($(".screen.active")?.id!=="screen-overview"){go("overview");return}toast("You're already on the DATOVA home screen.")}
 function showApp(){intro.classList.add("hidden");$("#welcomeGate").classList.add("hidden");app.classList.remove("hidden");localStorage.setItem("datova_intro_seen","1");initScreenHistory();updateGreeting()}
 function showWelcomeGate(){localStorage.setItem("datova_intro_seen","1");intro.classList.add("hidden");$("#welcomeGate").classList.remove("hidden");$("#welcomeGate").classList.add("gate-enter")}
 function artMarkup(type){
@@ -160,7 +160,8 @@ function updateWalletBalanceVisibility(){
  if(amount)amount.textContent=walletBalanceVisible?"0.00":"••••••";
  if(control){
   control.setAttribute("aria-pressed",String(walletBalanceVisible));
-  control.setAttribute("aria-label",walletBalanceVisible?"Hide balance":"Show balance");\n  control.title=walletBalanceVisible?"Hide balance":"Show balance";
+  control.setAttribute("aria-label",walletBalanceVisible?"Hide balance":"Show balance");
+  control.title=walletBalanceVisible?"Hide balance":"Show balance";
   control.innerHTML=walletBalanceVisible
    ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5.2 0 9 5 10 7- .4.8-1.4 2.1-3 3.3M6.2 6.2C3.8 7.7 2.4 10.3 2 12c1 2 4.8 7 10 7 1 0 2-.2 2.9-.6" /></svg>'
    : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
