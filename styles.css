@@ -419,3 +419,9 @@ body.dark .mobile-nav button.active{background:#18365b;color:#79baff}
  .theme-switch-label{min-width:25px}
  .service-tile{flex-basis:76%}
 }
+
+/* In-app back navigation */
+.datova-back-btn{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;padding:8px 13px;border:1px solid #d9e6f6;border-radius:999px;background:#f5f9ff;color:#1557a8;font:700 12px "DM Sans",sans-serif;cursor:pointer;transition:transform .18s ease,background .18s ease}
+.datova-back-btn span{font-size:18px;line-height:1}
+.datova-back-btn:active{transform:translateX(-3px)}
+body.dark .datova-back-btn{background:#10233e;border-color:#29415f;color:#9bcaff}
