@@ -347,3 +347,75 @@ body.dark .greeting-avatar{border-color:#1b3555}
 @keyframes introEnterRight{from{opacity:0;transform:translateX(48px)}to{opacity:1;transform:translateX(0)}}
 @keyframes introEnterLeft{from{opacity:0;transform:translateX(-48px)}to{opacity:1;transform:translateX(0)}}
 @media(prefers-reduced-motion:reduce){.intro-exit-left,.intro-exit-right,.intro-enter-left,.intro-enter-right{animation-duration:.01ms!important}}
+
+
+/* DATOVA mobile dashboard polish: identity, spacing, service cards and navigation */
+.topbar{gap:12px}
+.brand{gap:9px;min-width:0}
+.brand-icon{width:40px;height:40px;flex:0 0 40px;object-fit:contain}
+.brand .wordmark{display:inline-flex;align-items:center;gap:2px;white-space:nowrap;font-size:22px;letter-spacing:.015em}
+.brand .wordmark-globe{width:1.04em;height:1.04em;flex:0 0 1.04em;vertical-align:middle}
+.theme-switch{appearance:none;-webkit-appearance:none;display:inline-flex!important;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:5px 10px!important;border:1px solid #d8e5f5!important;border-radius:999px!important;background:#f5f9ff!important;color:#17365f!important;font:700 11px "DM Sans",sans-serif!important;line-height:1!important;box-shadow:0 3px 12px #102f5a0c!important;white-space:nowrap}
+.theme-switch-icon{font-size:16px;line-height:1}
+.theme-switch-label{min-width:28px;text-align:left}
+.theme-switch-track{width:31px;height:18px;padding:2px;border-radius:20px;background:#d7e4f4;display:flex;align-items:center;transition:background .2s ease}
+.theme-switch-track i{display:block;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 4px #07152f35;transition:transform .2s ease}
+.theme-switch[aria-checked="true"] .theme-switch-track{background:#1677ff}
+.theme-switch[aria-checked="true"] .theme-switch-track i{transform:translateX(13px)}
+body.dark .theme-switch{background:#10233e!important;border-color:#29415f!important;color:#e9f1ff!important}
+body.dark .theme-switch-track{background:#31547e}
+#greetingTitle{font-size:clamp(18px,2.4vw,22px)!important;line-height:1.2!important}
+#greetingSubtitle{font-size:12px;line-height:1.45}
+.mini-wallet-card{min-height:104px}
+.account-note{min-height:76px}
+.service-tile{flex-basis:min(74%,285px)}
+.mobile-nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.mobile-nav button{font-size:10px;min-width:54px;min-height:48px;padding:4px 8px;border-radius:13px;gap:4px}
+.mobile-nav button span{font-size:20px;line-height:1.1}
+.mobile-nav button.active{color:#1269e8;background:#edf5ff}
+.mobile-nav button.active span{filter:drop-shadow(0 2px 5px #1677ff30)}
+body.dark .mobile-nav button.active{background:#18365b;color:#79baff}
+@media(max-width:700px){
+ .topbar{height:62px;padding:0 14px;gap:8px}
+ .brand{gap:7px}
+ .brand-icon{width:38px;height:38px;flex-basis:38px}
+ .brand .wordmark{font-size:19px;gap:1px;letter-spacing:0}
+ .brand .wordmark-globe{width:1em;height:1em;flex-basis:1em}
+ .top-actions{gap:7px}
+ .theme-switch{min-height:36px;padding:4px 8px!important;gap:5px;font-size:10px!important}
+ .theme-switch-icon{font-size:14px}
+ .theme-switch-track{width:28px;height:17px}
+ .theme-switch-track i{width:13px;height:13px}
+ .theme-switch[aria-checked="true"] .theme-switch-track i{transform:translateX(11px)}
+ .top-actions .avatar{width:38px;height:38px;flex:0 0 38px}
+ .content{padding:23px 16px calc(100px + env(safe-area-inset-bottom))}
+ #screen-overview .welcome-row{margin-bottom:20px}
+ #screen-overview .welcome-row h1{font-size:20px!important;line-height:1.2}
+ #screen-overview .welcome-row p{font-size:11px;line-height:1.45}
+ .greeting-line{gap:10px;margin-top:8px}
+ .greeting-avatar{width:54px;height:54px;flex-basis:54px;font-size:17px}
+ .mini-account-row{grid-template-columns:1fr;gap:8px;margin-bottom:18px}
+ .mini-wallet-card{min-height:88px;padding:13px 15px;border-radius:17px}
+ .mini-wallet-icon{width:36px;height:36px}
+ .mini-wallet-copy strong{font-size:13px}
+ .account-note{min-height:58px;padding:10px 12px;border-radius:15px}
+ .account-note small{font-size:9px}
+ #screen-overview .section-head{margin:22px 0 12px}
+ #screen-overview .section-head h2{font-size:18px}
+ #screen-overview .section-head p{font-size:10px}
+ .horizontal-rail{gap:11px;padding-bottom:9px}
+ .service-tile{flex-basis:70%;min-height:170px;padding:17px;border-radius:18px}
+ .tile-icon{width:36px;height:36px;margin-bottom:13px}
+ .service-tile strong{font-size:19px}
+ .service-tile small{font-size:9px;line-height:1.5}
+ .service-tile i{font-size:9px;padding-top:10px}
+ .mobile-nav{padding:7px 5px calc(7px + env(safe-area-inset-bottom));min-height:65px}
+ .mobile-nav button{min-width:0;flex:1;max-width:78px;min-height:48px;font-size:9px;padding:4px 3px}
+ .mobile-nav button span{font-size:19px}
+}
+@media(max-width:360px){
+ .brand .wordmark{font-size:17px}
+ .theme-switch{gap:4px;padding:4px 6px!important}
+ .theme-switch-label{min-width:25px}
+ .service-tile{flex-basis:76%}
+}
