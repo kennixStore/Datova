@@ -328,3 +328,6 @@ body.dark .greeting-avatar{border-color:#1b3555}
  .support-strip button{margin-left:46px}
 }
 @media(prefers-reduced-motion:reduce){body:before,.mini-wallet-card:before,.mini-wallet-card:after,.promo-banner:before,.promo-globe,.promo-orbit,.wordmark-globe{animation:none!important}}
+
+.service-grid-icon{display:grid;grid-template-columns:repeat(2,7px);grid-template-rows:repeat(2,7px);gap:3px;place-content:center}
+.service-grid-icon i{display:block;width:7px;height:7px;border-radius:2px;background:currentColor;opacity:.9}
