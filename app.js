@@ -24,5 +24,5 @@ $("#authForm").addEventListener("submit",e=>{e.preventDefault();toast("Preview o
 $("#themeToggle").addEventListener("click",()=>{document.body.classList.toggle("dark");localStorage.setItem("datova_theme",document.body.classList.contains("dark")?"dark":"light")});
 if(localStorage.getItem("datova_theme")==="dark")document.body.classList.add("dark");
 renderSlide();
-setTimeout(()=>{splash.classList.add("out");setTimeout(()=>{splash.remove();if(localStorage.getItem("datova_intro_seen"))showApp();else intro.classList.remove("hidden")},650)},2100);
+setTimeout(()=>{splash.classList.add("out");setTimeout(()=>{splash.remove();if(localStorage.getItem("datova_intro_seen"))showApp();else intro.classList.remove("hidden")},650)},2750);
 if("serviceWorker" in navigator && location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
