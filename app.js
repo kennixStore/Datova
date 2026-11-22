@@ -139,7 +139,7 @@ function applyTheme(isDark,save=true){
  }
  if(save)localStorage.setItem("datova_theme",isDark?"dark":"light");
 }
-$("#themeToggle").addEventListener("click",()=>applyTheme(!document.body.classList.contains("dark")));
+// Theme clicks are handled directly by the header control.
 applyTheme(localStorage.getItem("datova_theme")==="dark",false);
 const plans={MTN:["500 MB — 30 days","1 GB — 30 days","2 GB — 30 days","5 GB — 30 days"],Airtel:["500 MB — 30 days","1 GB — 30 days","2 GB — 30 days","5 GB — 30 days"],Glo:["1 GB — 30 days","2 GB — 30 days","3 GB — 30 days","5 GB — 30 days"],"9mobile":["500 MB — 30 days","1 GB — 30 days","2 GB — 30 days"]};
 $("#dataNetwork").addEventListener("change",e=>{$("#dataPlan").innerHTML='<option value="">Select a sample plan</option>'+(plans[e.target.value]||[]).map(p=>'<option>'+p+'</option>').join("")});
