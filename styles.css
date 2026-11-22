@@ -130,3 +130,53 @@ button:active{transform:scale(.975)}
 .splash-earth{animation:earthRise 2.2s ease both}
 @keyframes earthRise{from{opacity:0;transform:translateY(30px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+/* Cinematic DATOVA brand reveal */
+.cinematic-splash{perspective:1100px;isolation:isolate;overflow:hidden}
+.cinematic-splash .splash-brand{margin-top:-5vh;gap:0}
+.cinematic-mark{width:clamp(128px,30vw,176px);height:auto;overflow:visible;filter:drop-shadow(0 0 25px #168cff9c)}
+.mark-body,.mark-cut,.mark-star{opacity:0;transform-origin:center;animation:markMaterialize .95s cubic-bezier(.16,.8,.2,1) .18s forwards}
+.mark-cut{animation-delay:.38s}.mark-star{animation-delay:1.2s}
+.mark-orbit{stroke-dasharray:330;stroke-dashoffset:330;filter:drop-shadow(0 0 9px #55c8ff);animation:orbitDraw 1.15s cubic-bezier(.6,0,.25,1) .62s forwards}
+@keyframes markMaterialize{0%{opacity:0;transform:scale(.72) translateY(10px)}65%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+@keyframes orbitDraw{to{stroke-dashoffset:0}}
+.cinematic-wordmark{display:flex;align-items:center;justify-content:center;gap:0;min-height:1.35em;margin-top:23px;letter-spacing:.08em;font-size:clamp(30px,7vw,42px);font-weight:800;line-height:1}
+.cinematic-wordmark .letter{display:inline-block;opacity:0;transform:translateY(15px);animation:letterReveal .48s cubic-bezier(.2,.8,.2,1) forwards}
+.letter-d{animation-delay:1.45s}.letter-a1{animation-delay:1.68s}.letter-t{animation-delay:1.91s}.letter-v{animation-delay:2.15s}.letter-a2{animation-delay:2.38s}
+@keyframes letterReveal{to{opacity:1;transform:translateY(0)}}
+.globe-slot{width:.92em;height:1.12em;display:inline-grid;place-items:center;position:relative;margin:0 .025em}
+.globe-slot .wordmark-globe{width:100%;height:100%;opacity:0;transform:scale(.1);filter:drop-shadow(0 0 0 #55b8ff);animation:globeLaunch 2.05s cubic-bezier(.16,.85,.2,1) 2.72s forwards;transform-origin:center}
+@keyframes globeLaunch{0%{opacity:0;transform:scale(.12)}12%{opacity:1;transform:scale(1.1)}42%{opacity:1;transform:scale(3.8) translateZ(170px);filter:drop-shadow(0 0 35px #3abaff)}62%{opacity:1;transform:scale(3.3) translateZ(150px);filter:drop-shadow(0 0 42px #3abaff)}100%{opacity:1;transform:scale(1) translateZ(0);filter:drop-shadow(0 0 13px #3abaff)}}
+.globe-slot:after{content:"";position:absolute;inset:-12%;border:1px solid #55b8ff;border-radius:50%;opacity:0;animation:globeHalo 1.4s ease 3.2s both}
+@keyframes globeHalo{0%{opacity:0;transform:scale(.35)}35%{opacity:.9}100%{opacity:0;transform:scale(2.5)}}
+.cinematic-splash .splash-tag{opacity:0;animation:tagReveal .7s ease 4.95s forwards}
+@keyframes tagReveal{from{opacity:0;transform:translateY(10px);letter-spacing:3px}to{opacity:1;transform:translateY(0);letter-spacing:.35px}}
+.cinematic-splash .splash-earth{opacity:0;animation:earthRise 1.5s cubic-bezier(.2,.8,.2,1) 4.65s forwards}
+.cinematic-splash .splash-loader{opacity:0;animation:loaderReveal .6s ease 5.35s forwards}
+@keyframes loaderReveal{to{opacity:1}}
+.cinematic-splash.returning-visit .cinematic-mark{animation:quickMark .65s ease both}
+.cinematic-splash.returning-visit .cinematic-mark *{animation:none!important;opacity:1;stroke-dashoffset:0}
+.cinematic-splash.returning-visit .cinematic-wordmark .letter{opacity:1;transform:none;animation:none}
+.cinematic-splash.returning-visit .globe-slot .wordmark-globe{opacity:1;transform:none;animation:globeDrift 7s ease-in-out infinite}
+.cinematic-splash.returning-visit .splash-tag,.cinematic-splash.returning-visit .splash-earth,.cinematic-splash.returning-visit .splash-loader{opacity:1;animation:none}
+@keyframes quickMark{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.splash-earth{z-index:-1}
+.art-scene.art-refresh{animation:artEnter .72s cubic-bezier(.16,.8,.2,1) both}
+.gate-enter .gate-content{animation:gateContentReveal .7s cubic-bezier(.16,.8,.2,1) both}
+.gate-enter .gate-city{animation:cityRise .9s ease .15s both}
+@keyframes gateContentReveal{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes cityRise{from{opacity:0;transform:translateY(35px)}to{opacity:.88;transform:translateY(0)}}
+.screen.active{animation:screenReveal .48s cubic-bezier(.16,.8,.2,1) both}
+@keyframes screenReveal{from{opacity:0;transform:translateY(15px) scale(.992);filter:blur(3px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+.quick-card,.service-card,.form-panel,.side-note-panel,.wallet-info,.profile-panel,.support-card,.table-panel{animation:cardRise .55s cubic-bezier(.16,.8,.2,1) both}
+@keyframes cardRise{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
+.quick-grid .quick-card:nth-child(2),.service-grid .service-card:nth-child(2){animation-delay:.06s}
+.quick-grid .quick-card:nth-child(3),.service-grid .service-card:nth-child(3){animation-delay:.12s}
+.quick-grid .quick-card:nth-child(4),.service-grid .service-card:nth-child(4){animation-delay:.18s}
+.hero-card{animation:heroReveal .75s cubic-bezier(.16,.8,.2,1) both}
+@keyframes heroReveal{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.hero-glow{animation:heroBreath 5s ease-in-out infinite}
+@keyframes heroBreath{50%{transform:scale(1.12);opacity:.8}}
+.quick-card:hover .quick-icon,.service-card:hover .service-icon{transform:translateY(-3px) rotate(-4deg);box-shadow:0 7px 18px #1677ff20}
+@media(max-width:600px){.cinematic-mark{width:142px}.cinematic-wordmark{font-size:32px}.cinematic-splash .splash-earth{bottom:-29vh;width:125vw;height:125vw}}
+@media(prefers-reduced-motion:reduce){.cinematic-mark *,.cinematic-wordmark .letter,.globe-slot .wordmark-globe,.cinematic-splash .splash-tag,.cinematic-splash .splash-earth,.cinematic-splash .splash-loader,.gate-enter .gate-content,.gate-enter .gate-city,.quick-card,.service-card,.form-panel,.side-note-panel,.wallet-info,.profile-panel,.support-card,.table-panel,.hero-card{animation:none!important;opacity:1!important;transform:none!important}.cinematic-wordmark .letter,.globe-slot .wordmark-globe{opacity:1}}
