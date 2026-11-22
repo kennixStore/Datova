@@ -132,6 +132,27 @@ window.setTimeout(function(){
 </div>
 <div class="modal-backdrop hidden" id="authModal"><div class="modal"><button class="modal-close" id="closeAuth">×</button><div class="modal-brand"><img class="brand-icon" src="icon.svg" alt=""> <span class="wordmark">DAT<svg class="wordmark-globe" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="globeBlue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7ce4ff"/><stop offset=".52" stop-color="#1677ff"/><stop offset="1" stop-color="#1646b8"/></linearGradient></defs><circle cx="20" cy="20" r="16" fill="url(#globeBlue)"/><path d="M5 20h30M20 4c-5 5-7 10-7 16s2 11 7 16m0-32c5 5 7 10 7 16s-2 11-7 16M8 11q12 7 24 0M8 29q12-7 24 0" fill="none" stroke="#eafaff" stroke-width="1.35" stroke-linecap="round" opacity=".9"/><path d="M7 27c6 4 20 4 26-2" fill="none" stroke="#fff" stroke-width="1.5" opacity=".7"/></svg>VA</span></div><div class="eyebrow">YOUR ACCOUNT</div><h2 id="authTitle">Welcome back</h2><p id="authDesc">Sign in to access your DATOVA account.</p><div class="auth-tabs"><button class="selected" data-auth="login">Log in</button><button data-auth="signup">Create account</button></div><form id="authForm"><label>Full name <input id="fullName" placeholder="Your name" autocomplete="name" class="hidden"></label><label>Email address<input type="email" placeholder="you@example.com" required autocomplete="email"></label><label>Password<input type="password" placeholder="At least 8 characters" required minlength="8" autocomplete="current-password"></label><button class="primary full" type="submit">Continue <b>→</b></button></form><small class="demo-note" id="authNote">Secure email authentication.</small></div></div>
 <div class="toast" id="toast"></div>
+<script>
+/* Independent navigation safety net: keeps dashboard sections clickable if app.js fails to initialize. */
+(function(){
+  document.addEventListener("click",function(event){
+    var button=event.target.closest("[data-screen], [data-network-shortcut], #accountBtn, #greetingAvatar");
+    if(!button)return;
+    var screen=button.dataset.screen || (button.id==="accountBtn"||button.id==="greetingAvatar"?"profile":button.dataset.networkShortcut?"data":"");
+    if(!screen)return;
+    var target=document.getElementById("screen-"+screen);
+    if(!target)return;
+    document.querySelectorAll(".screen").forEach(function(panel){panel.classList.toggle("active",panel===target);panel.classList.remove("screen-enter","screen-exit")});
+    document.querySelectorAll("[data-screen]").forEach(function(nav){nav.classList.toggle("active",nav.dataset.screen===screen)});
+    if(button.dataset.networkShortcut){
+      var select=document.getElementById("dataNetwork");
+      if(select){select.value=button.dataset.networkShortcut;select.dispatchEvent(new Event("change"));}
+    }
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+})();
+</script>
+
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script defer src="app.js"></script>
 </body></html>
