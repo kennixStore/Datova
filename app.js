@@ -113,6 +113,25 @@ $("#dataContinue").addEventListener("click",()=>{const n=$("#dataNetwork").value
 $("#airContinue").addEventListener("click",()=>{const n=$("#airNetwork").value,p=$("#airPhone").value,a=Number($("#airAmount").value);if(!n||!/^0\d{10}$/.test(p)||!Number.isFinite(a)||a<50||a>50000){toast("Check the network, phone number and amount (₦50–₦50,000).");return}toast("Preview only: airtime purchases are not connected yet.")});
 $$(".filter-chip").forEach(b=>b.addEventListener("click",()=>{$$(".filter-chip").forEach(x=>x.classList.remove("active"));b.classList.add("active");toast("Transaction filters will work when account history is connected.")}));
 renderSlide();
-const sessionCheck=supabaseReady?supabaseClient.auth.getSession().then(({data})=>data?.session?.user||null).catch(()=>null):Promise.resolve(null);
-const returningVisitor=!!localStorage.getItem("datova_intro_seen");const splashDuration=returningVisitor?1350:7600;splash.classList.add(returningVisitor?"returning-visit":"first-visit");setTimeout(async()=>{splash.classList.add("out");const signedInUser=await sessionCheck;setTimeout(()=>{splash.remove();if(signedInUser){renderAccount(signedInUser);showApp()}else if(returningVisitor)showApp();else intro.classList.remove("hidden")},620)},splashDuration);
+// Do not let a slow or blocked auth request keep the splash screen open.
+const sessionCheck=supabaseReady
+ ? Promise.race([
+     supabaseClient.auth.getSession().then(({data})=>data?.session?.user||null).catch(()=>null),
+     new Promise(resolve=>setTimeout(()=>resolve(null),2200))
+   ])
+ : Promise.resolve(null);
+const returningVisitor=!!localStorage.getItem("datova_intro_seen");
+const splashDuration=returningVisitor?1350:7600;
+splash.classList.add(returningVisitor?"returning-visit":"first-visit");
+setTimeout(()=>{
+ splash.classList.add("out");
+ setTimeout(()=>{
+  splash.remove();
+  sessionCheck.then(signedInUser=>{
+   if(signedInUser){renderAccount(signedInUser);showApp()}
+   else if(returningVisitor)showApp();
+   else intro.classList.remove("hidden");
+  });
+ },620);
+},splashDuration);
 if("serviceWorker" in navigator&&location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
