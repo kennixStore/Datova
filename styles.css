@@ -331,3 +331,6 @@ body.dark .greeting-avatar{border-color:#1b3555}
 
 .service-grid-icon{display:grid;grid-template-columns:repeat(2,7px);grid-template-rows:repeat(2,7px);gap:3px;place-content:center}
 .service-grid-icon i{display:block;width:7px;height:7px;border-radius:2px;background:currentColor;opacity:.9}
+
+/* Keep the welcome greeting compact without changing its wording. */
+#greetingTitle{font-size:clamp(17px,2.4vw,22px)!important;line-height:1.2!important;}
