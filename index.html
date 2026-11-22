@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07152f"><meta name="description" content="DATOVA — Data Made Easy. Connections Made Better.">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"><title>DATOVA — Digital services, made easy</title>
+</head>
+<body>
+<div id="splash" class="splash"><div class="splash-mark"><span class="ring"></span><span class="dmark">D</span></div><div class="splash-name">DATOVA</div><div class="splash-tag">Data Made Easy. Connections Made Better.</div></div>
+<div id="onboarding" class="onboarding hidden">
+ <button class="skip" id="skipIntro">Skip</button><div class="intro-art"><div class="orbit o1"></div><div class="orbit o2"></div><div class="intro-icon" id="introIcon">⌁</div></div>
+ <div class="intro-copy"><div class="eyebrow" id="introStep">WELCOME TO DATOVA</div><h1 id="introTitle">Your digital world,<br><span>made easier.</span></h1><p id="introText">A simpler way to stay connected. Get the essentials you need, all in one place.</p></div>
+ <div class="intro-bottom"><div class="dots" id="introDots"><i class="active"></i><i></i><i></i><i></i></div><div class="intro-actions"><button class="back hidden" id="introBack">Back</button><button class="primary" id="introNext">Next <b>→</b></button></div></div>
+</div>
+<div id="app" class="app hidden">
+<header class="topbar"><a class="brand" href="#"><span class="brand-icon">D</span><span>DATOVA</span></a><div class="top-actions"><button class="icon-btn" id="themeToggle" aria-label="Toggle theme">◐</button><button class="avatar" id="accountBtn">G</button></div></header>
+<main class="layout">
+<aside class="sidebar"><div class="side-label">MENU</div><button class="nav-item active" data-view="home">⌂ <span>Overview</span></button><button class="nav-item" data-view="buy-data">▤ <span>Buy Data</span></button><button class="nav-item" data-view="airtime">◉ <span>Buy Airtime</span></button><div class="side-label space">MORE SERVICES</div><button class="nav-item muted" data-view="coming">ϟ <span>Electricity</span><small>SOON</small></button><button class="nav-item muted" data-view="coming">▣ <span>Cable TV</span><small>SOON</small></button><button class="nav-item muted" data-view="coming">⌁ <span>Internet</span><small>SOON</small></button><div class="side-bottom"><div class="help-card"><div class="help-orb">?</div><b>Need a hand?</b><p>We're working on ways to support you.</p><span>Support centre ↗</span></div><button class="nav-item" id="loginSide">⇥ <span>Sign in</span></button></div></aside>
+<section class="content">
+<div class="welcome-row"><div><div class="eyebrow">YOUR DIGITAL SPACE</div><h1>Good day<span class="wave"> ✦</span></h1><p>Everything you need to stay connected.</p></div><div class="date-pill"><span class="live-dot"></span> DATOVA is ready for you</div></div>
+<div class="hero-card"><div class="hero-glow"></div><div class="hero-content"><div class="hero-chip">SIMPLE. FAST. CONNECTED.</div><h2>Stay connected<br>to what <span>matters.</span></h2><p>Buy data and airtime with a smoother, simpler experience.</p><button class="white-btn" data-view="buy-data">Get started <b>→</b></button></div><div class="hero-visual"><div class="signal signal-a"></div><div class="signal signal-b"></div><div class="phone-card"><div class="phone-top"></div><div class="phone-line"></div><div class="phone-line short"></div><div class="phone-bubble">D</div><div class="phone-bars"><i></i><i></i><i></i><i></i></div></div><span class="float-dot dot-a"></span><span class="float-dot dot-b"></span></div></div>
+<div class="section-head"><div><h2>What do you need today?</h2><p>Choose a service to get started.</p></div><span class="secure-label">✦ Designed for simplicity</span></div>
+<div class="service-grid">
+<button class="service-card" data-view="buy-data"><span class="service-icon data-icon">▤</span><span class="service-title">Buy Data</span><span class="service-desc">Stay online with your network.</span><span class="service-arrow">↗</span><span class="available">AVAILABLE SOON</span></button>
+<button class="service-card" data-view="airtime"><span class="service-icon airtime-icon">◉</span><span class="service-title">Buy Airtime</span><span class="service-desc">Top up in just a few steps.</span><span class="service-arrow">↗</span><span class="available">AVAILABLE SOON</span></button>
+<button class="service-card coming-card" data-view="coming"><span class="service-icon electric-icon">ϟ</span><span class="service-title">Electricity</span><span class="service-desc">Pay your electricity bills.</span><span class="service-arrow">↗</span><span class="coming-badge">COMING SOON</span></button>
+<button class="service-card coming-card" data-view="coming"><span class="service-icon cable-icon">▣</span><span class="service-title">Cable TV</span><span class="service-desc">Renew your TV subscription.</span><span class="service-arrow">↗</span><span class="coming-badge">COMING SOON</span></button>
+</div>
+<div class="bottom-grid"><div class="info-panel"><div class="panel-heading"><div><h3>More ways to connect</h3><p>We're growing the DATOVA experience.</p></div><span class="sparkle">✧</span></div><div class="coming-list"><div><span>⌁</span><b>Internet subscriptions</b><em>Coming soon</em></div><div><span>▧</span><b>Education PINs</b><em>Coming soon</em></div><div><span>✧</span><b>More digital services</b><em>Coming soon</em></div></div></div><div class="info-panel trust-panel"><div class="trust-symbol">D</div><h3>One place. Less hassle.</h3><p>DATOVA is being built to make everyday digital services feel effortless.</p><div class="trust-foot"><span>● Secure-by-design approach</span><span>● Simple experience</span></div></div></div>
+<footer>© <span id="year"></span> DATOVA. All rights reserved. <span>Data Made Easy. Connections Made Better.</span></footer>
+</section></main>
+</div>
+<div class="modal-backdrop hidden" id="authModal"><div class="modal"><button class="modal-close" id="closeAuth">×</button><div class="modal-brand"><span class="brand-icon">D</span> DATOVA</div><div class="eyebrow">YOUR ACCOUNT</div><h2 id="authTitle">Welcome back</h2><p id="authDesc">Sign in to access your DATOVA account.</p><div class="auth-tabs"><button class="selected" data-auth="login">Log in</button><button data-auth="signup">Create account</button></div><form id="authForm"><label>Full name <input id="fullName" placeholder="Your name" autocomplete="name" class="hidden"></label><label>Email address<input type="email" placeholder="you@example.com" required autocomplete="email"></label><label>Password<input type="password" placeholder="At least 8 characters" required minlength="8" autocomplete="current-password"></label><button class="primary full" type="submit">Continue <b>→</b></button></form><small class="demo-note">Preview only — account registration is not connected yet.</small></div></div>
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body></html>
