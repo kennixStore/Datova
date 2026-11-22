@@ -58,7 +58,7 @@ try{
   console.warn("Supabase library did not load; DATOVA will open in preview mode.");
  }
 }catch(initError){console.error("Supabase initialization failed:",initError);}
-function updateGreeting(){const user=currentUser;const hour=new Date().getHours();const period=hour<12?"morning":hour<17?"afternoon":"evening";const full=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email?.split("@")[0]||"").trim();const first=full?full.split(/\s+/)[0]:"Guest";const title=$("#greetingTitle");if(title)title.innerHTML=`Good ${period}, ${escapeText(first)} <span class="wave">✦</span>`;const sub=$("#greetingSubtitle");if(sub)sub.textContent=user?"Your DATOVA space is ready. Let’s keep you connected.":"Explore DATOVA’s digital services and stay connected.";}
+function updateGreeting(){const user=currentUser;const hour=new Date().getHours();const period=hour<12?"morning":hour<17?"afternoon":"evening";const full=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email?.split("@")[0]||"").trim();const first=full?full.split(/\s+/)[0]:"Guest";const title=$("#greetingTitle");if(title)title.textContent=`Good ${period}, ${first}`;const sub=$("#greetingSubtitle");if(sub)sub.textContent=user?"Your DATOVA space is ready. Let’s keep you connected.":"Explore DATOVA’s digital services and stay connected.";}
 function escapeText(value){return String(value).replace(/[&<>"\']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","\'":"&#39;"}[c]));}
 function renderAccount(user){
  currentUser=user||null;
