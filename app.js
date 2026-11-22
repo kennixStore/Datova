@@ -5,7 +5,7 @@ const slides=[
 {step:"BUY DATA EASILY",title:"Buy Data<br><span>Without Stress.</span>",text:"Get affordable data from your favourite networks.",art:"data"},
 {step:"AIRTIME MADE SIMPLE",title:"Recharge Without<br><span>Stress.</span>",text:"Top up your phone in a few simple steps.",art:"airtime"}];
 let slide=0;
-function showApp(){intro.classList.add("hidden");$("#welcomeGate").classList.add("hidden");app.classList.remove("hidden");localStorage.setItem("datova_intro_seen","1")}
+function showApp(){intro.classList.add("hidden");$("#welcomeGate").classList.add("hidden");app.classList.remove("hidden");localStorage.setItem("datova_intro_seen","1");updateGreeting()}
 function showWelcomeGate(){intro.classList.add("hidden");$("#welcomeGate").classList.remove("hidden")}
 function artMarkup(type){
 const start='<svg viewBox="0 0 360 300" role="img">';
@@ -16,7 +16,7 @@ return start+'<defs><linearGradient id="airPhone"><stop stop-color="#1677ff"/><s
 function renderSlide(){const v=slides[slide];$("#introStep").textContent=v.step;$("#introTitle").innerHTML=v.title;$("#introText").textContent=v.text;$("#introArt").dataset.art=v.art;$("#introVisual").innerHTML=artMarkup(v.art);$("#introDots").innerHTML=slides.map((_,i)=>'<i class="'+(i===slide?"active":"")+'"></i>').join("");$("#introBack").classList.toggle("hidden",slide===0);$("#introNext").innerHTML=slide===slides.length-1?'Get Started <b>→</b>':'Next <b>→</b>'}
 function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2700)}
 function openAuth(mode="login"){$("#authModal").classList.remove("hidden");$$("[data-auth]").forEach(b=>b.classList.toggle("selected",b.dataset.auth===mode));$("#fullName").classList.toggle("hidden",mode!=="signup");$("#fullName").required=mode==="signup";$("#authTitle").textContent=mode==="login"?"Welcome back":"Create your account";$("#authDesc").textContent=mode==="login"?"Sign in to access your DATOVA account.":"Join DATOVA and make staying connected easier."}
-function go(screen){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}$$(".screen").forEach(s=>s.classList.remove("active"));target.classList.add("active");$$("[data-screen]").forEach(b=>b.classList.toggle("active",b.dataset.screen===screen));window.scrollTo({top:0,behavior:"smooth"})}
+function go(screen){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}const current=$(".screen.active");if(current===target)return;if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);$("[data-screen]").forEach(b=>b.classList.toggle("active",b.dataset.screen===screen));window.scrollTo({top:0,behavior:"smooth"})}
 $("#introNext").addEventListener("click",()=>{if(slide<slides.length-1){slide++;renderSlide()}else showWelcomeGate()});
 $("#introBack").addEventListener("click",()=>{if(slide>0){slide--;renderSlide()}});
 $("#skipIntro").addEventListener("click",showWelcomeGate);
@@ -58,9 +58,12 @@ try{
   console.warn("Supabase library did not load; DATOVA will open in preview mode.");
  }
 }catch(initError){console.error("Supabase initialization failed:",initError);}
+function updateGreeting(){const user=currentUser;const hour=new Date().getHours();const period=hour<12?"morning":hour<17?"afternoon":"evening";const full=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email?.split("@")[0]||"").trim();const first=full?full.split(/\s+/)[0]:"Guest";const title=$("#greetingTitle");if(title)title.innerHTML=`Good ${period}, ${escapeText(first)} <span class="wave">✦</span>`;const sub=$("#greetingSubtitle");if(sub)sub.textContent=user?"Your DATOVA space is ready. Let’s keep you connected.":"Explore DATOVA’s digital services and stay connected.";}
+function escapeText(value){return String(value).replace(/[&<>"\']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","\'":"&#39;"}[c]));}
 function renderAccount(user){
  currentUser=user||null;
  const signedIn=!!user;
+ updateGreeting();
  $("#profileSignIn").classList.toggle("hidden",signedIn);
  $("#profileSignOut").classList.toggle("hidden",!signedIn);
  $(".profile-main h3").textContent=signedIn?(user.user_metadata?.full_name||user.email||"DATOVA customer"):"Guest account";
@@ -69,7 +72,7 @@ function renderAccount(user){
 }
 if(supabaseReady){
  supabaseClient.auth.getSession().then(({data,error})=>{if(error)toast(error.message);renderAccount(data?.session?.user||null)}).catch(()=>toast("Account service is temporarily unavailable."));
- supabaseClient.auth.onAuthStateChange((_event,session)=>renderAccount(session?.user||null));
+ supabaseClient.auth.onAuthStateChange((event,session)=>{renderAccount(session?.user||null);if(event==="SIGNED_IN"&&session?.user){showApp();}});
 }else{renderAccount(null);}
 $("#authForm").addEventListener("submit",async e=>{
  e.preventDefault();
@@ -108,5 +111,6 @@ $("#dataContinue").addEventListener("click",()=>{const n=$("#dataNetwork").value
 $("#airContinue").addEventListener("click",()=>{const n=$("#airNetwork").value,p=$("#airPhone").value,a=Number($("#airAmount").value);if(!n||!/^0\d{10}$/.test(p)||!Number.isFinite(a)||a<50||a>50000){toast("Check the network, phone number and amount (₦50–₦50,000).");return}toast("Preview only: airtime purchases are not connected yet.")});
 $$(".filter-chip").forEach(b=>b.addEventListener("click",()=>{$$(".filter-chip").forEach(x=>x.classList.remove("active"));b.classList.add("active");toast("Transaction filters will work when account history is connected.")}));
 renderSlide();
-setTimeout(()=>{splash.classList.add("out");setTimeout(()=>{splash.remove();if(localStorage.getItem("datova_intro_seen"))showWelcomeGate();else intro.classList.remove("hidden")},650)},3200);
+const sessionCheck=supabaseReady?supabaseClient.auth.getSession().then(({data})=>data?.session?.user||null).catch(()=>null):Promise.resolve(null);
+setTimeout(async()=>{splash.classList.add("out");const signedInUser=await sessionCheck;setTimeout(()=>{splash.remove();if(signedInUser){renderAccount(signedInUser);showApp()}else if(localStorage.getItem("datova_intro_seen"))showWelcomeGate();else intro.classList.remove("hidden")},550)},2200);
 if("serviceWorker" in navigator&&location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
