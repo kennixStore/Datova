@@ -425,3 +425,7 @@ body.dark .mobile-nav button.active{background:#18365b;color:#79baff}
 .datova-back-btn span{font-size:18px;line-height:1}
 .datova-back-btn:active{transform:translateX(-3px)}
 body.dark .datova-back-btn{background:#10233e;border-color:#29415f;color:#9bcaff}
+
+
+/* Wallet balance visibility control */
+.wallet-visibility-toggle{display:inline-flex;align-items:center;gap:6px;border:1px solid #ffffff55;border-radius:999px;background:#ffffff18;color:#fff;padding:7px 11px;font:700 11px "DM Sans",sans-serif;cursor:pointer;transition:background .2s,transform .2s}.wallet-visibility-toggle:active{transform:scale(.96)}.wallet-visibility-toggle span{font-size:10px}.wallet-amount span{letter-spacing:.04em}body.dark .wallet-visibility-toggle{background:#ffffff18;border-color:#ffffff45}
