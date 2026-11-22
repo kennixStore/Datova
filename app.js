@@ -7,7 +7,7 @@ const slides=[
 let slide=0;
 let screenHistoryReady=false,screenStack=["overview"];
 function initScreenHistory(){if(screenHistoryReady)return;screenHistoryReady=true;const current=document.querySelector(".screen.active")?.id.replace("screen-","")||"overview";screenStack=[current];history.replaceState({datovaScreen:"root",datovaRoot:true},"",location.href);history.pushState({datovaScreen:current,datovaApp:true},"",location.href)}
-function goBack(){if(history.state?.datovaApp){history.back();return}if($(".screen.active")?.id!=="screen-overview"){go("overview");return}toast("You're already on the DATOVA home screen.")}
+function goBack(){if(history.state?.datovaApp){history.back();return}if(screenStack.length>1){screenStack.pop();const previous=screenStack[screenStack.length-1]||"overview";go(previous,{fromPopState:true});return}if($(".screen.active")?.id!=="screen-overview"){go("overview");return}toast("You're already on the DATOVA home screen.")}
 function showApp(){intro.classList.add("hidden");$("#welcomeGate").classList.add("hidden");app.classList.remove("hidden");localStorage.setItem("datova_intro_seen","1");initScreenHistory();updateGreeting()}
 function showWelcomeGate(){localStorage.setItem("datova_intro_seen","1");intro.classList.add("hidden");$("#welcomeGate").classList.remove("hidden");$("#welcomeGate").classList.add("gate-enter")}
 function artMarkup(type){
@@ -19,9 +19,10 @@ return start+'<defs><linearGradient id="airPhone"><stop stop-color="#1677ff"/><s
 function renderSlide(){const v=slides[slide];$("#introStep").textContent=v.step;$("#introTitle").innerHTML=v.title;$("#introText").textContent=v.text;$("#introArt").dataset.art=v.art;$("#introVisual").innerHTML=artMarkup(v.art);$("#introDots").innerHTML=slides.map((_,i)=>'<i class="'+(i===slide?"active":"")+'"></i>').join("");$("#introBack").classList.toggle("hidden",slide===0);$("#introNext").innerHTML=slide===slides.length-1?'Get Started <b>→</b>':'Next <b>→</b>'}
 function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2700)}
 function openAuth(mode="login"){$("#authModal").classList.remove("hidden");$$("[data-auth]").forEach(b=>b.classList.toggle("selected",b.dataset.auth===mode));$("#fullName").classList.toggle("hidden",mode!=="signup");$("#fullName").required=mode==="signup";$("#authTitle").textContent=mode==="login"?"Welcome back":"Create your account";$("#authDesc").textContent=mode==="login"?"Sign in to access your DATOVA account.":"Join DATOVA and make staying connected easier."}
-function go(screen,options={}){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}const current=$(".screen.active");if(current===target)return;if(!options.fromPopState&&screenHistoryReady){screenStack.push(screen);history.pushState({datovaScreen:screen,datovaApp:true},"",location.href)}else if(options.fromPopState){while(screenStack.length>1&&screenStack[screenStack.length-1]!==screen)screenStack.pop();if(screenStack[screenStack.length-1]!==screen)screenStack.push(screen);}if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);$("[data-screen]").forEach(b=>b.classList.toggle("active",b.dataset.screen===screen));window.scrollTo({top:0,behavior:"smooth"})}
+function syncNavigation(screen){$("[data-screen]").forEach(button=>{const active=button.dataset.screen===screen;button.classList.toggle("active",active);button.setAttribute("aria-current",active?"page":"false")})}
+function go(screen,options={}){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}const current=$(".screen.active");if(current===target){syncNavigation(screen);return}if(!options.fromPopState&&screenHistoryReady){screenStack.push(screen);history.pushState({datovaScreen:screen,datovaApp:true},"",location.href)}else if(options.fromPopState){const index=screenStack.lastIndexOf(screen);if(index>=0)screenStack=screenStack.slice(0,index+1);else screenStack.push(screen)}if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);syncNavigation(screen);window.scrollTo({top:0,behavior:"smooth"})}
 window.datovaNavigate=go;
-window.addEventListener("popstate",event=>{if(!screenHistoryReady)return;const screen=event.state?.datovaScreen;if(screen&&screen!=="root"&&$("#screen-"+screen)){go(screen,{fromPopState:true});return}screenStack=["overview"];if($(".screen.active")?.id!=="screen-overview")go("overview",{fromPopState:true});else toast("You're already on the DATOVA home screen.")});
+window.addEventListener("popstate",event=>{if(!screenHistoryReady)return;const screen=event.state?.datovaScreen;if(screen&&screen!=="root"&&$("#screen-"+screen)){go(screen,{fromPopState:true});return}screenStack=["overview"];go("overview",{fromPopState:true})});
 let introSliding=false;
 function moveIntroSlide(direction){
  if(introSliding)return;
@@ -63,7 +64,7 @@ $("#googleAuth").addEventListener("click",async()=>{
 });
 $("#year").textContent=new Date().getFullYear();
 $("[data-network-shortcut]").forEach(btn=>btn.addEventListener("click",()=>{const network=btn.dataset.networkShortcut;go("data");$("#dataNetwork").value=network;$("#dataNetwork").dispatchEvent(new Event("change"));}));
-$$("[data-screen]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.screen)));
+document.addEventListener("click",event=>{const navButton=event.target.closest("[data-screen]");if(!navButton)return;event.preventDefault();go(navButton.dataset.screen)});
 $("#accountBtn").addEventListener("click",()=>go("profile"));
 $("#greetingAvatar")?.addEventListener("click",()=>go("profile"));
 $("#loginSide").addEventListener("click",()=>openAuth("login"));
@@ -170,6 +171,7 @@ function updateWalletBalanceVisibility(){
 document.addEventListener("click",event=>{
  const walletControl=event.target.closest("#walletVisibility");
  if(!walletControl)return;
+ event.preventDefault();
  walletBalanceVisible=!walletBalanceVisible;
  updateWalletBalanceVisibility();
 });
