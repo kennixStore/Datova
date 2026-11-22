@@ -9,14 +9,29 @@
 <link rel="stylesheet" href="styles.css"><title>DATOVA — Digital services, made easy</title>
 </head>
 <body>
-<div id="splash" class="splash"><div class="splash-mark"><svg class="morph-logo" viewBox="0 0 128 128" role="img" aria-label="DATOVA symbol"><defs><linearGradient id="logoGlow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8be0ff"/><stop offset=".55" stop-color="#2588ff"/><stop offset="1" stop-color="#d5f5ff"/></linearGradient></defs><path class="morph-path" d="M64 14 C91.6 14 114 36.4 114 64 C114 91.6 91.6 114 64 114 C36.4 114 14 91.6 14 64 C14 36.4 36.4 14 64 14"><animate attributeName="d" begin=".65s" dur="1.15s" fill="freeze" calcMode="spline" keySplines=".42 0 .58 1" values="M64 14 C91.6 14 114 36.4 114 64 C114 91.6 91.6 114 64 114 C36.4 114 14 91.6 14 64 C14 36.4 36.4 14 64 14;M42 14 C82 14 113 35 113 64 C113 93 82 114 42 114 C42 80 42 48 42 14"></animate></path><path class="logo-core" d="M54 34 C77 34 94 45 94 64 C94 83 77 94 54 94" /></svg></div><div class="splash-name">DATOVA</div><div class="splash-tag">Data Made Easy. Connections Made Better.</div></div>
+<div id="splash" class="splash">
+ <div class="splash-glow"></div>
+ <div class="splash-mark">
+  <svg class="morph-logo" viewBox="0 0 128 128" role="img" aria-label="DATOVA symbol">
+   <defs><linearGradient id="logoGlow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b8efff"/><stop offset=".52" stop-color="#2588ff"/><stop offset="1" stop-color="#e2f8ff"/></linearGradient></defs>
+   <circle class="orbit-ring" cx="64" cy="64" r="49"/>
+   <path class="morph-path" d="M64 15 C91 15 113 37 113 64 C113 91 91 113 64 113 C37 113 15 91 15 64 C15 37 37 15 64 15">
+    <animate attributeName="d" begin=".55s" dur="1.25s" fill="freeze" calcMode="spline" keySplines=".42 0 .58 1" values="M64 15 C91 15 113 37 113 64 C113 91 91 113 64 113 C37 113 15 91 15 64 C15 37 37 15 64 15;M43 15 C82 15 113 36 113 64 C113 92 82 113 43 113 C43 80 43 48 43 15"/>
+   </path>
+   <path class="logo-core" d="M55 34 C78 34 94 46 94 64 C94 82 78 94 55 94"/>
+  </svg>
+ </div>
+ <div class="splash-name">DATOVA</div>
+ <div class="splash-tag">Data Made Easy. Connections Made Better.</div>
+ <div class="splash-loader" aria-label="Loading"><i></i><i></i><i></i></div>
+</div>
 <div id="onboarding" class="onboarding hidden">
  <button class="skip" id="skipIntro">Skip</button><div class="intro-art"><div class="orbit o1"></div><div class="orbit o2"></div><div class="intro-icon" id="introIcon">⌁</div></div>
  <div class="intro-copy"><div class="eyebrow" id="introStep">WELCOME TO DATOVA</div><h1 id="introTitle">Your digital world,<br><span>made easier.</span></h1><p id="introText">A simpler way to stay connected. Get the essentials you need, all in one place.</p></div>
  <div class="intro-bottom"><div class="dots" id="introDots"><i class="active"></i><i></i><i></i><i></i></div><div class="intro-actions"><button class="back hidden" id="introBack">Back</button><button class="primary" id="introNext">Next <b>→</b></button></div></div>
 </div>
 <div id="app" class="app hidden">
-<header class="topbar"><a class="brand" href="#"><span class="brand-icon">D</span><span>DATOVA</span></a><div class="top-actions"><button class="icon-btn" id="themeToggle" aria-label="Toggle theme">◐</button><button class="avatar" id="accountBtn">G</button></div></header>
+<header class="topbar"><a class="brand" href="#"><img class="brand-icon" src="icon.svg" alt=""><span>DATOVA</span></a><div class="top-actions"><button class="icon-btn" id="themeToggle" aria-label="Toggle theme">◐</button><button class="avatar" id="accountBtn">G</button></div></header>
 <main class="layout">
 <aside class="sidebar"><div class="side-label">WORKSPACE</div>
 <button class="nav-item active" data-screen="overview">⌂ <span>Overview</span></button>
@@ -85,7 +100,7 @@
 </section>
 <nav class="mobile-nav"><button class="active" data-screen="overview"><span>⌂</span>Home</button><button data-screen="data"><span>▤</span>Data</button><button data-screen="airtime"><span>◉</span>Airtime</button><button data-screen="wallet"><span>◈</span>Wallet</button><button data-screen="profile"><span>◎</span>Profile</button></nav></main>
 </div>
-<div class="modal-backdrop hidden" id="authModal"><div class="modal"><button class="modal-close" id="closeAuth">×</button><div class="modal-brand"><span class="brand-icon">D</span> DATOVA</div><div class="eyebrow">YOUR ACCOUNT</div><h2 id="authTitle">Welcome back</h2><p id="authDesc">Sign in to access your DATOVA account.</p><div class="auth-tabs"><button class="selected" data-auth="login">Log in</button><button data-auth="signup">Create account</button></div><form id="authForm"><label>Full name <input id="fullName" placeholder="Your name" autocomplete="name" class="hidden"></label><label>Email address<input type="email" placeholder="you@example.com" required autocomplete="email"></label><label>Password<input type="password" placeholder="At least 8 characters" required minlength="8" autocomplete="current-password"></label><button class="primary full" type="submit">Continue <b>→</b></button></form><small class="demo-note" id="authNote">Secure email authentication.</small></div></div>
+<div class="modal-backdrop hidden" id="authModal"><div class="modal"><button class="modal-close" id="closeAuth">×</button><div class="modal-brand"><img class="brand-icon" src="icon.svg" alt=""> DATOVA</div><div class="eyebrow">YOUR ACCOUNT</div><h2 id="authTitle">Welcome back</h2><p id="authDesc">Sign in to access your DATOVA account.</p><div class="auth-tabs"><button class="selected" data-auth="login">Log in</button><button data-auth="signup">Create account</button></div><form id="authForm"><label>Full name <input id="fullName" placeholder="Your name" autocomplete="name" class="hidden"></label><label>Email address<input type="email" placeholder="you@example.com" required autocomplete="email"></label><label>Password<input type="password" placeholder="At least 8 characters" required minlength="8" autocomplete="current-password"></label><button class="primary full" type="submit">Continue <b>→</b></button></form><small class="demo-note" id="authNote">Secure email authentication.</small></div></div>
 <div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="app.js"></script>
