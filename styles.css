@@ -26,3 +26,21 @@ body.dark .side-note-panel{background:linear-gradient(145deg,#142d4c,#10233e)}
 @media(max-width:950px){.quick-grid{grid-template-columns:repeat(2,1fr)}.purchase-layout{grid-template-columns:1fr}.side-note-panel{display:none}.support-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.content{padding:25px 16px 100px}.mobile-nav{display:flex;position:fixed;z-index:9;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:8px 7px calc(8px + env(safe-area-inset-bottom));justify-content:space-around;box-shadow:0 -8px 24px #102c5010}.mobile-nav button{border:0;background:transparent;color:#8795a9;font-size:9px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:48px}.mobile-nav button span{font-size:19px}.mobile-nav button.active{color:#1677ff;font-weight:800}.quick-grid{gap:9px}.quick-card{padding:14px}.wallet-overview{grid-template-columns:1fr}.wallet-card{min-height:190px}.support-grid{grid-template-columns:1fr}.profile-panel{align-items:flex-start;padding:18px}.setting-row{align-items:flex-start}.setting-row .outline-btn{flex:none}.page-heading h1{font-size:27px}.form-panel{padding:19px}.dashboard-hero{min-height:280px}}
 body.dark .mobile-nav{background:#10233e;border-color:#223653}
+
+/* Premium DATOVA splash and sequential loader */
+.splash{isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 50% 46%,#123d78 0%,#0a2550 32%,#07152f 72%);padding:24px}
+.splash-glow{position:absolute;width:min(82vw,460px);height:min(82vw,460px);border-radius:50%;background:radial-gradient(circle,#1677ff2c 0%,#1677ff0c 42%,transparent 70%);filter:blur(12px);animation:splashBreath 3s ease-in-out infinite;pointer-events:none}
+@keyframes splashBreath{0%,100%{transform:scale(.88);opacity:.65}50%{transform:scale(1.12);opacity:1}}
+.splash-mark{z-index:1;width:112px;height:112px;margin-bottom:2px;filter:drop-shadow(0 0 24px #168cff70)}
+.morph-logo{overflow:visible}
+.morph-path{stroke-width:7.5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 10px #55b8ff)}
+.logo-core{stroke-width:3.5;stroke-dasharray:2 8}
+.splash-name{z-index:1;margin-top:17px;font-size:26px;letter-spacing:7px;text-shadow:0 0 24px #318cff50}
+.splash-tag{z-index:1;margin-top:10px;font-size:11px;letter-spacing:.35px;color:#b6d2f5;text-align:center}
+.splash-loader{z-index:1;display:flex;align-items:center;justify-content:center;gap:11px;margin-top:36px;height:18px}
+.splash-loader i{display:block;width:9px;height:9px;border-radius:50%;background:#286fcb;opacity:.38;box-shadow:0 0 0 transparent;animation:dotPulse 1.05s ease-in-out infinite}
+.splash-loader i:nth-child(2){animation-delay:.18s}.splash-loader i:nth-child(3){animation-delay:.36s}
+@keyframes dotPulse{0%,70%,100%{transform:scale(.82);opacity:.35;background:#286fcb;box-shadow:0 0 0 transparent}35%{transform:scale(1.22);opacity:1;background:#8bdcff;box-shadow:0 0 17px #43adff}}
+.brand-icon{width:34px;height:34px;object-fit:contain;border-radius:10px;background:#07152f;padding:2px;box-shadow:0 5px 15px #1677ff30}
+.modal-brand .brand-icon{width:30px;height:30px;vertical-align:middle;margin-right:7px}
+@media(prefers-reduced-motion:reduce){.splash-glow,.splash-loader i{animation:none!important}.splash-loader i{opacity:.9;background:#55b8ff}}
