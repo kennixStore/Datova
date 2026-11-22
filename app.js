@@ -17,8 +17,29 @@ function renderSlide(){const v=slides[slide];$("#introStep").textContent=v.step;
 function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2700)}
 function openAuth(mode="login"){$("#authModal").classList.remove("hidden");$$("[data-auth]").forEach(b=>b.classList.toggle("selected",b.dataset.auth===mode));$("#fullName").classList.toggle("hidden",mode!=="signup");$("#fullName").required=mode==="signup";$("#authTitle").textContent=mode==="login"?"Welcome back":"Create your account";$("#authDesc").textContent=mode==="login"?"Sign in to access your DATOVA account.":"Join DATOVA and make staying connected easier."}
 function go(screen){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}const current=$(".screen.active");if(current===target)return;if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);$("[data-screen]").forEach(b=>b.classList.toggle("active",b.dataset.screen===screen));window.scrollTo({top:0,behavior:"smooth"})}
-$("#introNext").addEventListener("click",()=>{if(slide<slides.length-1){slide++;renderSlide()}else showWelcomeGate()});
-$("#introBack").addEventListener("click",()=>{if(slide>0){slide--;renderSlide()}});
+let introSliding=false;
+function moveIntroSlide(direction){
+ if(introSliding)return;
+ const next=slide+direction;
+ if(next<0||next>=slides.length)return;
+ introSliding=true;
+ const parts=[$("#introArt"),$(".intro-copy"),$(".intro-bottom")];
+ parts.forEach(el=>{el.classList.remove("intro-enter-left","intro-enter-right","intro-exit-left","intro-exit-right");el.classList.add(direction>0?"intro-exit-left":"intro-exit-right")});
+ setTimeout(()=>{
+  slide=next;
+  renderSlide();
+  parts.forEach(el=>{
+   el.classList.remove("intro-exit-left","intro-exit-right");
+   el.classList.add(direction>0?"intro-enter-right":"intro-enter-left");
+  });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+   parts.forEach(el=>{el.classList.remove("intro-enter-right","intro-enter-left");el.classList.add("intro-settling")});
+   setTimeout(()=>{parts.forEach(el=>el.classList.remove("intro-settling"));introSliding=false},480);
+  }));
+ },190);
+}
+$("#introNext").addEventListener("click",()=>{if(introSliding)return;if(slide<slides.length-1)moveIntroSlide(1);else showWelcomeGate()});
+$("#introBack").addEventListener("click",()=>moveIntroSlide(-1));
 $("#skipIntro").addEventListener("click",showWelcomeGate);
 $("#gateCreate").addEventListener("click",()=>openAuth("signup"));
 $("#gateLogin").addEventListener("click",()=>openAuth("login"));
