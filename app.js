@@ -187,7 +187,9 @@ const sessionCheck=supabaseReady
    ])
  : Promise.resolve(null);
 const returningVisitor=!!localStorage.getItem("datova_intro_seen");
-const splashDuration=returningVisitor?1350:7600;
+const reducedMotion=!!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+const splashDuration=returningVisitor?1850:(reducedMotion?900:14400);
+const splashFadeDuration=returningVisitor?520:(reducedMotion?300:760);
 splash.classList.add(returningVisitor?"returning-visit":"first-visit");
 setTimeout(()=>{
  splash.classList.add("out");
@@ -196,8 +198,12 @@ setTimeout(()=>{
   sessionCheck.then(signedInUser=>{
    if(signedInUser){renderAccount(signedInUser);showApp()}
    else if(returningVisitor)showApp();
-   else intro.classList.remove("hidden");
+   else {
+    intro.classList.remove("hidden");
+    intro.classList.add("intro-arrive");
+    setTimeout(()=>intro.classList.remove("intro-arrive"),900);
+   }
   });
- },620);
+ },splashFadeDuration);
 },splashDuration);
 if("serviceWorker" in navigator&&location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
