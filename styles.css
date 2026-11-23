@@ -494,3 +494,82 @@ body.dark .datova-back-btn{background:#10233e;border-color:#29415f;color:#9bcaff
 @keyframes dtOnboardingArrive{from{opacity:0;transform:translateY(18px) scale(1.01);filter:blur(5px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
 @media(max-width:600px){.splash-planet{width:min(78vw,52vh,420px);top:45%}.cinematic-splash.first-visit .cinematic-mark{width:clamp(126px,34vw,150px)}.cinematic-splash.first-visit .cinematic-wordmark{font-size:clamp(28px,8vw,34px)}.cinematic-splash.first-visit .splash-brand{margin-top:-3vh}.cinematic-splash.first-visit .splash-tag{max-width:85vw}.cinematic-splash.first-visit .splash-earth,.cinematic-splash.returning-visit .splash-earth{height:110vh;bottom:-80vh}}
 @media(prefers-reduced-motion:reduce){.cinematic-splash.first-visit .splash-brand,.cinematic-splash.first-visit .splash-planet,.cinematic-splash.first-visit .splash-earth,.cinematic-splash.first-visit .cinematic-mark .mark-body,.cinematic-splash.first-visit .cinematic-mark .mark-cut,.cinematic-splash.first-visit .cinematic-mark .mark-orbit,.cinematic-splash.first-visit .cinematic-mark .mark-star,.cinematic-splash.first-visit .cinematic-wordmark .letter,.cinematic-splash.first-visit .globe-slot .wordmark-globe,.cinematic-splash.first-visit .splash-tag,.cinematic-splash.first-visit .splash-loader{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}.cinematic-splash.first-visit .splash-planet{display:none}.onboarding.intro-arrive{animation:none!important}}
+
+
+/* DATOVA Introduction 3.0 — cinematic corporate, lightweight reveal */
+.cinematic-splash{
+  isolation:isolate;overflow:hidden;
+  background:linear-gradient(180deg,#020817 0%,#07152f 58%,#030b1c 100%);
+  transition:opacity .48s ease,visibility .48s ease;
+}
+.cinematic-splash .splash-ambient{
+  position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse at 50% 48%,#12396a55 0%,transparent 58%);
+  animation:none!important;
+}
+.cinematic-splash .splash-horizon{
+  position:absolute;z-index:0;left:-15%;right:-15%;bottom:17%;
+  height:1px;background:#55b8ff;
+  box-shadow:0 0 12px 2px #1677ff88,0 0 55px 12px #1677ff38;
+  opacity:.7;
+}
+.cinematic-splash .splash-light-sweep{
+  position:absolute;z-index:2;top:0;bottom:0;left:0;width:42%;
+  pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,transparent 0%,#55b8ff12 35%,#8cddff55 50%,#1677ff18 70%,transparent 100%);
+  transform:translate3d(-130%,0,0);
+}
+.cinematic-splash.first-visit .splash-light-sweep{
+  animation:datovaLightSweep 2.35s cubic-bezier(.22,.68,.2,1) .75s both;
+}
+.cinematic-splash .splash-brand{
+  position:relative;z-index:3;display:flex;align-items:center;flex-direction:column;
+  margin-top:-2vh;gap:0;opacity:1;transform:none;animation:none!important;
+}
+.cinematic-splash .splash-logo{
+  display:block;width:clamp(116px,27vw,150px);height:auto;object-fit:contain;
+  filter:drop-shadow(0 0 16px #168cff48);
+  opacity:1;transform:none;animation:none!important;
+}
+.cinematic-splash .cinematic-wordmark{
+  display:flex;align-items:center;justify-content:center;gap:1px;
+  min-height:1.25em;margin-top:14px;font:800 clamp(29px,7vw,39px)/1 Manrope,sans-serif;
+  letter-spacing:.08em;color:#fff;
+}
+.cinematic-splash .cinematic-wordmark .letter{opacity:1;transform:none;animation:none!important}
+.cinematic-splash .globe-slot{display:inline-flex;width:.9em;height:.9em;flex:0 0 .9em;align-items:center;justify-content:center}
+.cinematic-splash .globe-slot .wordmark-globe{display:block;width:100%;height:100%;opacity:1;transform:none;animation:none!important}
+.cinematic-splash .splash-tag{
+  margin-top:13px;color:#c4d9f3;font-size:clamp(10px,2.6vw,12px);
+  letter-spacing:.25px;text-align:center;opacity:1;transform:none;animation:none!important;
+}
+.cinematic-splash.first-visit .splash-logo,
+.cinematic-splash.first-visit .cinematic-wordmark,
+.cinematic-splash.first-visit .splash-tag{
+  opacity:0;animation:datovaLogoReveal .85s ease 1.55s forwards!important;
+}
+.cinematic-splash.first-visit .splash-tag{animation-delay:3.55s!important}
+.cinematic-splash.returning-visit .splash-light-sweep{display:none}
+.cinematic-splash.returning-visit .splash-brand{opacity:1;animation:none!important}
+.cinematic-splash.returning-visit .splash-logo,
+.cinematic-splash.returning-visit .cinematic-wordmark,
+.cinematic-splash.returning-visit .splash-tag{opacity:1;animation:none!important}
+.splash-planet,.splash-earth,.splash-glow,.splash-loader{display:none!important}
+@keyframes datovaLightSweep{
+  0%{opacity:0;transform:translate3d(-130%,0,0)}
+  12%{opacity:1}
+  88%{opacity:.85}
+  100%{opacity:0;transform:translate3d(330%,0,0)}
+}
+@keyframes datovaLogoReveal{from{opacity:0}to{opacity:1}}
+@media(max-width:600px){
+  .cinematic-splash .splash-logo{width:clamp(112px,31vw,138px)}
+  .cinematic-splash .cinematic-wordmark{font-size:clamp(28px,8vw,34px)}
+  .cinematic-splash .splash-tag{max-width:85vw}
+}
+@media(prefers-reduced-motion:reduce){
+  .cinematic-splash.first-visit .splash-light-sweep,
+  .cinematic-splash.first-visit .splash-logo,
+  .cinematic-splash.first-visit .cinematic-wordmark,
+  .cinematic-splash.first-visit .splash-tag{animation:none!important;opacity:1!important;transform:none!important}
+}
