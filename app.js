@@ -189,18 +189,75 @@ const sessionCheck=supabaseReady
 const returningVisitor=!!localStorage.getItem("datova_intro_seen");
 // Play the short DATOVA brand reveal on every fresh site load.
 // First-time visitors continue to onboarding; returning visitors go to the app.
+// DATOVA intro sound is synthesized locally; no external audio files or trackers.
+let introAudioContext=null;
+let introSoundTimers=[];
+let introStartedAt=0;
+let introSoundEnabled=localStorage.getItem("datova_intro_sound")!=="off";
+function updateIntroSoundButton(){
+ const button=$("#introSoundToggle");
+ if(!button)return;
+ button.setAttribute("aria-pressed",String(!introSoundEnabled));
+ button.setAttribute("aria-label",introSoundEnabled?"Mute intro sound":"Enable intro sound");
+ button.title=introSoundEnabled?"Mute intro sound":"Enable intro sound";
+ button.querySelector("span").textContent=introSoundEnabled?"🔊":"🔇";
+}
+function clearIntroSoundTimers(){introSoundTimers.forEach(clearTimeout);introSoundTimers=[];}
+function introTone(ctx,frequency,start,duration,type="sine",volume=.035,endFrequency=null){
+ const osc=ctx.createOscillator(),gain=ctx.createGain();
+ osc.type=type;osc.frequency.setValueAtTime(frequency,start);
+ if(endFrequency)osc.frequency.exponentialRampToValueAtTime(endFrequency,start+duration);
+ gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(volume,start+.035);gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+ osc.connect(gain);gain.connect(ctx.destination);osc.start(start);osc.stop(start+duration+.03);
+}
+function introSoundCue(ctx,kind,at){
+ if(kind==="orbit"){introTone(ctx,420,at,.7,"sine",.018,760);introTone(ctx,620,at+.12,.55,"sine",.009,980);}
+ if(kind==="globe"){introTone(ctx,523.25,at,.8,"sine",.028);introTone(ctx,659.25,at+.06,.9,"sine",.022);introTone(ctx,783.99,at+.12,1.05,"sine",.018);}
+ if(kind==="heartbeat"){introTone(ctx,115,at,.22,"sine",.035,78);introTone(ctx,92,at+.19,.28,"sine",.026,68);}
+ if(kind==="chime"){introTone(ctx,783.99,at,.85,"sine",.025);introTone(ctx,987.77,at+.12,1.05,"sine",.02);introTone(ctx,1174.66,at+.24,1.2,"sine",.014);}
+}
+async function playIntroSoundFrom(elapsed=0){
+ if(!introSoundEnabled)return;
+ const AudioCtx=window.AudioContext||window.webkitAudioContext;
+ if(!AudioCtx)return;
+ try{
+  introAudioContext=introAudioContext||new AudioCtx();
+  await introAudioContext.resume();
+  if(introAudioContext.state!=="running")return;
+  clearIntroSoundTimers();
+  const cues=[["orbit",.65],["globe",3.65],["heartbeat",4.55],["heartbeat",5.65],["chime",7.05]];
+  cues.forEach(([kind,offset])=>{
+   if(offset<elapsed)return;
+   const timer=setTimeout(()=>{if(introSoundEnabled&&introAudioContext?.state==="running")introSoundCue(introAudioContext,kind,introAudioContext.currentTime);},Math.max(0,(offset-elapsed)*1000));
+   introSoundTimers.push(timer);
+  });
+ }catch(error){/* Mobile browsers may require a tap before audio can start. */}
+}
+$("#introSoundToggle")?.addEventListener("click",async()=>{
+ introSoundEnabled=!introSoundEnabled;
+ localStorage.setItem("datova_intro_sound",introSoundEnabled?"on":"off");
+ updateIntroSoundButton();
+ if(introSoundEnabled&&$("#introSplash")&&!$("#introSplash").classList.contains("hidden"))playIntroSoundFrom(Math.max(0,(Date.now()-introStartedAt)/1000));
+ else if(!introSoundEnabled)clearIntroSoundTimers();
+});
+updateIntroSoundButton();
 function startOpeningAnimation(afterOpening){
  const splash=$("#introSplash");
- splash.classList.remove("hidden","splash-leave");
+ introStartedAt=Date.now();
+ splash.classList.remove("hidden","splash-leave","heartbeat-reveal");
  splash.classList.add("splash-play");
+ playIntroSoundFrom(0);
+ // The complete DATOVA wordmark gets a full three-second heartbeat after the globe forms.
+ setTimeout(()=>splash.classList.add("heartbeat-reveal"),4270);
  setTimeout(()=>{
+  clearIntroSoundTimers();
   splash.classList.add("splash-leave");
   setTimeout(()=>{
    splash.classList.add("hidden");
-   splash.classList.remove("splash-play","splash-leave");
+   splash.classList.remove("splash-play","splash-leave","heartbeat-reveal");
    afterOpening();
   },620);
- },4400);
+ },7300);
 }
 function showFirstVisitOnboarding(){
  intro.classList.remove("hidden");
