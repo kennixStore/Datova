@@ -8,8 +8,8 @@ let slide=0;
 let screenHistoryReady=false,screenStack=["overview"];
 function initScreenHistory(){if(screenHistoryReady)return;screenHistoryReady=true;const current=document.querySelector(".screen.active")?.id.replace("screen-","")||"overview";screenStack=[current];history.replaceState({datovaScreen:"root",datovaRoot:true},"",location.href);history.pushState({datovaScreen:current,datovaApp:true},"",location.href)}
 function goBack(){if(history.state?.datovaApp){history.back();return}if(screenStack.length>1){screenStack.pop();const previous=screenStack[screenStack.length-1]||"overview";go(previous,{fromPopState:true});return}if($(".screen.active")?.id!=="screen-overview"){go("overview");return}toast("You're already on the DATOVA home screen.")}
-function showApp(){intro.classList.add("hidden");$("#welcomeGate").classList.add("hidden");app.classList.remove("hidden");localStorage.setItem("datova_intro_seen","1");initScreenHistory();updateGreeting()}
-function showWelcomeGate(){localStorage.setItem("datova_intro_seen","1");intro.classList.add("hidden");$("#welcomeGate").classList.remove("hidden");$("#welcomeGate").classList.add("gate-enter")}
+function showApp(){$("#introSplash")?.classList.add("hidden");intro.classList.add("hidden");$("#welcomeGate").classList.add("hidden");app.classList.remove("hidden");localStorage.setItem("datova_intro_seen","1");initScreenHistory();updateGreeting()}
+function showWelcomeGate(){localStorage.setItem("datova_intro_seen","1");$("#introSplash")?.classList.add("hidden");intro.classList.add("hidden");$("#welcomeGate").classList.remove("hidden");$("#welcomeGate").classList.add("gate-enter")}
 function artMarkup(type){
 const start='<svg viewBox="0 0 360 300" role="img">';
 if(type==="globe")return start+'<defs><radialGradient id="earthFill"><stop stop-color="#39baff"/><stop offset=".7" stop-color="#0756c8"/><stop offset="1" stop-color="#041b54"/></radialGradient><linearGradient id="orbitLine"><stop stop-color="#55caff"/><stop offset=".5" stop-color="#1677ff"/><stop offset="1" stop-color="#a4eaff"/></linearGradient></defs><ellipse cx="180" cy="166" rx="145" ry="55" fill="none" stroke="url(#orbitLine)" stroke-width="5" transform="rotate(-12 180 166)"/><circle cx="180" cy="145" r="91" fill="url(#earthFill)" stroke="#48caff" stroke-width="2"/><ellipse cx="180" cy="145" rx="43" ry="91" fill="none" stroke="#6bd0ff" stroke-opacity=".65"/><path d="M91 145h178M106 105h148M106 185h148M180 54c-25 27-35 58-35 91s10 64 35 91M180 54c25 27 35 58 35 91s-10 64-35 91" fill="none" stroke="#74d5ff" stroke-opacity=".5"/><path d="M112 108q35-32 67-15t65 2M102 169q45-18 79 8t70-4" fill="none" stroke="#a5ecff" stroke-width="8" stroke-linecap="round" opacity=".25"/><g fill="#fff"><circle cx="62" cy="88" r="5"/><circle cx="292" cy="93" r="4"/><circle cx="277" cy="218" r="5"/></g><g fill="#1677ff" stroke="#9ce7ff" stroke-width="2"><rect x="35" y="183" width="46" height="40" rx="10"/><rect x="278" y="157" width="47" height="42" rx="10"/></g><path d="M49 202h18m-9-9v18M291 171l20 14m-20 0 20-14" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>';
@@ -187,11 +187,27 @@ const sessionCheck=supabaseReady
    ])
  : Promise.resolve(null);
 const returningVisitor=!!localStorage.getItem("datova_intro_seen");
-// First-time visitors see the welcome slides immediately; returning visitors go straight to the dashboard.
+// Returning visitors go straight to the dashboard. First-time visitors see the animated brand reveal, then onboarding.
+function startFirstVisitIntro(){
+ const splash=$("#introSplash");
+ splash.classList.remove("hidden");
+ splash.classList.add("splash-play");
+ setTimeout(()=>{
+  splash.classList.add("splash-leave");
+  setTimeout(()=>{
+   splash.classList.add("hidden");
+   splash.classList.remove("splash-play","splash-leave");
+   intro.classList.remove("hidden");
+   intro.classList.remove("intro-arrive");
+   void intro.offsetWidth;
+   intro.classList.add("intro-arrive");
+  },620);
+ },4400);
+}
 if(returningVisitor)showApp();
 sessionCheck.then(signedInUser=>{
  if(signedInUser){renderAccount(signedInUser);showApp();}
  else if(returningVisitor){showApp();}
- else{intro.classList.remove("hidden");}
-}).catch(()=>{intro.classList.remove("hidden");});
+ else{startFirstVisitIntro();}
+}).catch(()=>{if(!returningVisitor)startFirstVisitIntro();});
 window.datovaAppStarted=true;
