@@ -189,12 +189,6 @@ const sessionCheck=supabaseReady
 const returningVisitor=!!localStorage.getItem("datova_intro_seen");
 // First-time visitors see the welcome slides immediately; returning visitors go straight to the dashboard.
 if(returningVisitor)showApp();
-const sessionCheck=supabaseReady
- ? Promise.race([
-     supabaseClient.auth.getSession().then(({data})=>data?.session?.user||null).catch(()=>null),
-     new Promise(resolve=>setTimeout(()=>resolve(null),2200))
-   ])
- : Promise.resolve(null);
 sessionCheck.then(signedInUser=>{
  if(signedInUser){renderAccount(signedInUser);showApp();}
  else if(returningVisitor){showApp();}
