@@ -430,3 +430,67 @@ body.dark .datova-back-btn{background:#10233e;border-color:#29415f;color:#9bcaff
 
 /* Accessible wallet eye control */
 .wallet-visibility-toggle{width:42px;height:42px;display:inline-grid;place-items:center;border:1px solid rgba(255,255,255,.35);border-radius:12px;background:rgba(255,255,255,.14);color:#fff;padding:0;cursor:pointer;transition:background .2s,transform .2s}.wallet-visibility-toggle:active{transform:scale(.94)}.wallet-visibility-toggle svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.wallet-visibility-toggle:focus-visible{outline:3px solid #9bd8ff;outline-offset:3px}
+
+/* DATOVA cinematic introduction 2.0 — first-visit visual sequence */
+.cinematic-splash{isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 50% 44%,#0d3e7d 0%,#071f49 42%,#02091d 100%);transition:opacity .76s ease,visibility .76s ease}
+.cinematic-splash .splash-ambient{z-index:0;background:radial-gradient(ellipse at 50% 40%,#1677ff25 0%,transparent 44%),radial-gradient(ellipse at 15% 75%,#0a5bc522 0%,transparent 35%),linear-gradient(180deg,#02091d 0%,#061b3d 55%,#02091d 100%);animation:dtAmbientBreathe 7s ease-in-out infinite alternate}
+.cinematic-splash .splash-glow{z-index:0;width:min(100vw,720px);height:min(100vw,720px);background:radial-gradient(circle,#208cff32 0%,#1677ff12 42%,transparent 72%);filter:blur(18px);animation:dtGlowBreathe 5s ease-in-out infinite}
+.cinematic-splash.first-visit .splash-brand{opacity:0;animation:dtBrandJourney 15s linear both}
+.cinematic-splash.first-visit .cinematic-mark{width:clamp(132px,31vw,178px);height:auto;filter:drop-shadow(0 0 28px #168cff72)}
+.cinematic-splash.first-visit .cinematic-mark .mark-body{opacity:0;fill-opacity:0;stroke-dasharray:430;stroke-dashoffset:430;animation:dtMarkForm 2.05s cubic-bezier(.18,.72,.22,1) .28s forwards!important}
+.cinematic-splash.first-visit .cinematic-mark .mark-cut{opacity:0;transform:scale(.72);transform-origin:center;animation:dtMarkCut .72s cubic-bezier(.16,.8,.2,1) 1.72s forwards!important}
+.cinematic-splash.first-visit .cinematic-mark .mark-orbit{stroke-dasharray:520;stroke-dashoffset:520;filter:drop-shadow(0 0 11px #55c8ff);animation:dtOrbitForm 1.55s cubic-bezier(.2,.7,.2,1) .92s forwards!important}
+.cinematic-splash.first-visit .cinematic-mark .mark-star{opacity:0;transform:scale(.1);transform-origin:center;animation:dtStarIgnite .6s cubic-bezier(.16,1.3,.3,1) 2.05s forwards!important}
+.cinematic-splash.first-visit .cinematic-wordmark{display:flex;align-items:center;justify-content:center;gap:1px;min-height:1.3em;margin-top:18px;font-size:clamp(30px,7vw,42px);letter-spacing:.08em;line-height:1}
+.cinematic-splash.first-visit .cinematic-wordmark .letter{opacity:0!important;transform:translateY(18px) rotateX(-20deg)!important;animation:dtLetterForm .58s cubic-bezier(.18,.78,.22,1) forwards!important}
+.cinematic-splash.first-visit .letter-d{animation-delay:2.55s!important}
+.cinematic-splash.first-visit .letter-a1{animation-delay:2.72s!important}
+.cinematic-splash.first-visit .letter-t{animation-delay:2.89s!important}
+.cinematic-splash.first-visit .letter-v{animation-delay:3.23s!important}
+.cinematic-splash.first-visit .letter-a2{animation-delay:3.4s!important}
+.cinematic-splash.first-visit .globe-slot{display:inline-flex;width:.9em;height:.9em;flex:0 0 .9em;align-items:center;justify-content:center}
+.cinematic-splash.first-visit .globe-slot .wordmark-globe{width:100%;height:100%;opacity:0!important;transform:scale(.12) rotate(-75deg)!important;animation:dtWordGlobe .9s cubic-bezier(.16,.85,.2,1) 3.05s forwards!important}
+.cinematic-splash.first-visit .splash-tag{margin-top:12px;color:#c9e4ff;font-size:clamp(10px,2.6vw,12px);letter-spacing:.28px;text-align:center;opacity:0!important;transform:translateY(9px);animation:dtTagJourney 15s ease both!important}
+.cinematic-splash.first-visit .splash-loader{opacity:0!important;animation:dtLoaderJourney 15s linear both!important}
+.cinematic-splash.first-visit .splash-loader i{background:#76d7ff;box-shadow:0 0 15px #55b8ff88;animation:dtDotPulse 1.2s ease-in-out infinite!important}
+.cinematic-splash.first-visit .splash-earth{z-index:1;left:50%;bottom:-80vh;width:min(190vw,1600px);height:110vh;opacity:0;transform:translate(-50%,35px) scale(.94);border-radius:50%;background:radial-gradient(ellipse at 50% 8%,#147ee8 0%,#0752a8 30%,#062a68 62%,#020b22 78%);box-shadow:0 -10px 58px #35a9ff9c,inset 0 18px 48px #80dfff65;animation:dtHorizonJourney 15s ease both!important}
+.cinematic-splash.first-visit .splash-earth:before{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(0deg,transparent 0 35px,#9ce6ff19 36px 37px),repeating-linear-gradient(90deg,transparent 0 55px,#9ce6ff12 56px 57px);mask-image:radial-gradient(ellipse at 50% 15%,#000 18%,transparent 72%)}
+.cinematic-splash.first-visit .splash-earth:after{content:"";position:absolute;inset:0;border-radius:50%;border-top:2px solid #a5eaff;background:radial-gradient(ellipse at 50% 0%,#8ce4ff55,transparent 45%);box-shadow:0 -5px 28px #54c4ff88}
+.cinematic-splash.first-visit .earth-grid{inset:8% 14%;border:1px solid #8adfff30;border-radius:50%;transform:scaleX(.55)}
+.cinematic-splash.first-visit .earth-glow{top:0;left:12%;right:12%;height:36px;background:#61caff;filter:blur(34px)}
+.splash-planet{position:absolute;z-index:2;left:50%;top:46%;width:min(76vw,68vh,540px);aspect-ratio:1;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.25);filter:drop-shadow(0 18px 42px #00142c88);transform-style:preserve-3d}
+.cinematic-splash.first-visit .splash-planet{animation:dtPlanetJourney 15s cubic-bezier(.16,.72,.2,1) both}
+.dt-planet-aura{position:absolute;inset:-9%;border-radius:50%;background:radial-gradient(circle,#168bff28 42%,#1a8fff20 55%,transparent 72%);filter:blur(13px)}
+.dt-planet-sphere{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 34% 28%,#50d5ff 0%,#0b70c6 42%,#073b82 72%,#031a46 100%);box-shadow:inset -28px -22px 48px #00112fba,inset 12px 12px 28px #a4efff55,0 0 0 2px #75dcff90,0 0 34px #168bff88;transform:rotateZ(-7deg);transform-style:preserve-3d;animation:dtGlobeTurn 9s ease-in-out infinite alternate}
+.dt-planet-map{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.dt-map-drift{transform-box:fill-box;transform-origin:center;animation:dtMapDrift 16s ease-in-out infinite alternate}
+.dt-planet-clouds{position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(164deg,transparent 0 31px,#e8fbff0a 33px 37px,transparent 40px 65px);mix-blend-mode:screen;opacity:.55;filter:blur(4px);animation:dtCloudDrift 11s linear infinite alternate}
+.dt-planet-rim{position:absolute;inset:-1.5%;border:2px solid #8feaff8a;border-left-color:#4abaff45;border-bottom-color:#a6edffb0;border-radius:50%;box-shadow:0 0 23px #42baff88,inset 0 0 15px #42baff20;pointer-events:none}
+.cinematic-splash.first-visit .splash-planet .dt-planet-rim{animation:dtRimPulse 3s ease-in-out infinite alternate}
+.cinematic-splash.returning-visit .splash-brand{opacity:1;animation:none!important;transform:none!important}
+.cinematic-splash.returning-visit .splash-planet{display:none}
+.cinematic-splash.returning-visit .splash-earth{left:50%;bottom:-80vh;width:min(190vw,1600px);height:110vh;opacity:.42;transform:translateX(-50%);animation:none!important}
+.cinematic-splash.returning-visit .splash-tag{opacity:1!important;transform:none!important;animation:none!important}
+.cinematic-splash.returning-visit .splash-loader{display:none}
+.onboarding.intro-arrive{animation:dtOnboardingArrive .9s cubic-bezier(.18,.72,.22,1) both}
+@keyframes dtAmbientBreathe{from{opacity:.75;transform:scale(1)}to{opacity:1;transform:scale(1.05)}}
+@keyframes dtGlowBreathe{0%,100%{opacity:.55;transform:scale(.88)}50%{opacity:1;transform:scale(1.08)}}
+@keyframes dtBrandJourney{0%,2%{opacity:0;transform:translate3d(0,16px,0) scale(.96)}7%{opacity:1;transform:translate3d(0,0,0) scale(1)}29%{opacity:1;transform:translate3d(0,0,0) scale(1)}35%{opacity:0;transform:translate3d(0,-9px,0) scale(.985)}77%{opacity:0}82%{opacity:1;transform:translate3d(0,0,0) scale(1)}100%{opacity:1}}
+@keyframes dtMarkForm{0%{opacity:0;stroke-dashoffset:430;fill-opacity:0;transform:scale(.78)}66%{opacity:1;stroke-dashoffset:0;fill-opacity:0}100%{opacity:1;stroke-dashoffset:0;fill-opacity:1;transform:scale(1)}}
+@keyframes dtMarkCut{0%{opacity:0;transform:scale(.72)}100%{opacity:1;transform:scale(1)}}
+@keyframes dtOrbitForm{0%{opacity:.2;stroke-dashoffset:520;transform:rotate(-38deg) scale(.88)}100%{opacity:1;stroke-dashoffset:0;transform:rotate(0) scale(1)}}
+@keyframes dtStarIgnite{0%{opacity:0;transform:scale(.1)}70%{opacity:1;transform:scale(1.25)}100%{opacity:1;transform:scale(1)}}
+@keyframes dtLetterForm{0%{opacity:0;transform:translateY(18px) rotateX(-20deg);filter:blur(5px)}100%{opacity:1;transform:translateY(0) rotateX(0);filter:blur(0)}}
+@keyframes dtWordGlobe{0%{opacity:0;transform:scale(.12) rotate(-75deg)}75%{opacity:1;transform:scale(1.16) rotate(8deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes dtTagJourney{0%,23%{opacity:0;transform:translateY(9px);letter-spacing:3px}29%{opacity:1;transform:translateY(0);letter-spacing:.28px}35%{opacity:0;transform:translateY(-5px)}77%{opacity:0}86%{opacity:1;transform:translateY(0);letter-spacing:.28px}100%{opacity:1}}
+@keyframes dtLoaderJourney{0%,82%{opacity:0}90%{opacity:1}100%{opacity:1}}
+@keyframes dtDotPulse{0%,100%{transform:scale(.78);opacity:.42}50%{transform:scale(1.15);opacity:1}}
+@keyframes dtPlanetJourney{0%,27%{opacity:0;transform:translate(-50%,-50%) scale(.25);filter:blur(12px)}32%{opacity:1;transform:translate(-50%,-50%) scale(.78);filter:blur(0)}40%{opacity:1;transform:translate(-50%,-50%) scale(1)}56%{opacity:1;transform:translate(-50%,-50%) scale(1.04)}64%{opacity:1;transform:translate(-50%,-50%) scale(1.28)}70%{opacity:1;transform:translate(-50%,-50%) scale(2.1)}76%{opacity:.9;transform:translate(-50%,-50%) scale(5.8)}79%{opacity:0;transform:translate(-50%,-50%) scale(9)}100%{opacity:0;transform:translate(-50%,-50%) scale(9)}}
+@keyframes dtGlobeTurn{from{transform:rotateY(-13deg) rotateZ(-7deg)}to{transform:rotateY(13deg) rotateZ(-3deg)}}
+@keyframes dtMapDrift{from{transform:translateX(-8px)}to{transform:translateX(8px)}}
+@keyframes dtCloudDrift{from{transform:translateX(-3%) rotate(-4deg)}to{transform:translateX(3%) rotate(4deg)}}
+@keyframes dtRimPulse{from{opacity:.72;filter:brightness(.9)}to{opacity:1;filter:brightness(1.25)}}
+@keyframes dtHorizonJourney{0%,77%{opacity:0;transform:translate(-50%,35px) scale(.94)}88%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes dtOnboardingArrive{from{opacity:0;transform:translateY(18px) scale(1.01);filter:blur(5px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@media(max-width:600px){.splash-planet{width:min(78vw,52vh,420px);top:45%}.cinematic-splash.first-visit .cinematic-mark{width:clamp(126px,34vw,150px)}.cinematic-splash.first-visit .cinematic-wordmark{font-size:clamp(28px,8vw,34px)}.cinematic-splash.first-visit .splash-brand{margin-top:-3vh}.cinematic-splash.first-visit .splash-tag{max-width:85vw}.cinematic-splash.first-visit .splash-earth,.cinematic-splash.returning-visit .splash-earth{height:110vh;bottom:-80vh}}
+@media(prefers-reduced-motion:reduce){.cinematic-splash.first-visit .splash-brand,.cinematic-splash.first-visit .splash-planet,.cinematic-splash.first-visit .splash-earth,.cinematic-splash.first-visit .cinematic-mark .mark-body,.cinematic-splash.first-visit .cinematic-mark .mark-cut,.cinematic-splash.first-visit .cinematic-mark .mark-orbit,.cinematic-splash.first-visit .cinematic-mark .mark-star,.cinematic-splash.first-visit .cinematic-wordmark .letter,.cinematic-splash.first-visit .globe-slot .wordmark-globe,.cinematic-splash.first-visit .splash-tag,.cinematic-splash.first-visit .splash-loader{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}.cinematic-splash.first-visit .splash-planet{display:none}.onboarding.intro-arrive{animation:none!important}}
