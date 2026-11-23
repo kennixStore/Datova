@@ -665,3 +665,16 @@ body.dark .datova-back-btn{background:#10233e;border-color:#29415f;color:#9bcaff
   100%{transform:scale(1);filter:drop-shadow(0 0 0 #1677ff00)}
 }
 @media(prefers-reduced-motion:reduce){.intro-splash.heartbeat-reveal .splash-word{animation:none!important}.intro-sound-toggle{transition:none}}
+
+
+/* Auth modal: keep the globe O visible independently of dashboard wordmark styles. */
+#authModal .modal-brand .auth-wordmark{
+ display:inline-flex!important;align-items:center!important;gap:1px!important;
+ white-space:nowrap!important;overflow:visible!important;
+}
+#authModal .modal-brand .auth-wordmark-globe{
+ display:inline-block!important;visibility:visible!important;opacity:1!important;
+ width:20px!important;height:20px!important;min-width:20px!important;
+ flex:0 0 20px!important;vertical-align:middle!important;margin:0 1px!important;
+ transform:none!important;filter:drop-shadow(0 2px 7px #1677ff66)!important;
+}
