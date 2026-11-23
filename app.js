@@ -187,27 +187,38 @@ const sessionCheck=supabaseReady
    ])
  : Promise.resolve(null);
 const returningVisitor=!!localStorage.getItem("datova_intro_seen");
-// Returning visitors go straight to the dashboard. First-time visitors see the animated brand reveal, then onboarding.
-function startFirstVisitIntro(){
+// Play the short DATOVA brand reveal on every fresh site load.
+// First-time visitors continue to onboarding; returning visitors go to the app.
+function startOpeningAnimation(afterOpening){
  const splash=$("#introSplash");
- splash.classList.remove("hidden");
+ splash.classList.remove("hidden","splash-leave");
  splash.classList.add("splash-play");
  setTimeout(()=>{
   splash.classList.add("splash-leave");
   setTimeout(()=>{
    splash.classList.add("hidden");
    splash.classList.remove("splash-play","splash-leave");
-   intro.classList.remove("hidden");
-   intro.classList.remove("intro-arrive");
-   void intro.offsetWidth;
-   intro.classList.add("intro-arrive");
+   afterOpening();
   },620);
  },4400);
 }
-if(returningVisitor)showApp();
+function showFirstVisitOnboarding(){
+ intro.classList.remove("hidden");
+ intro.classList.remove("intro-arrive");
+ void intro.offsetWidth;
+ intro.classList.add("intro-arrive");
+}
 sessionCheck.then(signedInUser=>{
- if(signedInUser){renderAccount(signedInUser);showApp();}
- else if(returningVisitor){showApp();}
- else{startFirstVisitIntro();}
-}).catch(()=>{if(!returningVisitor)startFirstVisitIntro();});
+ if(signedInUser){
+  renderAccount(signedInUser);
+  startOpeningAnimation(showApp);
+ }else if(returningVisitor){
+  startOpeningAnimation(showApp);
+ }else{
+  startOpeningAnimation(showFirstVisitOnboarding);
+ }
+}).catch(()=>{
+ if(returningVisitor)startOpeningAnimation(showApp);
+ else startOpeningAnimation(showFirstVisitOnboarding);
+});
 window.datovaAppStarted=true;
