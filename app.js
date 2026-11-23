@@ -225,6 +225,13 @@ async function playIntroSoundFrom(elapsed=0){
   introAudioContext=introAudioContext||new AudioCtx();
   if(introAudioContext.state!=="running")await introAudioContext.resume();
   if(introAudioContext.state!=="running")return false;
+  // Give the first successful unlock a clear, immediate audible confirmation.
+  // This is especially important on mobile, where autoplay is blocked until a tap.
+  if(!introAudioUnlocked){
+   const now=introAudioContext.currentTime+.025;
+   introTone(introAudioContext,659.25,now,.24,"sine",.075);
+   introTone(introAudioContext,880,now+.12,.34,"sine",.065);
+  }
   introAudioUnlocked=true;
   clearIntroSoundTimers();
   const cues=[["orbit",.65],["globe",3.65],["heartbeat",4.55],["heartbeat",5.65],["chime",7.05]];
