@@ -211,11 +211,40 @@ function introTone(ctx,frequency,start,duration,type="sine",volume=.035,endFrequ
  gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(volume,start+.035);gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
  osc.connect(gain);gain.connect(ctx.destination);osc.start(start);osc.stop(start+duration+.03);
 }
+function introWhoosh(ctx,at){
+ const length= Math.ceil(ctx.sampleRate*.95),buffer=ctx.createBuffer(1,length,ctx.sampleRate),data=buffer.getChannelData(0);
+ for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);
+ const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+ source.buffer=buffer;filter.type="bandpass";filter.Q.value=.65;
+ filter.frequency.setValueAtTime(260,at);filter.frequency.exponentialRampToValueAtTime(2400,at+.72);
+ gain.gain.setValueAtTime(.0001,at);gain.gain.exponentialRampToValueAtTime(.12,at+.28);gain.gain.exponentialRampToValueAtTime(.0001,at+.92);
+ source.connect(filter);filter.connect(gain);gain.connect(ctx.destination);source.start(at);source.stop(at+1);
+ introTone(ctx,180,at+.12,.72,"sine",.018,92);
+}
+function introGlobeActivation(ctx,at){
+ introTone(ctx,92,at,.9,"sine",.055,48);
+ introTone(ctx,220,at+.05,1.05,"triangle",.035,440);
+ introTone(ctx,440,at+.16,1.15,"sine",.025,880);
+ introTone(ctx,660,at+.32,1.2,"sine",.014,990);
+}
+function introHeartbeat(ctx,at){
+ // Soft, rounded double thump with a short low-frequency body and gentle sub-bass.
+ introTone(ctx,88,at,.24,"sine",.075,52);
+ introTone(ctx,64,at+.16,.34,"sine",.052,42);
+}
+function introFinalChime(ctx,at){
+ // Warm, layered bell partials with a long, smooth decay.
+ [[659.25,.0,.035],[830.61,.08,.026],[987.77,.16,.022],[1318.51,.28,.012]].forEach(([hz,delay,level])=>{
+  const when=at+delay;
+  introTone(ctx,hz,when,1.75,"sine",level,hz*.997);
+  introTone(ctx,hz*2.002,when,.95,"sine",level*.18,hz*2);
+ });
+}
 function introSoundCue(ctx,kind,at){
- if(kind==="orbit"){introTone(ctx,420,at,.7,"sine",.018,760);introTone(ctx,620,at+.12,.55,"sine",.009,980);}
- if(kind==="globe"){introTone(ctx,523.25,at,.8,"sine",.028);introTone(ctx,659.25,at+.06,.9,"sine",.022);introTone(ctx,783.99,at+.12,1.05,"sine",.018);}
- if(kind==="heartbeat"){introTone(ctx,115,at,.22,"sine",.035,78);introTone(ctx,92,at+.19,.28,"sine",.026,68);}
- if(kind==="chime"){introTone(ctx,783.99,at,.85,"sine",.025);introTone(ctx,987.77,at+.12,1.05,"sine",.02);introTone(ctx,1174.66,at+.24,1.2,"sine",.014);}
+ if(kind==="orbit")introWhoosh(ctx,at);
+ if(kind==="globe")introGlobeActivation(ctx,at);
+ if(kind==="heartbeat")introHeartbeat(ctx,at);
+ if(kind==="chime")introFinalChime(ctx,at);
 }
 async function playIntroSoundFrom(elapsed=0){
  if(!introSoundEnabled)return false;
@@ -225,13 +254,6 @@ async function playIntroSoundFrom(elapsed=0){
   introAudioContext=introAudioContext||new AudioCtx();
   if(introAudioContext.state!=="running")await introAudioContext.resume();
   if(introAudioContext.state!=="running")return false;
-  // Give the first successful unlock a clear, immediate audible confirmation.
-  // This is especially important on mobile, where autoplay is blocked until a tap.
-  if(!introAudioUnlocked){
-   const now=introAudioContext.currentTime+.025;
-   introTone(introAudioContext,659.25,now,.24,"sine",.075);
-   introTone(introAudioContext,880,now+.12,.34,"sine",.065);
-  }
   introAudioUnlocked=true;
   clearIntroSoundTimers();
   const cues=[["orbit",.65],["globe",3.65],["heartbeat",4.55],["heartbeat",5.65],["chime",7.05]];
@@ -252,11 +274,8 @@ function unlockIntroSoundFromGesture(){
   introAudioContext=introAudioContext||new AudioCtx();
   const ctx=introAudioContext;
   const resumePromise=ctx.state==="running"?Promise.resolve():ctx.resume();
-  // Create and start the confirmation tones before yielding to any async operation.
-  // This preserves the browser's user-activation permission on Android/iOS.
-  const now=ctx.currentTime+.04;
-  introTone(ctx,659.25,now,.28,"sine",.085);
-  introTone(ctx,880,now+.16,.38,"sine",.075);
+  // Resume the audio engine within the user's tap gesture, then play the
+  // actual cinematic cue sequence from the current point in the opening reveal.
   introAudioUnlocked=true;
   resumePromise.then(()=>{
    if(ctx.state==="running"){
