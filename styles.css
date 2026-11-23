@@ -647,3 +647,21 @@ body.dark .datova-back-btn{background:#10233e;border-color:#29415f;color:#9bcaff
 @keyframes dtCopySettle{from{opacity:.7;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
 @keyframes dtBottomSettle{from{opacity:.8;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.intro-splash *,.onboarding.intro-arrive,.onboarding .intro-art,.onboarding .intro-copy,.onboarding .intro-bottom{animation:none!important;transition:none!important}.intro-splash .splash-mark,.intro-splash .splash-word{opacity:1!important;transform:none!important}}
+
+
+/* DATOVA brand heartbeat and optional intro sound control */
+.intro-sound-toggle{position:absolute;z-index:8;top:max(22px,env(safe-area-inset-top));right:max(22px,env(safe-area-inset-right));width:42px;height:42px;border:1px solid #1677ff24;border-radius:50%;background:#ffffffd9;color:#0b3472;box-shadow:0 5px 20px #1677ff16;display:grid;place-items:center;font-size:17px;cursor:pointer;backdrop-filter:blur(10px);transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.intro-sound-toggle:active{transform:scale(.92)}
+.intro-sound-toggle:focus-visible{outline:3px solid #55b8ff;outline-offset:3px}
+.intro-splash.heartbeat-reveal .splash-word{transform-origin:center;animation:dtBrandHeartbeat 3s cubic-bezier(.25,.7,.25,1) both}
+.intro-splash.heartbeat-reveal .splash-word{filter:drop-shadow(0 0 0 #1677ff00)}
+.intro-splash.heartbeat-reveal .splash-globe-slot svg{filter:drop-shadow(0 0 12px #1677ff99)}
+@keyframes dtBrandHeartbeat{
+  0%{transform:scale(1);filter:drop-shadow(0 0 0 #1677ff00)}
+  12%{transform:scale(1.045);filter:drop-shadow(0 0 15px #1677ff55)}
+  22%{transform:scale(1);filter:drop-shadow(0 0 3px #1677ff18)}
+  34%{transform:scale(1.035);filter:drop-shadow(0 0 12px #1677ff45)}
+  48%{transform:scale(1);filter:drop-shadow(0 0 2px #1677ff12)}
+  100%{transform:scale(1);filter:drop-shadow(0 0 0 #1677ff00)}
+}
+@media(prefers-reduced-motion:reduce){.intro-splash.heartbeat-reveal .splash-word{animation:none!important}.intro-sound-toggle{transition:none}}
