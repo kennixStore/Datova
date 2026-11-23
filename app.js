@@ -243,21 +243,46 @@ async function playIntroSoundFrom(elapsed=0){
   return true;
  }catch(error){return false;}
 }
-// A real user gesture unlocks Web Audio on browsers that block autoplay.
+// Unlock audio synchronously inside the actual tap gesture (mobile browsers require this).
+function unlockIntroSoundFromGesture(){
+ if(!introSoundEnabled)return;
+ const AudioCtx=window.AudioContext||window.webkitAudioContext;
+ if(!AudioCtx)return;
+ try{
+  introAudioContext=introAudioContext||new AudioCtx();
+  const ctx=introAudioContext;
+  const resumePromise=ctx.state==="running"?Promise.resolve():ctx.resume();
+  // Create and start the confirmation tones before yielding to any async operation.
+  // This preserves the browser's user-activation permission on Android/iOS.
+  const now=ctx.currentTime+.04;
+  introTone(ctx,659.25,now,.28,"sine",.085);
+  introTone(ctx,880,now+.16,.38,"sine",.075);
+  introAudioUnlocked=true;
+  resumePromise.then(()=>{
+   if(ctx.state==="running"){
+    const elapsed=Math.max(0,(Date.now()-introStartedAt)/1000);
+    playIntroSoundFrom(elapsed);
+   }
+  }).catch(()=>{introAudioUnlocked=false;});
+ }catch(error){introAudioUnlocked=false;}
+}
 $("#introSplash")?.addEventListener("pointerdown",event=>{
  if(event.target.closest("#introSoundToggle"))return;
- if(introSoundEnabled&&!introAudioUnlocked)playIntroSoundFrom(Math.max(0,(Date.now()-introStartedAt)/1000));
+ if(introSoundEnabled&&!introAudioUnlocked)unlockIntroSoundFromGesture();
 },{passive:true});
-$("#introSoundToggle")?.addEventListener("click",async()=>{
+$("#introSoundToggle")?.addEventListener("click",()=>{
  if(introSoundEnabled&&!introAudioUnlocked){
-  await playIntroSoundFrom(Math.max(0,(Date.now()-introStartedAt)/1000));
+  unlockIntroSoundFromGesture();
   return;
  }
  introSoundEnabled=!introSoundEnabled;
  localStorage.setItem("datova_intro_sound",introSoundEnabled?"on":"off");
  updateIntroSoundButton();
- if(introSoundEnabled&&$("#introSplash")&&!$("#introSplash").classList.contains("hidden"))playIntroSoundFrom(Math.max(0,(Date.now()-introStartedAt)/1000));
- else if(!introSoundEnabled)clearIntroSoundTimers();
+ if(introSoundEnabled){
+  unlockIntroSoundFromGesture();
+ }else{
+  clearIntroSoundTimers();
+ }
 });
 updateIntroSoundButton();
 function startOpeningAnimation(afterOpening){
