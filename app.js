@@ -193,6 +193,7 @@ const returningVisitor=!!localStorage.getItem("datova_intro_seen");
 let introAudioContext=null;
 let introSoundTimers=[];
 let introStartedAt=0;
+let introAudioUnlocked=false;
 let introSoundEnabled=localStorage.getItem("datova_intro_sound")!=="off";
 function updateIntroSoundButton(){
  const button=$("#introSoundToggle");
@@ -217,13 +218,14 @@ function introSoundCue(ctx,kind,at){
  if(kind==="chime"){introTone(ctx,783.99,at,.85,"sine",.025);introTone(ctx,987.77,at+.12,1.05,"sine",.02);introTone(ctx,1174.66,at+.24,1.2,"sine",.014);}
 }
 async function playIntroSoundFrom(elapsed=0){
- if(!introSoundEnabled)return;
+ if(!introSoundEnabled)return false;
  const AudioCtx=window.AudioContext||window.webkitAudioContext;
- if(!AudioCtx)return;
+ if(!AudioCtx)return false;
  try{
   introAudioContext=introAudioContext||new AudioCtx();
-  await introAudioContext.resume();
-  if(introAudioContext.state!=="running")return;
+  if(introAudioContext.state!=="running")await introAudioContext.resume();
+  if(introAudioContext.state!=="running")return false;
+  introAudioUnlocked=true;
   clearIntroSoundTimers();
   const cues=[["orbit",.65],["globe",3.65],["heartbeat",4.55],["heartbeat",5.65],["chime",7.05]];
   cues.forEach(([kind,offset])=>{
@@ -231,9 +233,19 @@ async function playIntroSoundFrom(elapsed=0){
    const timer=setTimeout(()=>{if(introSoundEnabled&&introAudioContext?.state==="running")introSoundCue(introAudioContext,kind,introAudioContext.currentTime);},Math.max(0,(offset-elapsed)*1000));
    introSoundTimers.push(timer);
   });
- }catch(error){/* Mobile browsers may require a tap before audio can start. */}
+  return true;
+ }catch(error){return false;}
 }
+// A real user gesture unlocks Web Audio on browsers that block autoplay.
+$("#introSplash")?.addEventListener("pointerdown",event=>{
+ if(event.target.closest("#introSoundToggle"))return;
+ if(introSoundEnabled&&!introAudioUnlocked)playIntroSoundFrom(Math.max(0,(Date.now()-introStartedAt)/1000));
+},{passive:true});
 $("#introSoundToggle")?.addEventListener("click",async()=>{
+ if(introSoundEnabled&&!introAudioUnlocked){
+  await playIntroSoundFrom(Math.max(0,(Date.now()-introStartedAt)/1000));
+  return;
+ }
  introSoundEnabled=!introSoundEnabled;
  localStorage.setItem("datova_intro_sound",introSoundEnabled?"on":"off");
  updateIntroSoundButton();
