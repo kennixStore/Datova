@@ -687,3 +687,10 @@ body.dark .datova-back-btn{background:#10233e;border-color:#29415f;color:#9bcaff
 .password-toggle:focus-visible,.forgot-password:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .forgot-password{display:block;margin:3px 0 4px auto;padding:5px 0;border:0;background:transparent;color:var(--blue);font-size:11px;font-weight:700}
 body.dark .password-toggle{color:#a9c8ef}
+
+/* Standard password visibility eye controls */
+.password-toggle{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:5px!important;color:#7187a5!important}
+.password-toggle svg{width:21px;height:21px;display:block}
+.password-toggle[aria-pressed="true"] svg{opacity:.9}
+.password-toggle[aria-pressed="true"] svg path{stroke-dasharray:2 2}
+#authModal label.hidden{display:none!important}
