@@ -189,11 +189,11 @@ const sessionCheck=supabaseReady
 const replayIntro=new URLSearchParams(location.search).get("intro")==="full";
 const returningVisitor=!!localStorage.getItem("datova_intro_seen")&&!replayIntro;
 const reducedMotion=!!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-const splashDuration=returningVisitor?1850:(reducedMotion?900:15000);
-const splashFadeDuration=returningVisitor?520:(reducedMotion?300:760);
+const splashDuration=returningVisitor?1800:(reducedMotion?900:8500);
+const splashFadeDuration=returningVisitor?360:(reducedMotion?220:480);
 splash.classList.add(returningVisitor?"returning-visit":"first-visit");
-setTimeout(playDatovaSignatureTone,returningVisitor?260:3450);
-if(!returningVisitor&&!reducedMotion)setTimeout(playDatovaSignatureTone,12400);
+setTimeout(playDatovaSignatureTone,returningVisitor?260:3150);
+
 setTimeout(()=>{datovaSignaturePending=false;},splashDuration+splashFadeDuration+80);
 /* DATOVA signature tone. Browsers may require a user gesture before Web Audio can play. */
 let datovaAudioContext=null;
