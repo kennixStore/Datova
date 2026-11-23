@@ -573,3 +573,22 @@ body.dark .datova-back-btn{background:#10233e;border-color:#29415f;color:#9bcaff
   .cinematic-splash.first-visit .cinematic-wordmark,
   .cinematic-splash.first-visit .splash-tag{animation:none!important;opacity:1!important;transform:none!important}
 }
+
+
+/* DATOVA refreshed onboarding — clean white and electric blue. */
+.onboarding{background:#fff!important;color:#07152f!important;padding:22px max(7vw,24px) 30px!important;}
+.onboarding .skip{color:#1677ff!important;font-weight:700;padding:10px 4px;}
+.onboarding .intro-art{height:38vh;min-height:205px;max-height:340px;margin:4px auto 0;width:min(100%,520px);border-radius:28px;background:linear-gradient(145deg,#f5f9ff,#eaf3ff 58%,#f8fbff);overflow:hidden;}
+.onboarding .intro-art svg{max-width:100%;max-height:100%;filter:drop-shadow(0 12px 18px #1677ff18);}
+.onboarding .intro-copy{margin: auto auto 26px;width:min(100%,560px);}
+.onboarding .intro-copy .eyebrow{color:#1677ff!important;}
+.onboarding .intro-copy h1{color:#07152f!important;font-size:clamp(32px,7vw,48px);}
+.onboarding .intro-copy h1 span{color:#1677ff!important;}
+.onboarding .intro-copy p{color:#63738b!important;}
+.onboarding .dots i{background:#d8e5f6!important;}
+.onboarding .dots i.active{background:#1677ff!important;}
+.onboarding .back{color:#52647d!important;}
+.onboarding .primary{background:linear-gradient(110deg,#1677ff,#55b8ff)!important;box-shadow:0 8px 22px #1677ff25!important;}
+.onboarding .intro-art,.onboarding .intro-copy,.onboarding .intro-bottom{animation:none!important;}
+@media(max-width:600px){.onboarding{padding:16px 22px 24px!important}.onboarding .intro-art{height:35vh;min-height:190px}.onboarding .intro-copy{margin-bottom:22px}.onboarding .intro-copy h1{font-size:clamp(30px,8vw,40px)}}
+@media(prefers-reduced-motion:reduce){.onboarding *{animation:none!important;transition:none!important}}
