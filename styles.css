@@ -601,25 +601,35 @@ body.dark .datova-back-btn{background:#10233e;border-color:#29415f;color:#9bcaff
 .intro-splash.hidden{display:none!important}
 .splash-core{position:relative;z-index:3;display:flex;align-items:center;flex-direction:column;gap:15px}
 .splash-mark{width:clamp(112px,28vw,154px);height:auto;object-fit:contain;filter:drop-shadow(0 12px 26px #1677ff30)}
-.splash-word{font:800 clamp(30px,8vw,42px)/1 Manrope,sans-serif;letter-spacing:.16em;color:#07152f}
+.splash-word{display:flex;align-items:center;justify-content:center;min-height:1em;font:800 clamp(30px,8vw,42px)/1 Manrope,sans-serif;letter-spacing:.16em;color:#07152f;white-space:nowrap}
+.splash-word>span{display:inline-block}
+.splash-globe-slot{display:inline-flex;align-items:center;justify-content:center;width:0;height:1em;overflow:visible;opacity:0;transform:scale(.08);transform-origin:center}
+.splash-globe-slot svg{width:1em;height:1em;display:block;filter:drop-shadow(0 0 9px #269bff88)}
 .splash-light{position:absolute;width:min(90vw,650px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#55b8ff42 0%,#1677ff12 42%,transparent 70%);filter:blur(14px);opacity:0}
-.splash-orbit{position:absolute;left:50%;top:50%;width:min(72vw,360px);height:min(72vw,360px);border:1px solid #55b8ff55;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.65) rotate(-25deg)}
-.splash-orbit:after{content:"";position:absolute;left:8%;top:17%;width:9px;height:9px;border-radius:50%;background:#55b8ff;box-shadow:0 0 16px 5px #55b8ff88}
+.splash-orbit{position:absolute;left:50%;top:50%;width:min(72vw,360px);height:min(72vw,360px);border:1px solid #55b8ff55;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.65)}
 .splash-orbit.orbit-b{width:min(94vw,470px);height:min(94vw,470px);border-color:#1677ff25}
+.splash-runner{--runner-radius:min(36vw,180px);position:absolute;left:50%;top:50%;z-index:4;width:10px;height:10px;border-radius:50%;background:#55caff;opacity:0;box-shadow:0 0 9px 3px #55b8ff99,0 0 22px 7px #1677ff66;transform:translate(-50%,-50%)}
 .splash-floor{position:absolute;left:50%;bottom:15%;width:min(72vw,420px);height:2px;opacity:0;background:linear-gradient(90deg,transparent,#55b8ff,#1677ff,transparent);filter:blur(1px);box-shadow:0 0 28px 5px #55b8ff55;transform:translateX(-50%) scaleX(.2)}
-.intro-splash.splash-play .splash-light{animation:dtSplashGlow 3.8s ease-in-out both}
-.intro-splash.splash-play .splash-orbit.orbit-a{animation:dtSplashOrbit 3.7s cubic-bezier(.2,.7,.2,1) .25s both}
-.intro-splash.splash-play .splash-orbit.orbit-b{animation:dtSplashOrbitB 3.7s ease-in-out .45s both}
-.intro-splash.splash-play .splash-mark{animation:dtSplashMark 1.35s cubic-bezier(.16,.8,.2,1) .35s both}
-.intro-splash.splash-play .splash-word{opacity:0;animation:dtSplashWord .8s cubic-bezier(.16,.8,.2,1) 1.15s forwards}
+.intro-splash.splash-play .splash-light{animation:dtSplashGlow 4.1s ease-in-out both}
+.intro-splash.splash-play .splash-orbit.orbit-a{animation:dtSplashRing 4s cubic-bezier(.2,.7,.2,1) .1s both}
+.intro-splash.splash-play .splash-orbit.orbit-b{animation:dtSplashOrbitB 3.8s ease-in-out .2s both}
+.intro-splash.splash-play .splash-mark{animation:dtSplashMark 1.15s cubic-bezier(.16,.8,.2,1) .2s both}
+.intro-splash.splash-play .splash-word>span:not(.splash-globe-slot){opacity:0;animation:dtSplashWord .7s cubic-bezier(.16,.8,.2,1) .75s forwards}
+.intro-splash.splash-play .splash-runner{animation:dtSplashRunner 3.5s cubic-bezier(.55,.05,.35,1) .35s forwards}
+.intro-splash.splash-play .splash-globe-slot{animation:dtSplashGlobeForm .72s cubic-bezier(.16,.8,.2,1) 3.55s forwards}
+.intro-splash.splash-play .splash-globe-slot svg{animation:dtSplashGlobeRotate 8s linear 4.27s infinite}
 .intro-splash.splash-play .splash-floor{animation:dtSplashFloor 2s ease 1.8s both}
 .intro-splash.splash-leave{opacity:0;visibility:hidden;transition:opacity .62s ease,visibility .62s ease}
 @keyframes dtSplashGlow{0%{opacity:0;transform:scale(.55)}45%,75%{opacity:1;transform:scale(1.08)}100%{opacity:.55;transform:scale(1)}}
-@keyframes dtSplashOrbit{0%{opacity:0;transform:translate(-50%,-50%) scale(.55) rotate(-45deg)}45%{opacity:.9}100%{opacity:.4;transform:translate(-50%,-50%) scale(1.08) rotate(24deg)}}
+@keyframes dtSplashRing{0%{opacity:0;transform:translate(-50%,-50%) scale(.72)}20%,80%{opacity:.9;transform:translate(-50%,-50%) scale(1)}100%{opacity:.48;transform:translate(-50%,-50%) scale(1.02)}}
 @keyframes dtSplashOrbitB{0%{opacity:0;transform:translate(-50%,-50%) scale(.72) rotate(35deg)}55%{opacity:.6}100%{opacity:.25;transform:translate(-50%,-50%) scale(1.02) rotate(-18deg)}}
 @keyframes dtSplashMark{0%{opacity:0;transform:translateY(18px) scale(.72);filter:blur(7px) drop-shadow(0 12px 26px #1677ff30)}70%{opacity:1;transform:translateY(-3px) scale(1.06);filter:blur(0) drop-shadow(0 12px 26px #1677ff30)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes dtSplashWord{from{opacity:0;transform:translateY(12px);letter-spacing:.3em;filter:blur(5px)}to{opacity:1;transform:translateY(0);letter-spacing:.16em;filter:blur(0)}}
+@keyframes dtSplashRunner{0%{opacity:0;transform:translate(-50%,-50%) rotate(-90deg) translateX(var(--runner-radius))}8%{opacity:1}78%{opacity:1;transform:translate(-50%,-50%) rotate(270deg) translateX(var(--runner-radius))}88%{opacity:1;transform:translate(-50%,-50%) rotate(270deg) translateX(48px) translateY(88px) scale(.9)}100%{opacity:0;transform:translate(-50%,-50%) rotate(270deg) translateX(0) translateY(88px) scale(.35)}}
+@keyframes dtSplashGlobeForm{0%{width:0;opacity:0;transform:scale(.08)}65%{width:1em;opacity:1;transform:scale(1.18)}100%{width:1em;opacity:1;transform:scale(1)}}
+@keyframes dtSplashGlobeRotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 @keyframes dtSplashFloor{0%{opacity:0;transform:translateX(-50%) scaleX(.2)}45%,100%{opacity:.8;transform:translateX(-50%) scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.intro-splash.splash-play *{animation-duration:.01ms!important;animation-delay:0ms!important}.splash-globe-slot{width:1em;opacity:1;transform:none}}
 .onboarding.intro-arrive{animation:dtOnboardingArrive .85s cubic-bezier(.18,.72,.22,1) both}
 .onboarding .intro-art.intro-exit-left,.onboarding .intro-copy.intro-exit-left,.onboarding .intro-bottom.intro-exit-left{animation:dtSlideOutLeft .34s cubic-bezier(.4,0,.7,.2) both!important}
 .onboarding .intro-art.intro-exit-right,.onboarding .intro-copy.intro-exit-right,.onboarding .intro-bottom.intro-exit-right{animation:dtSlideOutRight .34s cubic-bezier(.4,0,.7,.2) both!important}
