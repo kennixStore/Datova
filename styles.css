@@ -114,6 +114,8 @@ body.dark .brand{color:#fff}
 .brand .wordmark{font-size:20px;color:inherit;letter-spacing:.04em}
 .gate-content h1 .wordmark{font-size:.94em;letter-spacing:.035em;color:#1677ff}
 .modal-brand .wordmark{font-size:17px;color:var(--navy)}
+.modal-brand .wordmark-globe{width:20px;height:20px;flex:0 0 20px;display:inline-block;vertical-align:middle;margin:0 1px;transform-origin:50% 50%;}
+.modal-brand .wordmark{display:inline-flex;align-items:center;gap:1px;white-space:nowrap;}
 @keyframes globeDrift{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
 .screen.active{animation:screenReveal .42s cubic-bezier(.2,.75,.25,1) both}
 .screen.screen-exit{animation:screenLeave .2s ease both;pointer-events:none}
