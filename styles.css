@@ -592,3 +592,46 @@ body.dark .datova-back-btn{background:#10233e;border-color:#29415f;color:#9bcaff
 .onboarding .intro-art,.onboarding .intro-copy,.onboarding .intro-bottom{animation:none!important;}
 @media(max-width:600px){.onboarding{padding:16px 22px 24px!important}.onboarding .intro-art{height:35vh;min-height:190px}.onboarding .intro-copy{margin-bottom:22px}.onboarding .intro-copy h1{font-size:clamp(30px,8vw,40px)}}
 @media(prefers-reduced-motion:reduce){.onboarding *{animation:none!important;transition:none!important}}
+
+
+/* DATOVA premium opening reveal and fluid onboarding transitions */
+.intro-splash{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,#f5faff 0%,#eaf4ff 42%,#fff 78%);opacity:1;visibility:visible}
+.intro-splash.hidden{display:none!important}
+.splash-core{position:relative;z-index:3;display:flex;align-items:center;flex-direction:column;gap:15px}
+.splash-mark{width:clamp(112px,28vw,154px);height:auto;object-fit:contain;filter:drop-shadow(0 12px 26px #1677ff30)}
+.splash-word{font:800 clamp(30px,8vw,42px)/1 Manrope,sans-serif;letter-spacing:.16em;color:#07152f}
+.splash-light{position:absolute;width:min(90vw,650px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#55b8ff42 0%,#1677ff12 42%,transparent 70%);filter:blur(14px);opacity:0}
+.splash-orbit{position:absolute;left:50%;top:50%;width:min(72vw,360px);height:min(72vw,360px);border:1px solid #55b8ff55;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.65) rotate(-25deg)}
+.splash-orbit:after{content:"";position:absolute;left:8%;top:17%;width:9px;height:9px;border-radius:50%;background:#55b8ff;box-shadow:0 0 16px 5px #55b8ff88}
+.splash-orbit.orbit-b{width:min(94vw,470px);height:min(94vw,470px);border-color:#1677ff25}
+.splash-floor{position:absolute;left:50%;bottom:15%;width:min(72vw,420px);height:2px;opacity:0;background:linear-gradient(90deg,transparent,#55b8ff,#1677ff,transparent);filter:blur(1px);box-shadow:0 0 28px 5px #55b8ff55;transform:translateX(-50%) scaleX(.2)}
+.intro-splash.splash-play .splash-light{animation:dtSplashGlow 3.8s ease-in-out both}
+.intro-splash.splash-play .splash-orbit.orbit-a{animation:dtSplashOrbit 3.7s cubic-bezier(.2,.7,.2,1) .25s both}
+.intro-splash.splash-play .splash-orbit.orbit-b{animation:dtSplashOrbitB 3.7s ease-in-out .45s both}
+.intro-splash.splash-play .splash-mark{animation:dtSplashMark 1.35s cubic-bezier(.16,.8,.2,1) .35s both}
+.intro-splash.splash-play .splash-word{opacity:0;animation:dtSplashWord .8s cubic-bezier(.16,.8,.2,1) 1.15s forwards}
+.intro-splash.splash-play .splash-floor{animation:dtSplashFloor 2s ease 1.8s both}
+.intro-splash.splash-leave{opacity:0;visibility:hidden;transition:opacity .62s ease,visibility .62s ease}
+@keyframes dtSplashGlow{0%{opacity:0;transform:scale(.55)}45%,75%{opacity:1;transform:scale(1.08)}100%{opacity:.55;transform:scale(1)}}
+@keyframes dtSplashOrbit{0%{opacity:0;transform:translate(-50%,-50%) scale(.55) rotate(-45deg)}45%{opacity:.9}100%{opacity:.4;transform:translate(-50%,-50%) scale(1.08) rotate(24deg)}}
+@keyframes dtSplashOrbitB{0%{opacity:0;transform:translate(-50%,-50%) scale(.72) rotate(35deg)}55%{opacity:.6}100%{opacity:.25;transform:translate(-50%,-50%) scale(1.02) rotate(-18deg)}}
+@keyframes dtSplashMark{0%{opacity:0;transform:translateY(18px) scale(.72);filter:blur(7px) drop-shadow(0 12px 26px #1677ff30)}70%{opacity:1;transform:translateY(-3px) scale(1.06);filter:blur(0) drop-shadow(0 12px 26px #1677ff30)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes dtSplashWord{from{opacity:0;transform:translateY(12px);letter-spacing:.3em;filter:blur(5px)}to{opacity:1;transform:translateY(0);letter-spacing:.16em;filter:blur(0)}}
+@keyframes dtSplashFloor{0%{opacity:0;transform:translateX(-50%) scaleX(.2)}45%,100%{opacity:.8;transform:translateX(-50%) scaleX(1)}}
+.onboarding.intro-arrive{animation:dtOnboardingArrive .85s cubic-bezier(.18,.72,.22,1) both}
+.onboarding .intro-art.intro-exit-left,.onboarding .intro-copy.intro-exit-left,.onboarding .intro-bottom.intro-exit-left{animation:dtSlideOutLeft .34s cubic-bezier(.4,0,.7,.2) both!important}
+.onboarding .intro-art.intro-exit-right,.onboarding .intro-copy.intro-exit-right,.onboarding .intro-bottom.intro-exit-right{animation:dtSlideOutRight .34s cubic-bezier(.4,0,.7,.2) both!important}
+.onboarding .intro-art.intro-enter-right,.onboarding .intro-copy.intro-enter-right,.onboarding .intro-bottom.intro-enter-right{animation:dtSlideInRight .42s cubic-bezier(.18,.72,.22,1) both!important}
+.onboarding .intro-art.intro-enter-left,.onboarding .intro-copy.intro-enter-left,.onboarding .intro-bottom.intro-enter-left{animation:dtSlideInLeft .42s cubic-bezier(.18,.72,.22,1) both!important}
+.onboarding .intro-art.intro-settling{animation:dtSlideSettle .48s cubic-bezier(.18,.72,.22,1) both!important}
+.onboarding .intro-copy.intro-settling{animation:dtCopySettle .48s cubic-bezier(.18,.72,.22,1) both!important}
+.onboarding .intro-bottom.intro-settling{animation:dtBottomSettle .48s cubic-bezier(.18,.72,.22,1) both!important}
+.onboarding .dots i{transition:background .35s ease,width .35s ease,transform .35s ease}
+@keyframes dtSlideOutLeft{to{opacity:0;transform:translateX(-34px) scale(.98);filter:blur(3px)}}
+@keyframes dtSlideOutRight{to{opacity:0;transform:translateX(34px) scale(.98);filter:blur(3px)}}
+@keyframes dtSlideInRight{from{opacity:0;transform:translateX(42px) scale(.985);filter:blur(4px)}to{opacity:1;transform:translateX(0) scale(1);filter:blur(0)}}
+@keyframes dtSlideInLeft{from{opacity:0;transform:translateX(-42px) scale(.985);filter:blur(4px)}to{opacity:1;transform:translateX(0) scale(1);filter:blur(0)}}
+@keyframes dtSlideSettle{from{transform:translateY(5px) scale(.995)}to{transform:translateY(0) scale(1)}}
+@keyframes dtCopySettle{from{opacity:.7;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dtBottomSettle{from{opacity:.8;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.intro-splash *,.onboarding.intro-arrive,.onboarding .intro-art,.onboarding .intro-copy,.onboarding .intro-bottom{animation:none!important;transition:none!important}.intro-splash .splash-mark,.intro-splash .splash-word{opacity:1!important;transform:none!important}}
