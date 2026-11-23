@@ -188,9 +188,70 @@ const sessionCheck=supabaseReady
  : Promise.resolve(null);
 const returningVisitor=!!localStorage.getItem("datova_intro_seen");
 const reducedMotion=!!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-const splashDuration=returningVisitor?1850:(reducedMotion?900:14400);
+const splashDuration=returningVisitor?1850:(reducedMotion?900:15000);
 const splashFadeDuration=returningVisitor?520:(reducedMotion?300:760);
 splash.classList.add(returningVisitor?"returning-visit":"first-visit");
+setTimeout(playDatovaSignatureTone,returningVisitor?260:3450);
+if(!returningVisitor&&!reducedMotion)setTimeout(playDatovaSignatureTone,12400);
+/* DATOVA signature tone. Browsers may require a user gesture before Web Audio can play. */
+let datovaAudioContext=null;
+let datovaSignaturePending=false;
+let datovaAudioUnlockBound=false;
+function playDatovaSignatureTone(){
+ if(reducedMotion)return;
+ const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+ if(!AudioContextClass)return;
+ try{
+  if(!datovaAudioContext)datovaAudioContext=new AudioContextClass();
+  const ctx=datovaAudioContext;
+  const sound=()=>{
+   if(ctx.state!=="running")return false;
+   const now=ctx.currentTime;
+   const master=ctx.createGain();
+   master.gain.setValueAtTime(.72,now);
+   master.connect(ctx.destination);
+   const notes=[{frequency:587.33,start:0,duration:.66,volume:.075},{frequency:880,start:.16,duration:.76,volume:.055},{frequency:1174.66,start:.38,duration:.88,volume:.035}];
+   notes.forEach(note=>{
+    const oscillator=ctx.createOscillator();
+    const envelope=ctx.createGain();
+    const start=now+note.start;
+    oscillator.type="sine";
+    oscillator.frequency.setValueAtTime(note.frequency,start);
+    envelope.gain.setValueAtTime(.0001,start);
+    envelope.gain.exponentialRampToValueAtTime(note.volume,start+.045);
+    envelope.gain.exponentialRampToValueAtTime(.0001,start+note.duration);
+    oscillator.connect(envelope);
+    envelope.connect(master);
+    oscillator.start(start);
+    oscillator.stop(start+note.duration+.04);
+   });
+   return true;
+  };
+  const unlock=()=>{
+   ctx.resume().then(()=>{
+    if(ctx.state==="running"&&datovaSignaturePending){
+     datovaSignaturePending=false;
+     sound();
+    }
+   }).catch(()=>{});
+  };
+  if(ctx.state==="running"){sound();return;}
+  datovaSignaturePending=true;
+  ctx.resume().then(()=>{
+   if(ctx.state==="running"&&datovaSignaturePending){
+    datovaSignaturePending=false;
+    sound();
+   }
+  }).catch(()=>{});
+  if(!datovaAudioUnlockBound){
+   datovaAudioUnlockBound=true;
+   document.addEventListener("pointerdown",unlock,{once:true,passive:true});
+   document.addEventListener("keydown",unlock,{once:true});
+   document.addEventListener("touchstart",unlock,{once:true,passive:true});
+  }
+ }catch(error){}
+}
+
 setTimeout(()=>{
  splash.classList.add("out");
  setTimeout(()=>{
