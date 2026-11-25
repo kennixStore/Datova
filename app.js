@@ -366,10 +366,6 @@ $("#introSplash")?.addEventListener("pointerdown",event=>{
  if(introSoundEnabled&&!introAudioUnlocked)unlockIntroSoundFromGesture();
 },{passive:true});
 $("#introSoundToggle")?.addEventListener("click",()=>{
- if(introSoundEnabled&&!introAudioUnlocked){
-  unlockIntroSoundFromGesture();
-  return;
- }
  introSoundEnabled=!introSoundEnabled;
  localStorage.setItem("datova_intro_sound",introSoundEnabled?"on":"off");
  updateIntroSoundButton();
@@ -377,6 +373,7 @@ $("#introSoundToggle")?.addEventListener("click",()=>{
   unlockIntroSoundFromGesture();
  }else{
   clearIntroSoundTimers();
+  if(introAudioContext?.state==="running")introAudioContext.suspend().catch(()=>{});
  }
 });
 updateIntroSoundButton();
