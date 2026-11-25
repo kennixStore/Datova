@@ -701,3 +701,17 @@ body.dark .password-toggle{color:#a9c8ef}
 #authModal .auth-divider{display:flex;align-items:center;gap:12px;margin:15px 0 3px;color:#8190a5;font-size:11px;}
 #authModal .auth-divider:before,#authModal .auth-divider:after{content:"";height:1px;flex:1;background:#e3eaf3;}
 #authModal .google-auth-button:disabled{opacity:.65;cursor:wait;}
+
+/* Mobile authentication modal: vertical scroll with a fixed viewport backdrop. */
+#authModal.modal-backdrop{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:max(14px,env(safe-area-inset-top)) 14px max(18px,env(safe-area-inset-bottom));}
+#authModal .modal{width:min(100%,440px);max-height:calc(100dvh - max(28px,env(safe-area-inset-top) + env(safe-area-inset-bottom) + 28px));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;margin:auto;padding:26px 24px 24px;}
+body.auth-modal-open{overflow:hidden;}
+@media(max-width:600px){
+ #authModal.modal-backdrop{align-items:flex-start;padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(18px,env(safe-area-inset-bottom));}
+ #authModal .modal{max-height:calc(100dvh - max(30px,env(safe-area-inset-top) + env(safe-area-inset-bottom) + 30px));margin:0 auto;padding:22px 20px 24px;border-radius:20px;}
+ #authModal .modal-brand{margin-bottom:18px;}
+ #authModal .auth-tabs{margin:16px 0;}
+ #authModal form label{margin:11px 0;}
+ #authModal form input{min-height:48px;}
+ #authModal .full{min-height:54px;}
+}
