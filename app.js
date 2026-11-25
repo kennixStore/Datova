@@ -8,8 +8,54 @@ let slide=0;
 let screenHistoryReady=false,screenStack=["overview"];
 function initScreenHistory(){if(screenHistoryReady)return;screenHistoryReady=true;const current=document.querySelector(".screen.active")?.id.replace("screen-","")||"overview";screenStack=[current];history.replaceState({datovaScreen:"root",datovaRoot:true},"",location.href);history.pushState({datovaScreen:current,datovaApp:true},"",location.href)}
 function goBack(){if(history.state?.datovaApp){history.back();return}if(screenStack.length>1){screenStack.pop();const previous=screenStack[screenStack.length-1]||"overview";go(previous,{fromPopState:true});return}if($(".screen.active")?.id!=="screen-overview"){go("overview");return}toast("You're already on the DATOVA home screen.")}
-function showApp(){$("#introSplash")?.classList.add("hidden");intro.classList.add("hidden");$("#welcomeGate").classList.add("hidden");app.classList.remove("hidden");localStorage.setItem("datova_intro_seen","1");initScreenHistory();updateGreeting()}
-function showWelcomeGate(){localStorage.setItem("datova_intro_seen","1");$("#introSplash")?.classList.add("hidden");intro.classList.add("hidden");$("#welcomeGate").classList.remove("hidden");$("#welcomeGate").classList.add("gate-enter")}
+let onboardingReplayMode=false;
+function closeAuthModal(){
+ const modal=$("#authModal");
+ if(modal)modal.classList.add("hidden");
+ document.body.classList.remove("auth-modal-open");
+}
+function markOnboardingComplete(){
+ localStorage.setItem("datova_intro_seen","1");
+ localStorage.setItem("datova_onboarding_complete","1");
+}
+function showApp(){
+ markOnboardingComplete();
+ closeAuthModal();
+ $("#introSplash")?.classList.add("hidden");
+ intro.classList.add("hidden");
+ $("#welcomeGate").classList.add("hidden");
+ app.classList.remove("hidden");
+ initScreenHistory();
+ updateGreeting();
+}
+function showWelcomeGate(){
+ markOnboardingComplete();
+ $("#introSplash")?.classList.add("hidden");
+ intro.classList.add("hidden");
+ $("#welcomeGate").classList.remove("hidden");
+ $("#welcomeGate").classList.add("gate-enter");
+}
+function finishOnboarding(){
+ markOnboardingComplete();
+ if(onboardingReplayMode){
+  onboardingReplayMode=false;
+  showApp();
+ }else{
+  showWelcomeGate();
+ }
+}
+function replayOnboarding(){
+ onboardingReplayMode=true;
+ slide=0;
+ renderSlide();
+ app.classList.add("hidden");
+ $("#welcomeGate").classList.add("hidden");
+ $("#introSplash")?.classList.add("hidden");
+ intro.classList.remove("hidden","intro-arrive");
+ void intro.offsetWidth;
+ intro.classList.add("intro-arrive");
+ window.scrollTo({top:0,behavior:"instant"});
+}
 function artMarkup(type){
 const start='<svg viewBox="0 0 360 300" role="img">';
 if(type==="globe")return start+'<defs><radialGradient id="earthFill"><stop stop-color="#39baff"/><stop offset=".7" stop-color="#0756c8"/><stop offset="1" stop-color="#041b54"/></radialGradient><linearGradient id="orbitLine"><stop stop-color="#55caff"/><stop offset=".5" stop-color="#1677ff"/><stop offset="1" stop-color="#a4eaff"/></linearGradient></defs><ellipse cx="180" cy="166" rx="145" ry="55" fill="none" stroke="url(#orbitLine)" stroke-width="5" transform="rotate(-12 180 166)"/><circle cx="180" cy="145" r="91" fill="url(#earthFill)" stroke="#48caff" stroke-width="2"/><ellipse cx="180" cy="145" rx="43" ry="91" fill="none" stroke="#6bd0ff" stroke-opacity=".65"/><path d="M91 145h178M106 105h148M106 185h148M180 54c-25 27-35 58-35 91s10 64 35 91M180 54c25 27 35 58 35 91s-10 64-35 91" fill="none" stroke="#74d5ff" stroke-opacity=".5"/><path d="M112 108q35-32 67-15t65 2M102 169q45-18 79 8t70-4" fill="none" stroke="#a5ecff" stroke-width="8" stroke-linecap="round" opacity=".25"/><g fill="#fff"><circle cx="62" cy="88" r="5"/><circle cx="292" cy="93" r="4"/><circle cx="277" cy="218" r="5"/></g><g fill="#1677ff" stroke="#9ce7ff" stroke-width="2"><rect x="35" y="183" width="46" height="40" rx="10"/><rect x="278" y="157" width="47" height="42" rx="10"/></g><path d="M49 202h18m-9-9v18M291 171l20 14m-20 0 20-14" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>';
@@ -18,17 +64,40 @@ return start+'<defs><linearGradient id="airPhone"><stop stop-color="#1677ff"/><s
 }
 function renderSlide(){const v=slides[slide];$("#introStep").textContent=v.step;$("#introTitle").innerHTML=v.title;$("#introText").textContent=v.text;$("#introArt").dataset.art=v.art;$("#introVisual").innerHTML=artMarkup(v.art);$("#introDots").innerHTML=slides.map((_,i)=>'<i class="'+(i===slide?"active":"")+'"></i>').join("");$("#introBack").classList.toggle("hidden",slide===0);$("#introNext").innerHTML=slide===slides.length-1?'Get Started <b>→</b>':'Next <b>→</b>'}
 function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2700)}
+function passwordToggleIcon(visible){
+ return visible
+  ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 3l18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+  : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+}
+function setPasswordToggle(button,visible){
+ button.setAttribute("aria-pressed",String(visible));
+ const field=button.dataset.togglePassword==="confirmPassword"?"confirm password":"password";
+ button.setAttribute("aria-label",visible?"Hide "+field:"Show "+field);
+ button.innerHTML=passwordToggleIcon(visible);
+}
 function openAuth(mode="login"){
  const signup=mode==="signup";
- $("#authModal").classList.remove("hidden");document.body.classList.add("auth-modal-open");
- $$("[data-auth]").forEach(button=>{const selected=button.dataset.auth===mode;button.classList.toggle("selected",selected);button.setAttribute("aria-pressed",String(selected));});
- $("#fullNameField").classList.toggle("hidden",!signup);$("#fullName").required=signup;
- $("#confirmPasswordField").classList.toggle("hidden",!signup);$("#confirmPassword").required=signup;
+ $("#authModal").classList.remove("hidden");
+ document.body.classList.add("auth-modal-open");
+ $("[data-auth]").forEach(button=>{
+  const selected=button.dataset.auth===mode;
+  button.classList.toggle("selected",selected);
+  button.setAttribute("aria-pressed",String(selected));
+ });
+ $("#fullNameField").classList.toggle("hidden",!signup);
+ $("#fullName").required=signup;
+ $("#confirmPasswordField").classList.toggle("hidden",!signup);
+ $("#confirmPassword").required=signup;
  $("#forgotPassword").classList.toggle("hidden",signup);
  $("#authTitle").textContent=signup?"Create your account":"Welcome back";
  $("#authDesc").textContent=signup?"Join DATOVA and make staying connected easier.":"Sign in to access your DATOVA account.";
- $("#authPassword").value="";$("#confirmPassword").value="";
- $$("[data-toggle-password]").forEach(button=>{const input=$("#"+button.dataset.togglePassword);if(input)input.type="password";button.setAttribute("aria-pressed","false");button.setAttribute("aria-label","Show password");});
+ $("#authPassword").value="";
+ $("#confirmPassword").value="";
+ $("[data-toggle-password]").forEach(button=>{
+  const input=$("#"+button.dataset.togglePassword);
+  if(input)input.type="password";
+  setPasswordToggle(button,false);
+ });
  requestAnimationFrame(()=>$("#authModal").scrollTo({top:0,behavior:"auto"}));
 }
 function syncNavigation(screen){$$("[data-screen]").forEach(button=>{const active=button.dataset.screen===screen;button.classList.toggle("active",active);button.setAttribute("aria-current",active?"page":"false")})}
@@ -56,9 +125,10 @@ function moveIntroSlide(direction){
   }));
  },190);
 }
-$("#introNext").addEventListener("click",()=>{if(introSliding)return;if(slide<slides.length-1)moveIntroSlide(1);else showWelcomeGate()});
+$("#introNext").addEventListener("click",()=>{if(introSliding)return;if(slide<slides.length-1)moveIntroSlide(1);else finishOnboarding()});
 $("#introBack").addEventListener("click",()=>moveIntroSlide(-1));
-$("#skipIntro").addEventListener("click",showWelcomeGate);
+$("#skipIntro").addEventListener("click",finishOnboarding);
+$("#replayOnboarding")?.addEventListener("click",replayOnboarding);
 $("#gateCreate").addEventListener("click",()=>openAuth("signup"));
 $("#gateLogin").addEventListener("click",()=>openAuth("login"));
 $("#exploreGuest").addEventListener("click",showApp);
@@ -72,10 +142,10 @@ $("#greetingAvatar")?.addEventListener("click",()=>go("profile"));
 $("#loginSide").addEventListener("click",()=>openAuth("login"));
 $("#profileSignIn").addEventListener("click",()=>openAuth("login"));
 $("#profileTheme").addEventListener("click",()=>$("#themeToggle").click());
-$("#closeAuth").addEventListener("click",()=>{$("#authModal").classList.add("hidden");document.body.classList.remove("auth-modal-open");});
-$("#authModal").addEventListener("click",e=>{if(e.target.id==="authModal"){$("#authModal").classList.add("hidden");document.body.classList.remove("auth-modal-open");}});
+$("#closeAuth").addEventListener("click",closeAuthModal);
+$("#authModal").addEventListener("click",e=>{if(e.target.id==="authModal")closeAuthModal();});
 $("[data-auth]").forEach(button=>button.addEventListener("click",event=>{event.preventDefault();openAuth(button.dataset.auth);}));
-$("[data-toggle-password]").forEach(button=>button.addEventListener("click",()=>{const input=$("#"+button.dataset.togglePassword);if(!input)return;const visible=input.type==="password";input.type=visible?"text":"password";button.setAttribute("aria-pressed",String(visible));button.setAttribute("aria-label",visible?"Hide password":"Show password");}));
+$("[data-toggle-password]").forEach(button=>button.addEventListener("click",()=>{const input=$("#"+button.dataset.togglePassword);if(!input)return;const visible=input.type==="password";input.type=visible?"text":"password";setPasswordToggle(button,visible);}));
 // DATOVA Supabase connection (publishable key is designed for browser use; RLS protects data).
 const SUPABASE_URL="https://lqfmgzfdpamaenrtbjat.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_jnPRVfYqcu2W0DCdTYX3_g_SMJte69z";
@@ -108,7 +178,6 @@ if(supabaseReady){
  supabaseClient.auth.getSession().then(({data,error})=>{if(error)toast(error.message);renderAccount(data?.session?.user||null)}).catch(()=>toast("Account service is temporarily unavailable."));
  supabaseClient.auth.onAuthStateChange(async(event,session)=>{renderAccount(session?.user||null);if(event==="SIGNED_IN"&&session?.user){showApp();}if(event==="PASSWORD_RECOVERY"){const next=window.prompt("Enter your new DATOVA password (at least 8 characters):");if(next&&next.length>=8){const {error}=await supabaseClient.auth.updateUser({password:next});toast(error?error.message:"Your password has been updated.");}else if(next!==null){toast("Password must contain at least 8 characters.");}}});
 }else{renderAccount(null);}
-document.addEventListener("click",event=>{const b=event.target.closest("[data-toggle-password]");if(!b)return;const i=$("#"+b.dataset.togglePassword);const show=i.type==="password";i.type=show?"text":"password";b.setAttribute("aria-pressed",String(show));b.setAttribute("aria-label",(show?"Hide ":"Show ")+(b.dataset.togglePassword==="authPassword"?"password":"confirm password"));});
 $("#forgotPassword").addEventListener("click",async()=>{const email=$("#authEmail").value.trim();if(!email){toast("Enter your email address first.");$("#authEmail").focus();return}if(!supabaseReady){toast("Account service is unavailable.");return}const b=$("#forgotPassword");b.disabled=true;try{const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});if(error)throw error;toast("Password reset link sent. Check your email.");}catch(err){toast(err.message||"Could not send password reset email.");}finally{b.disabled=false;}});
 $("#authForm").addEventListener("submit",async e=>{
  e.preventDefault();
@@ -126,12 +195,12 @@ $("#authForm").addEventListener("submit",async e=>{
    if(password!==confirmPassword){toast("Your passwords do not match.");$("#confirmPassword").focus();return}
    const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:fullName}}});
    if(error)throw error;
-   if(data.session){renderAccount(data.user);$("#authModal").classList.add("hidden");toast("Your DATOVA account is ready.");}
-   else{$("#authModal").classList.add("hidden");toast("Account created. Check your email to confirm your address, then log in.");}
+   if(data.session){renderAccount(data.user);closeAuthModal();toast("Your DATOVA account is ready.");}
+   else{closeAuthModal();toast("Account created. Check your email to confirm your address, then log in.");}
   }else{
    const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
    if(error)throw error;
-   renderAccount(data.user);$("#authModal").classList.add("hidden");toast("Welcome back to DATOVA.");
+   renderAccount(data.user);closeAuthModal();toast("Welcome back to DATOVA.");
   }
  }catch(err){toast(err.message||"Authentication failed. Please try again.");}
  finally{submit.disabled=false;submit.innerHTML='Continue <b>→</b>';}
@@ -193,7 +262,7 @@ const sessionCheck=supabaseReady
      new Promise(resolve=>setTimeout(()=>resolve(null),2200))
    ])
  : Promise.resolve(null);
-const returningVisitor=!!localStorage.getItem("datova_intro_seen");
+const returningVisitor=localStorage.getItem("datova_onboarding_complete")==="1"||localStorage.getItem("datova_intro_seen")==="1";
 // Play the short DATOVA brand reveal on every fresh site load.
 // First-time visitors continue to onboarding; returning visitors go to the app.
 // DATOVA intro sound is synthesized locally; no external audio files or trackers.
