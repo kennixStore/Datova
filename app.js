@@ -18,7 +18,19 @@ return start+'<defs><linearGradient id="airPhone"><stop stop-color="#1677ff"/><s
 }
 function renderSlide(){const v=slides[slide];$("#introStep").textContent=v.step;$("#introTitle").innerHTML=v.title;$("#introText").textContent=v.text;$("#introArt").dataset.art=v.art;$("#introVisual").innerHTML=artMarkup(v.art);$("#introDots").innerHTML=slides.map((_,i)=>'<i class="'+(i===slide?"active":"")+'"></i>').join("");$("#introBack").classList.toggle("hidden",slide===0);$("#introNext").innerHTML=slide===slides.length-1?'Get Started <b>→</b>':'Next <b>→</b>'}
 function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2700)}
-function openAuth(mode="login"){$("#authModal").classList.remove("hidden");$("[data-auth]").forEach(b=>b.classList.toggle("selected",b.dataset.auth===mode));$("#fullNameField").classList.toggle("hidden",mode!=="signup");$("#fullName").required=mode==="signup";$("#confirmPasswordField").classList.toggle("hidden",mode!=="signup");$("#confirmPassword").required=mode==="signup";$("#forgotPassword").classList.toggle("hidden",mode!=="login");$("#authTitle").textContent=mode==="login"?"Welcome back":"Create your account";$("#authDesc").textContent=mode==="login"?"Sign in to access your DATOVA account.":"Join DATOVA and make staying connected easier.";$("#authPassword").value="";$("#confirmPassword").value="";$("[data-toggle-password]").forEach(b=>{const i=$("#"+b.dataset.togglePassword);i.type="password";b.setAttribute("aria-pressed","false");});}
+function openAuth(mode="login"){
+ const signup=mode==="signup";
+ $("#authModal").classList.remove("hidden");document.body.classList.add("auth-modal-open");
+ $$("[data-auth]").forEach(button=>{const selected=button.dataset.auth===mode;button.classList.toggle("selected",selected);button.setAttribute("aria-pressed",String(selected));});
+ $("#fullNameField").classList.toggle("hidden",!signup);$("#fullName").required=signup;
+ $("#confirmPasswordField").classList.toggle("hidden",!signup);$("#confirmPassword").required=signup;
+ $("#forgotPassword").classList.toggle("hidden",signup);
+ $("#authTitle").textContent=signup?"Create your account":"Welcome back";
+ $("#authDesc").textContent=signup?"Join DATOVA and make staying connected easier.":"Sign in to access your DATOVA account.";
+ $("#authPassword").value="";$("#confirmPassword").value="";
+ $$("[data-toggle-password]").forEach(button=>{const input=$("#"+button.dataset.togglePassword);if(input)input.type="password";button.setAttribute("aria-pressed","false");button.setAttribute("aria-label","Show password");});
+ requestAnimationFrame(()=>$("#authModal").scrollTo({top:0,behavior:"auto"}));
+}
 function syncNavigation(screen){$$("[data-screen]").forEach(button=>{const active=button.dataset.screen===screen;button.classList.toggle("active",active);button.setAttribute("aria-current",active?"page":"false")})}
 function go(screen,options={}){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}const current=$(".screen.active");if(current===target){syncNavigation(screen);return}if(!options.fromPopState&&screenHistoryReady){screenStack.push(screen);history.pushState({datovaScreen:screen,datovaApp:true},"",location.href)}else if(options.fromPopState){const index=screenStack.lastIndexOf(screen);if(index>=0)screenStack=screenStack.slice(0,index+1);else screenStack.push(screen)}if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);syncNavigation(screen);window.scrollTo({top:0,behavior:"smooth"})}
 window.datovaNavigate=go;
@@ -60,9 +72,10 @@ $("#greetingAvatar")?.addEventListener("click",()=>go("profile"));
 $("#loginSide").addEventListener("click",()=>openAuth("login"));
 $("#profileSignIn").addEventListener("click",()=>openAuth("login"));
 $("#profileTheme").addEventListener("click",()=>$("#themeToggle").click());
-$("#closeAuth").addEventListener("click",()=>$("#authModal").classList.add("hidden"));
-$("#authModal").addEventListener("click",e=>{if(e.target.id==="authModal")$("#authModal").classList.add("hidden")});
-$$('[data-auth]').forEach(b=>b.addEventListener("click",()=>openAuth(b.dataset.auth)));
+$("#closeAuth").addEventListener("click",()=>{$("#authModal").classList.add("hidden");document.body.classList.remove("auth-modal-open");});
+$("#authModal").addEventListener("click",e=>{if(e.target.id==="authModal"){$("#authModal").classList.add("hidden");document.body.classList.remove("auth-modal-open");}});
+$("[data-auth]").forEach(button=>button.addEventListener("click",event=>{event.preventDefault();openAuth(button.dataset.auth);}));
+$("[data-toggle-password]").forEach(button=>button.addEventListener("click",()=>{const input=$("#"+button.dataset.togglePassword);if(!input)return;const visible=input.type==="password";input.type=visible?"text":"password";button.setAttribute("aria-pressed",String(visible));button.setAttribute("aria-label",visible?"Hide password":"Show password");}));
 // DATOVA Supabase connection (publishable key is designed for browser use; RLS protects data).
 const SUPABASE_URL="https://lqfmgzfdpamaenrtbjat.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_jnPRVfYqcu2W0DCdTYX3_g_SMJte69z";
