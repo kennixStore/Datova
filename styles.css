@@ -692,7 +692,7 @@ body.dark .password-toggle{color:#a9c8ef}
 .password-toggle{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:5px!important;color:#7187a5!important}
 .password-toggle svg{width:21px;height:21px;display:block}
 .password-toggle[aria-pressed="true"] svg{opacity:.9}
-.password-toggle[aria-pressed="true"] svg path{stroke-dasharray:2 2}
+.password-toggle[aria-pressed="true"] svg path{stroke-dasharray:none}
 #authModal label.hidden{display:none!important}
 
 /* Authentication modal Google button: match DATOVA primary styling. */
