@@ -79,7 +79,7 @@ function openAuth(mode="login"){
  const signup=mode==="signup";
  $("#authModal").classList.remove("hidden");
  document.body.classList.add("auth-modal-open");
- $("[data-auth]").forEach(button=>{
+ $$("[data-auth]").forEach(button=>{
   const selected=button.dataset.auth===mode;
   button.classList.toggle("selected",selected);
   button.setAttribute("aria-pressed",String(selected));
@@ -93,7 +93,7 @@ function openAuth(mode="login"){
  $("#authDesc").textContent=signup?"Join DATOVA and make staying connected easier.":"Sign in to access your DATOVA account.";
  $("#authPassword").value="";
  $("#confirmPassword").value="";
- $("[data-toggle-password]").forEach(button=>{
+ $$("[data-toggle-password]").forEach(button=>{
   const input=$("#"+button.dataset.togglePassword);
   if(input)input.type="password";
   setPasswordToggle(button,false);
@@ -144,8 +144,8 @@ $("#profileSignIn").addEventListener("click",()=>openAuth("login"));
 $("#profileTheme").addEventListener("click",()=>$("#themeToggle").click());
 $("#closeAuth").addEventListener("click",closeAuthModal);
 $("#authModal").addEventListener("click",e=>{if(e.target.id==="authModal")closeAuthModal();});
-$("[data-auth]").forEach(button=>button.addEventListener("click",event=>{event.preventDefault();openAuth(button.dataset.auth);}));
-$("[data-toggle-password]").forEach(button=>button.addEventListener("click",()=>{const input=$("#"+button.dataset.togglePassword);if(!input)return;const visible=input.type==="password";input.type=visible?"text":"password";setPasswordToggle(button,visible);}));
+$$("[data-auth]").forEach(button=>button.addEventListener("click",event=>{event.preventDefault();openAuth(button.dataset.auth);}));
+$$("[data-toggle-password]").forEach(button=>button.addEventListener("click",()=>{const input=$("#"+button.dataset.togglePassword);if(!input)return;const visible=input.type==="password";input.type=visible?"text":"password";setPasswordToggle(button,visible);}));
 // DATOVA Supabase connection (publishable key is designed for browser use; RLS protects data).
 const SUPABASE_URL="https://lqfmgzfdpamaenrtbjat.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_jnPRVfYqcu2W0DCdTYX3_g_SMJte69z";
