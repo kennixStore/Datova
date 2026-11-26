@@ -163,12 +163,31 @@ try{
   console.warn("Supabase library did not load; DATOVA will open in preview mode.");
  }
 }catch(initError){console.error("Supabase initialization failed:",initError);}
-function updateGreeting(){const user=currentUser;const parts=new Intl.DateTimeFormat("en-NG",{timeZone:"Africa/Lagos",hour:"2-digit",hourCycle:"h23"}).formatToParts(new Date());const hour=Number(parts.find(part=>part.type==="hour")?.value??new Date().getHours());const period=hour<5?"night":hour<12?"morning":hour<17?"afternoon":hour<21?"evening":"night";const full=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email?.split("@")[0]||"").trim();const first=full?full.split(/\s+/)[0]:"Guest";const title=$("#greetingTitle");if(title)title.textContent=`Good ${period}, ${first}`;const sub=$("#greetingSubtitle");if(sub)sub.textContent=user?"Your DATOVA space is ready. Let’s keep you connected.":"Explore DATOVA’s digital services and stay connected.";const wallet=$("#miniWalletValue");if(wallet)wallet.textContent=user?"Wallet balance is not connected yet":"Sign in to view balance";}
+let walletBalanceValue=null;
+let walletBalanceState="loading";
+let walletBalanceVisible=false;
+const formatNaira=value=>"₦"+Number(value||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+function updateWalletDisplays(){
+ const amount=$("#walletAmountValue"),caption=$(".wallet-balance-caption"),mini=$("#miniWalletValue");
+ if(!currentUser){if(amount)amount.textContent="••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Sign in to view your wallet balance';if(mini)mini.textContent="Sign in to view balance";return}
+ if(walletBalanceState==="loading"){if(amount)amount.textContent="••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Loading your wallet balance…';if(mini)mini.textContent="Loading balance…"}
+ else if(walletBalanceState==="error"){if(amount)amount.textContent=walletBalanceVisible?"Unavailable":"••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Balance could not be loaded. Refresh to try again.';if(mini)mini.textContent="Balance unavailable"}
+ else{if(amount)amount.textContent=walletBalanceVisible?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):"••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Live wallet balance';if(mini)mini.textContent=formatNaira(walletBalanceValue)}
+}
+async function loadWalletBalance(user=currentUser){
+ if(!user||!supabaseReady||!supabaseClient){walletBalanceValue=null;walletBalanceState="idle";updateWalletDisplays();return}
+ walletBalanceState="loading";updateWalletDisplays();
+ try{const {data,error}=await supabaseClient.from("wallets").select("balance,currency").eq("user_id",user.id).maybeSingle();if(error)throw error;if(currentUser?.id!==user.id)return;walletBalanceValue=data?Number(data.balance||0):0;walletBalanceState="ready"}
+ catch(error){console.error("Could not load DATOVA wallet balance:",error);if(currentUser?.id!==user.id)return;walletBalanceState="error"}
+ updateWalletDisplays();
+}
+function updateGreeting(){const user=currentUser;const parts=new Intl.DateTimeFormat("en-NG",{timeZone:"Africa/Lagos",hour:"2-digit",hourCycle:"h23"}).formatToParts(new Date());const hour=Number(parts.find(part=>part.type==="hour")?.value??new Date().getHours());const period=hour<5?"night":hour<12?"morning":hour<17?"afternoon":hour<21?"evening":"night";const full=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email?.split("@")[0]||"").trim();const first=full?full.split(/\s+/)[0]:"Guest";const title=$("#greetingTitle");if(title)title.textContent=`Good ${period}, ${first}`;const sub=$("#greetingSubtitle");if(sub)sub.textContent=user?"Your DATOVA space is ready. Let’s keep you connected.":"Explore DATOVA’s digital services and stay connected.";updateWalletDisplays();}
 setInterval(updateGreeting,60000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)updateGreeting()});
 function escapeText(value){return String(value).replace(/[&<>"\']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","\'":"&#39;"}[c]));}
 function renderAccount(user){
  currentUser=user||null;
+ walletBalanceValue=null;walletBalanceState=user?"loading":"idle";
  const signedIn=!!user;
  updateGreeting();
  $("#profileSignIn").classList.toggle("hidden",signedIn);
@@ -176,6 +195,7 @@ function renderAccount(user){
  $(".profile-main h3").textContent=signedIn?(user.user_metadata?.full_name||user.email||"DATOVA customer"):"Guest account";
  $(".profile-main p").textContent=signedIn?(user.email||"You're signed in to DATOVA."):"Sign in or create an account to manage your DATOVA profile.";
  const displayName=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email||"").trim();const initials=signedIn?(displayName.split(/\s+/).slice(0,2).map(x=>x.charAt(0)).join("").toUpperCase()||"D"):"G";const photo=user?.user_metadata?.avatar_url||user?.user_metadata?.picture||"";const avatarMarkup=photo?`<img src="${escapeText(photo)}" alt="Profile picture" referrerpolicy="no-referrer">`:escapeText(initials);$("#accountBtn").innerHTML=avatarMarkup;const greetingAvatar=$("#greetingAvatar");if(greetingAvatar)greetingAvatar.innerHTML=avatarMarkup;const profileAvatar=$(".profile-avatar");if(profileAvatar)profileAvatar.innerHTML=avatarMarkup;
+ if(currentUser)loadWalletBalance(currentUser);else updateWalletDisplays();
 }
 if(supabaseReady){
  supabaseClient.auth.getSession().then(({data,error})=>{if(error)toast(error.message);renderAccount(data?.session?.user||null)}).catch(()=>toast("Account service is temporarily unavailable."));
@@ -234,12 +254,11 @@ $("#dataNetwork").addEventListener("change",e=>{$("#dataPlan").innerHTML='<optio
 $("#dataContinue").addEventListener("click",()=>{const n=$("#dataNetwork").value,p=$("#dataPhone").value,plan=$("#dataPlan").value;if(!n||!/^0\d{10}$/.test(p)||!plan){toast("Select a network, enter a valid 11-digit number and choose a plan.");return}toast("Preview only: data purchases are not connected yet.")});
 $("#airContinue").addEventListener("click",()=>{const n=$("#airNetwork").value,p=$("#airPhone").value,a=Number($("#airAmount").value);if(!n||!/^0\d{10}$/.test(p)||!Number.isFinite(a)||a<50||a>50000){toast("Check the network, phone number and amount (₦50–₦50,000).");return}toast("Preview only: airtime purchases are not connected yet.")});
 $$(".filter-chip").forEach(b=>b.addEventListener("click",()=>{$$(".filter-chip").forEach(x=>x.classList.remove("active"));b.classList.add("active");toast("Transaction filters will work when account history is connected.")}));
-// Wallet balance visibility preview. Live wallet data is not connected yet.
-let walletBalanceVisible=false;
+// Toggle visibility of the live wallet balance loaded from Supabase.
 function updateWalletBalanceVisibility(){
  const amount=$("#walletAmountValue");
  const control=$("#walletVisibility");
- if(amount)amount.textContent=walletBalanceVisible?"Not connected":"••••••";
+ if(amount)amount.textContent=walletBalanceVisible?(walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…"):"••••••";
  if(control){
   control.setAttribute("aria-pressed",String(walletBalanceVisible));
   control.setAttribute("aria-label",walletBalanceVisible?"Hide balance":"Show balance");
