@@ -350,6 +350,7 @@ $("#walletTransferOpen")?.addEventListener("click",()=>{
   panel?.scrollIntoView({behavior:"smooth",block:"start"});
   setTimeout(()=>$("#transferRecipient")?.focus({preventScroll:true}),300);
 });
+$("#walletWithdrawOpen")?.addEventListener("click",()=>go("withdraw"));
 $("#walletTransferClose")?.addEventListener("click",()=>{
   $("#walletTransferPanel")?.classList.add("hidden");
   $("#transferPreviewMessage")?.classList.remove("error","success");
