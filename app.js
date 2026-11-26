@@ -163,7 +163,38 @@ try{
   console.warn("Supabase library did not load; DATOVA will open in preview mode.");
  }
 }catch(initError){console.error("Supabase initialization failed:",initError);}
-let walletBalanceValue=null;
+let accountNumberValue=null;
+let accountNumberState="idle";
+function updateAccountNumberDisplays(){
+ const value=accountNumberState==="loading"?"Loading…":accountNumberValue||"Not available";
+ ["profileAccountNumber","walletAccountNumber"].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el)el.textContent=value;
+ });
+ ["profileAccountCopy","walletAccountCopy"].forEach(id=>{
+  const button=document.getElementById(id);
+  if(button)button.disabled=!accountNumberValue;
+ });
+}
+async function loadAccountNumber(user=currentUser){
+ accountNumberValue=null;
+ accountNumberState=user?"loading":"idle";
+ updateAccountNumberDisplays();
+ if(!user||!supabaseReady||!supabaseClient)return;
+ try{
+  const {data,error}=await supabaseClient.from("profiles").select("account_number").eq("id",user.id).maybeSingle();
+  if(error)throw error;
+  if(currentUser?.id!==user.id)return;
+  accountNumberValue=data?.account_number||null;
+  accountNumberState=accountNumberValue?"ready":"missing";
+ }catch(error){
+  console.error("Could not load DATOVA account number:",error);
+  if(currentUser?.id!==user.id)return;
+  accountNumberState="error";
+ }
+ updateAccountNumberDisplays();
+}
+
 let walletBalanceState="loading";
 let walletBalanceVisible=false;
 const formatNaira=value=>"₦"+Number(value||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -195,7 +226,7 @@ function renderAccount(user){
  $(".profile-main h3").textContent=signedIn?(user.user_metadata?.full_name||user.email||"DATOVA customer"):"Guest account";
  $(".profile-main p").textContent=signedIn?(user.email||"You're signed in to DATOVA."):"Sign in or create an account to manage your DATOVA profile.";
  const displayName=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email||"").trim();const initials=signedIn?(displayName.split(/\s+/).slice(0,2).map(x=>x.charAt(0)).join("").toUpperCase()||"D"):"G";const photo=user?.user_metadata?.avatar_url||user?.user_metadata?.picture||"";const avatarMarkup=photo?`<img src="${escapeText(photo)}" alt="Profile picture" referrerpolicy="no-referrer">`:escapeText(initials);$("#accountBtn").innerHTML=avatarMarkup;const greetingAvatar=$("#greetingAvatar");if(greetingAvatar)greetingAvatar.innerHTML=avatarMarkup;const profileAvatar=$(".profile-avatar");if(profileAvatar)profileAvatar.innerHTML=avatarMarkup;
- if(currentUser)loadWalletBalance(currentUser);else updateWalletDisplays();
+ if(currentUser){loadWalletBalance(currentUser);loadAccountNumber(currentUser);}else{updateWalletDisplays();loadAccountNumber(null);}
 }
 if(supabaseReady){
  supabaseClient.auth.getSession().then(({data,error})=>{if(error)toast(error.message);renderAccount(data?.session?.user||null)}).catch(()=>toast("Account service is temporarily unavailable."));
@@ -283,6 +314,13 @@ $("#walletAddMoney")?.addEventListener("click",()=>{
 updateWalletBalanceVisibility();
 
 document.addEventListener("click",async event=>{
+ const accountCopy=event.target.closest("[data-copy-account-number]");
+ if(accountCopy){
+  if(!accountNumberValue)return;
+  try{await navigator.clipboard.writeText(accountNumberValue);toast("DATOVA account number copied.");}
+  catch(error){toast("Copy unavailable. Please copy the number manually.");}
+  return;
+ }
  const copyButton=event.target.closest("[data-copy-reference]");
  if(!copyButton)return;
  const reference=copyButton.dataset.copyReference||"";
