@@ -40,12 +40,8 @@ function showWelcomeGate(){
 }
 function finishOnboarding(){
  markOnboardingComplete();
- if(onboardingReplayMode){
-  onboardingReplayMode=false;
-  showApp();
- }else{
-  showWelcomeGate();
- }
+ onboardingReplayMode=false;
+ showApp();
 }
 function replayOnboarding(){
  onboardingReplayMode=true;
@@ -403,16 +399,18 @@ $("#walletTransferForm")?.addEventListener("submit",async event=>{
     button.textContent="Check transfer details";
   }
 });
+function openWalletFunding(){
+ const area=$("#walletFundingArea");
+ if(!area)return;
+ area.classList.remove("hidden");
+ area.scrollIntoView({behavior:"smooth",block:"start"});
+ setTimeout(()=>$("#walletFundingAmount")?.focus({preventScroll:true}),400);
+}
 $("#dashboardAddMoney")?.addEventListener("click",()=>{
  go("wallet");
- setTimeout(()=>$("#walletFundingAmount")?.focus({preventScroll:true}),350);
+ openWalletFunding();
 });
-$("#walletAddMoney")?.addEventListener("click",()=>{
- const area=$("#walletFundingArea");
- area?.classList.remove("hidden");
- area?.scrollIntoView({behavior:"smooth",block:"start"});
- setTimeout(()=>$("#walletFundingAmount")?.focus({preventScroll:true}),350);
-});
+$("#walletAddMoney")?.addEventListener("click",openWalletFunding);
 $("#walletFundingClose")?.addEventListener("click",()=>$("#walletFundingArea")?.classList.add("hidden"));
 updateWalletBalanceVisibility();
 
@@ -545,26 +543,21 @@ function showFirstVisitOnboarding(){
  void intro.offsetWidth;
  intro.classList.add("intro-arrive");
 }
-sessionCheck.then(signedInUser=>{
+function launchVisitorExperience(signedInUser){
  if(signedInUser)renderAccount(signedInUser);
- // Keep the main DATOVA app accessible on every visit; onboarding remains available
- // only through the explicit Replay introduction control in Profile.
- markOpeningPlayedThisSession();
- markOnboardingComplete();
- stopOriginalIntroSound();
- $("#introSplash")?.classList.add("hidden");
- intro?.classList.add("hidden");
  $("#welcomeGate")?.classList.add("hidden");
- showApp();
-}).catch(error=>{
+ // Every visit gets the DATOVA brand intro. Only first-time visitors see onboarding.
+ startOpeningAnimation(()=>{
+  if(returningVisitor){
+   showApp();
+  }else{
+   showFirstVisitOnboarding();
+  }
+ });
+}
+sessionCheck.then(launchVisitorExperience).catch(error=>{
  console.error("DATOVA startup:",error);
- markOpeningPlayedThisSession();
- markOnboardingComplete();
- stopOriginalIntroSound();
- $("#introSplash")?.classList.add("hidden");
- intro?.classList.add("hidden");
- $("#welcomeGate")?.classList.add("hidden");
- showApp();
+ launchVisitorExperience(null);
 });
 
 /* Reliable direct controls: bind after the app functions and DOM are ready. */
@@ -641,7 +634,7 @@ if(pinTestForm)pinTestForm.addEventListener("submit",async event=>{
  event.preventDefault();
  if(!supabaseReady||!currentUser){pinTestMessage.textContent="Please sign in and try again.";pinTestMessage.className="pin-manager-message error";return;}
  const pin=$("#testTransactionPin").value;
- if(!/^\\d{4}$/.test(pin)){pinTestMessage.textContent="Enter exactly four digits.";pinTestMessage.className="pin-manager-message error";return;}
+ if(!/^\d{4}$/.test(pin)){pinTestMessage.textContent="Enter exactly four digits.";pinTestMessage.className="pin-manager-message error";return;}
  const button=$("#transactionPinTestButton");
  button.disabled=true;button.textContent="Verifying…";
  pinTestMessage.textContent="";pinTestMessage.className="pin-manager-message";
