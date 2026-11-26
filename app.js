@@ -330,8 +330,28 @@ $("#walletTransferForm")?.addEventListener("submit",event=>{
   if(!Number.isFinite(amount)||amount<=0||Math.round(amount*100)!==amount*100){message.textContent="Enter a valid amount with no more than 2 decimal places.";message.classList.add("error");return;}
   if(walletBalanceState!=="ready"){message.textContent="Your wallet balance is not ready. Refresh your balance and try again.";message.classList.add("error");return;}
   if(amount>walletBalanceValue){message.textContent="Insufficient wallet balance for this amount.";message.classList.add("error");return;}
-  message.textContent="Your transfer details passed the basic checks. Secure recipient verification, server-side PIN authentication and an authorised real-money transfer provider are still required. No money has been moved.";
-  message.classList.add("success");
+  const button=$("#transferPreviewButton");
+  button.disabled=true;
+  button.textContent="Checking recipient…";
+  try{
+    const formattedAccount="DTV-"+recipient.slice(3);
+    const {data:recipientName,error}=await supabaseClient.rpc("lookup_datova_recipient",{p_account_number:formattedAccount});
+    if(error)throw error;
+    if(!recipientName){
+      message.textContent="No DATOVA account was found with that account number. Check the number and try again.";
+      message.classList.add("error");
+      return;
+    }
+    message.textContent="Recipient found: "+recipientName+". Please confirm this is the correct person. This is recipient verification only; transaction PIN and secure transfer processing are not connected, so no money has been moved.";
+    message.classList.add("success");
+  }catch(error){
+    console.error("DATOVA recipient lookup failed:",error);
+    message.textContent="Recipient lookup is not ready yet. The secure lookup function must be installed in Supabase before this can work.";
+    message.classList.add("error");
+  }finally{
+    button.disabled=false;
+    button.textContent="Check transfer details";
+  }
 });
 $("#walletAddMoney")?.addEventListener("click",()=>{
  const panel=$("#walletFundPanel");
