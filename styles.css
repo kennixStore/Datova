@@ -1077,3 +1077,25 @@ body.dark .transfer-preview-message.error{background:#3a2024;color:#ffc0c0}
 .dashboard-wallet-open b{margin-left:5px}
 body.dark .dashboard-wallet-card{box-shadow:0 18px 42px #0005}
 @media(max-width:600px){.dashboard-wallet-card{padding:20px 18px 17px;border-radius:19px;margin-bottom:24px}.dashboard-wallet-top{margin-bottom:23px}.dashboard-add-money{padding:10px 13px;font-size:10px}.dashboard-balance-value strong{font-size:34px}.dashboard-wallet-foot{font-size:9px}.dashboard-wallet-open{font-size:9px}}
+
+/* Wallet page refinement: brand, account number and progressive funding panel */
+.wallet-hero{gap:18px}
+.wallet-hero-main{background:linear-gradient(125deg,#071a39 0%,#103b79 58%,#176fff 100%);box-shadow:0 18px 40px #0c34752b}
+.wallet-brand-wordmark{font-size:15px;font-weight:900;letter-spacing:2px;color:#fff}
+.wallet-brand-wordmark span{font-size:8px;font-weight:700;letter-spacing:1.3px;color:#c7ddfb}
+.wallet-card-chip{width:31px;height:23px;border:1px solid #ffffff80;border-radius:6px;background:linear-gradient(135deg,#ffffff45,#ffffff08);position:relative}
+.wallet-card-chip:after{content:"";position:absolute;left:0;right:0;top:10px;border-top:1px solid #ffffff70}
+.wallet-account-number-card{border:1px solid #e2eaf6;background:#fff;border-radius:17px;box-shadow:0 8px 26px #0b28500a}
+.wallet-account-number-card strong{font-size:19px;letter-spacing:1.1px;color:#102c58}
+.wallet-account-number-card button{border-radius:11px;background:#edf4ff;color:#1555b8;border:1px solid #d8e7ff;font-weight:800;padding:10px 17px}
+.wallet-funding-close{width:34px;height:34px;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--ink);font-size:22px;line-height:1;display:grid;place-items:center}
+#walletFundingArea{scroll-margin-top:22px}
+#walletFundingArea .wallet-fund-panel{border-color:#dce8f8;box-shadow:0 12px 35px #123a700c}
+.wallet-action-primary,.wallet-action-muted{transition:transform .18s ease,box-shadow .18s ease}
+.wallet-action-primary:active,.wallet-action-muted:active{transform:scale(.985)}
+body.dark .wallet-account-number-card{background:#111d31;border-color:#263a58;box-shadow:0 12px 32px #0003}
+body.dark .wallet-account-number-card strong{color:#e8f1ff}
+body.dark .wallet-account-number-card button{background:#172d4d;color:#b9d7ff;border-color:#2d4d78}
+body.dark .wallet-funding-close{background:#15243a;color:#eaf2ff;border-color:#2c3f5c}
+body.dark #walletFundingArea .wallet-fund-panel{border-color:#263b59}
+@media(max-width:650px){.wallet-account-number-card{gap:12px;padding:16px}.wallet-account-number-card strong{font-size:16px}.wallet-account-number-card button{padding:9px 13px}}
