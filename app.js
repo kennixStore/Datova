@@ -1,4 +1,4 @@
-const $=s=>document.querySelector(s),$=s=>[...document.querySelectorAll(s)];
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const intro=$("#onboarding"),app=$("#app");
 
 // Critical UI controls use early delegated handling so an unrelated startup
