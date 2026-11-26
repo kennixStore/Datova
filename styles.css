@@ -1055,6 +1055,3 @@ body.dark .transfer-preview-message.success{background:#123522;color:#a9e7bf}
 body.dark .transfer-preview-message.error{background:#3a2024;color:#ffc0c0}
 .wallet-action-muted#\walletTransferOpen{cursor:pointer;color:var(--text)}
 
-/* DATOVA emergency startup fallback: never trap visitors on a frozen onboarding layer. */
-#onboarding,#welcomeGate,#introSplash{display:none!important;}
-#app.hidden{display:block!important;}
