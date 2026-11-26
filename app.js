@@ -606,9 +606,9 @@ if(pinForm)pinForm.addEventListener("submit",async event=>{
  const currentPin=$("#currentTransactionPin").value;
  const newPin=$("#newTransactionPin").value;
  const confirmPin=$("#confirmTransactionPin").value;
- if(!/^\\d{4}$/.test(newPin)){pinMessage.textContent="Your new PIN must contain exactly four digits.";pinMessage.className="pin-manager-message error";return;}
+ if(!/^\d{4}$/.test(newPin)){pinMessage.textContent="Your new PIN must contain exactly four digits.";pinMessage.className="pin-manager-message error";return;}
  if(newPin!==confirmPin){pinMessage.textContent="The new PIN entries do not match.";pinMessage.className="pin-manager-message error";$("#confirmTransactionPin").focus();return;}
- if(currentPin&&!/^\\d{4}$/.test(currentPin)){pinMessage.textContent="Your current PIN must contain exactly four digits.";pinMessage.className="pin-manager-message error";return;}
+ if(currentPin&&!/^\d{4}$/.test(currentPin)){pinMessage.textContent="Your current PIN must contain exactly four digits.";pinMessage.className="pin-manager-message error";return;}
  const button=$("#transactionPinSubmit");
  button.disabled=true;button.textContent="Saving securely…";
  pinMessage.textContent="";pinMessage.className="pin-manager-message";
