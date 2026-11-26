@@ -234,8 +234,19 @@ function updateWalletDisplays(){
 async function loadWalletBalance(user=currentUser){
  if(!user||!supabaseReady||!supabaseClient){walletBalanceValue=null;walletBalanceState="idle";updateWalletDisplays();return}
  walletBalanceState="loading";updateWalletDisplays();
- try{const {data,error}=await supabaseClient.from("wallets").select("balance,currency").eq("user_id",user.id).maybeSingle();if(error)throw error;if(currentUser?.id!==user.id)return;walletBalanceValue=data?Number(data.balance||0):0;walletBalanceState="ready"}
- catch(error){console.error("Could not load DATOVA wallet balance:",error);if(currentUser?.id!==user.id)return;walletBalanceState="error"}
+ try{
+  const request=supabaseClient.from("wallets").select("balance,currency").eq("user_id",user.id).maybeSingle();
+  const timeout=new Promise((_,reject)=>setTimeout(()=>reject(new Error("Wallet balance request timed out. Check your connection and try again.")),12000));
+  const {data,error}=await Promise.race([request,timeout]);
+  if(error)throw error;
+  if(currentUser?.id!==user.id)return;
+  walletBalanceValue=data?Number(data.balance||0):0;
+  walletBalanceState="ready";
+ }catch(error){
+  console.error("Could not load DATOVA wallet balance:",error);
+  if(currentUser?.id!==user.id)return;
+  walletBalanceState="error";
+ }
  updateWalletDisplays();
 }
 function updateGreeting(){const user=currentUser;const parts=new Intl.DateTimeFormat("en-NG",{timeZone:"Africa/Lagos",hour:"2-digit",hourCycle:"h23"}).formatToParts(new Date());const hour=Number(parts.find(part=>part.type==="hour")?.value??new Date().getHours());const period=hour<5?"night":hour<12?"morning":hour<17?"afternoon":hour<21?"evening":"night";const full=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email?.split("@")[0]||"").trim();const first=full?full.split(/\s+/)[0]:"Guest";const title=$("#greetingTitle");if(title)title.textContent=`Good ${period}, ${first}`;const sub=$("#greetingSubtitle");if(sub)sub.textContent=user?"Your DATOVA space is ready. Let’s keep you connected.":"Explore DATOVA’s digital services and stay connected.";updateWalletDisplays();}
@@ -279,7 +290,7 @@ $("#authForm").addEventListener("submit",async e=>{
   if(mode==="signup"){
    if(!fullName){toast("Enter your full name.");return}
    if(password!==confirmPassword){toast("Your passwords do not match.");$("#confirmPassword").focus();return}
-   const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:fullName}}});
+   const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:fullName},emailRedirectTo:window.location.origin+window.location.pathname}});
    if(error)throw error;
    if(data.session){renderAccount(data.user);closeAuthModal();toast("Your DATOVA account is ready.");}
    else{closeAuthModal();toast("Account created. Check your email to confirm your address, then log in.");}
@@ -403,10 +414,14 @@ function openWalletFunding(){
  const area=$("#walletFundingArea");
  if(!area)return;
  area.classList.remove("hidden");
- area.scrollIntoView({behavior:"smooth",block:"start"});
- setTimeout(()=>$("#walletFundingAmount")?.focus({preventScroll:true}),400);
+ // The wallet screen may still be transitioning from display:none.
+ requestAnimationFrame(()=>setTimeout(()=>{
+  area.scrollIntoView({behavior:"smooth",block:"start"});
+  setTimeout(()=>$("#walletFundingAmount")?.focus({preventScroll:true}),250);
+ },320));
 }
-$("#dashboardAddMoney")?.addEventListener("click",()=>{
+$("#dashboardAddMoney")?.addEventListener("click",event=>{
+ event.preventDefault();
  go("wallet");
  openWalletFunding();
 });
@@ -555,10 +570,12 @@ function launchVisitorExperience(signedInUser){
   }
  });
 }
-sessionCheck.then(launchVisitorExperience).catch(error=>{
- console.error("DATOVA startup:",error);
- launchVisitorExperience(null);
-});
+// Show the opening reveal immediately instead of waiting for Supabase to answer.
+// Restore the signed-in profile as soon as the session lookup completes.
+launchVisitorExperience(null);
+sessionCheck.then(user=>{
+ if(user)renderAccount(user);
+}).catch(error=>console.error("DATOVA session restore:",error));
 
 /* Reliable direct controls: bind after the app functions and DOM are ready. */
 const themeControl=$("#themeToggle");
@@ -576,6 +593,15 @@ if(signOutControl)signOutControl.onclick=async()=>{
  finally{signOutControl.disabled=false;}
 };
 
+
+/* Profile Security and Preferences panels can be expanded/collapsed on mobile. */
+$$("[data-profile-toggle]").forEach(button=>button.addEventListener("click",()=>{
+ const card=button.closest(".profile-section-card");
+ if(!card)return;
+ const expanded=button.getAttribute("aria-expanded")==="true";
+ button.setAttribute("aria-expanded",String(!expanded));
+ card.classList.toggle("is-collapsed",expanded);
+}));
 
 /* DATOVA transaction PIN management — PINs are sent only to the protected Supabase RPC. */
 const pinManager=$("#pinManager");
