@@ -1025,3 +1025,15 @@ body.dark .wallet-hero-main{background:linear-gradient(125deg,#071b3d 0%,#103f80
 .wallet-instruction-foot{display:block}
 body.dark .wallet-bank-unavailable{background:#332b1a;border-color:#665126;color:#f1d89e}
 body.dark .wallet-instruction-check{background:#163c2a;color:#a9e7bf}
+
+
+/* DATOVA customer account number */
+.datova-account-number-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;margin:18px 0 22px;border:1px solid var(--border-color,#dce5f2);border-radius:16px;background:var(--panel-bg,#fff);box-shadow:0 8px 24px rgba(20,50,90,.05)}
+.datova-account-number-card>div{display:flex;flex-direction:column;gap:5px;min-width:0}
+.datova-account-number-card small{font-size:10px;font-weight:800;letter-spacing:1.1px;color:var(--muted,#738198)}
+.datova-account-number-card strong{font-size:21px;letter-spacing:1.2px;color:var(--text,#14213d)}
+.datova-account-number-card span{font-size:12px;line-height:1.5;color:var(--muted,#738198)}
+.datova-account-number-card button{flex:0 0 auto;border:0;border-radius:10px;padding:10px 16px;background:#1769e8;color:#fff;font-weight:700;cursor:pointer}
+.datova-account-number-card button:disabled{opacity:.45;cursor:not-allowed}
+.wallet-account-number-card{margin-top:20px}
+@media(max-width:520px){.datova-account-number-card{padding:15px;gap:10px}.datova-account-number-card strong{font-size:18px}.datova-account-number-card span{max-width:230px}}
