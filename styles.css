@@ -839,3 +839,24 @@ body.dark .network-card .network-mark{box-shadow:0 3px 10px rgba(0,0,0,.18)}
  .network-rail .network-mark{width:48px;height:48px}
  .network-rail .network-card>small{font-size:8px}
 }
+
+
+/* DATOVA wallet funding request form */
+.wallet-funding-panel{align-items:stretch;justify-content:flex-start;gap:0}
+.wallet-funding-panel .wallet-icon{margin-bottom:12px}
+.wallet-funding-form{width:100%;margin-top:10px}
+.wallet-funding-form label{display:block;width:100%;font-size:10px;font-weight:800;color:var(--text)}
+.wallet-funding-form input{display:block;width:100%;height:46px;margin-top:7px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text);font:13px "DM Sans",sans-serif}
+.wallet-funding-form input:focus{outline:2px solid #1677ff35;border-color:#1677ff}
+.wallet-funding-form .primary-btn{margin-top:13px;min-height:46px}
+.wallet-funding-form button:disabled{opacity:.65;cursor:wait}
+.wallet-funding-message{display:none;margin-top:12px;padding:12px;border-radius:10px;background:#effaf3;color:#176b3a;font-size:10px;line-height:1.8;overflow-wrap:anywhere}
+.wallet-funding-message.success{display:block}
+.wallet-funding-message.error{display:block;background:#fff1f1;color:#a52c2c}
+.wallet-funding-note{margin:12px 0!important}
+.wallet-ready-pill{margin-top:2px;background:#eaf3ff;color:#1765c2}
+body.dark .wallet-funding-form label{color:var(--text)}
+body.dark .wallet-funding-form input{background:#101d30;border-color:#29415f;color:#eef5ff}
+body.dark .wallet-funding-message.success{background:#123522;color:#a9e7bf}
+body.dark .wallet-funding-message.error{background:#3a2024;color:#ffc0c0}
+@media(max-width:700px){.wallet-overview{grid-template-columns:1fr}.wallet-funding-panel{padding:20px}.wallet-funding-form button{width:100%}}
