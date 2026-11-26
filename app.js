@@ -104,7 +104,24 @@ function openAuth(mode="login"){
  requestAnimationFrame(()=>$("#authModal").scrollTo({top:0,behavior:"auto"}));
 }
 function syncNavigation(screen){$$("[data-screen]").forEach(button=>{const active=button.dataset.screen===screen;button.classList.toggle("active",active);button.setAttribute("aria-current",active?"page":"false")})}
-function go(screen,options={}){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}try{sessionStorage.setItem("datova_current_screen",screen)}catch(error){}const current=$(".screen.active");if(current===target){syncNavigation(screen);return}if(!options.fromPopState&&screenHistoryReady){screenStack.push(screen);history.pushState({datovaScreen:screen,datovaApp:true},"",location.href)}else if(options.fromPopState){const index=screenStack.lastIndexOf(screen);if(index>=0)screenStack=screenStack.slice(0,index+1);else screenStack.push(screen)}if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);syncNavigation(screen);window.scrollTo({top:0,behavior:"smooth"})}
+async function loadWalletHistory(){
+ const panel=document.querySelector("#walletHistoryPanel");if(!panel)return;
+ if(!currentUser||!supabaseReady||!supabaseClient){panel.innerHTML='<div class="empty-state"><div class="empty-symbol">↗</div><b>Sign in to view transactions</b><p>Your wallet activity will appear here after you sign in.</p></div>';return;}
+ panel.innerHTML='<div class="empty-state"><b>Loading your transactions…</b></div>';
+ try{
+  const {data,error}=await supabaseClient.from("wallet_transactions").select("id,transaction_type,amount,balance_before,balance_after,reference,description,created_at").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(50);
+  if(error)throw error;
+  if(!data?.length){panel.innerHTML='<div class="empty-state"><div class="empty-symbol">↗</div><b>No wallet activity yet</b><p>Your deposits and wallet activity will appear here.</p></div>';return;}
+  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  panel.innerHTML='<div class="wallet-history-list">'+data.map(row=>{
+   const credit=["credit","refund","adjustment"].includes(String(row.transaction_type||"").toLowerCase());
+   const amount=(credit?"+":"−")+"₦"+Number(row.amount||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+   const date=row.created_at?new Date(row.created_at).toLocaleString("en-NG",{dateStyle:"medium",timeStyle:"short"}):"Date unavailable";
+   return '<article class="wallet-history-item"><span class="wallet-history-mark '+(credit?"incoming":"outgoing")+'">'+(credit?"↓":"↑")+'</span><div class="wallet-history-info"><b>'+esc(row.description||row.transaction_type||"Wallet activity")+'</b><small>'+esc(date)+' · '+esc(row.reference||"No reference")+'</small></div><strong class="'+(credit?"incoming-text":"outgoing-text")+'">'+amount+'</strong></article>';
+  }).join("")+'</div>';
+ }catch(error){console.error("Could not load wallet history:",error);panel.innerHTML='<div class="empty-state"><b>Could not load transactions</b><p>Please refresh and try again.</p></div>';}
+}
+function go(screen,options={}){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}try{sessionStorage.setItem("datova_current_screen",screen)}catch(error){}const current=$(".screen.active");if(current===target){syncNavigation(screen);return}if(!options.fromPopState&&screenHistoryReady){screenStack.push(screen);history.pushState({datovaScreen:screen,datovaApp:true},"",location.href)}else if(options.fromPopState){const index=screenStack.lastIndexOf(screen);if(index>=0)screenStack=screenStack.slice(0,index+1);else screenStack.push(screen)}if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);syncNavigation(screen);if(screen==="transactions")loadWalletHistory();window.scrollTo({top:0,behavior:"smooth"})}
 window.datovaNavigate=go;
 window.addEventListener("popstate",event=>{if(!screenHistoryReady)return;const screen=event.state?.datovaScreen;if(screen&&screen!=="root"&&$("#screen-"+screen)){go(screen,{fromPopState:true});return}screenStack=["overview"];go("overview",{fromPopState:true})});
 let introSliding=false;
