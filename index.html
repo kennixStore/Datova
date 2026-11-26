@@ -184,9 +184,25 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
 </div>
 <div class="screen" id="screen-profile">
 <div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">YOUR ACCOUNT</div><h1>My Profile</h1><p>Manage your personal information and preferences.</p></div>
-<div class="profile-panel"><div class="profile-avatar">G</div><div class="profile-main"><div class="profile-identity"><h3>Guest account</h3><p>Sign in or create an account to manage your DATOVA profile.</p></div><div class="profile-actions"><button class="primary" id="profileSignIn">Sign in / Create account</button><button class="outline-btn hidden" id="profileSignOut">Sign out</button></div></div></div>
-<div class="datova-account-number-card"><div><small>YOUR DATOVA ACCOUNT NUMBER</small><strong id="profileAccountNumber">Sign in to view</strong><span>Share this number to receive money from another DATOVA user.</span></div><button type="button" id="profileAccountCopy" data-copy-account-number disabled>Copy</button></div>
-<div class="form-panel settings-panel"><h3>Account preferences</h3><div class="setting-row"><span class="setting-icon">◐</span><div class="setting-copy"><b>Appearance</b><small>Switch between light and dark mode.</small></div><button class="outline-btn" id="profileTheme">Toggle theme</button></div><div class="setting-row"><span class="setting-icon">◇</span><div class="setting-copy"><b>Privacy and security</b><small>Security settings will be available with account authentication.</small></div><span class="status-pill">Coming soon</span></div><div class="setting-row"><span class="setting-icon">↻</span><div class="setting-copy"><b>Replay introduction</b><small>Watch DATOVA’s three onboarding screens again.</small></div><button class="outline-btn" id="replayOnboarding" type="button">Replay</button></div></div>
+<section class="profile-hero-card">
+ <div class="profile-hero-top"><div class="profile-avatar">G</div><div class="profile-hero-identity"><span class="profile-kicker">DATOVA ACCOUNT</span><h2 class="profile-display-name">Guest account</h2><p class="profile-display-email">Sign in to view your account details.</p></div><span class="profile-account-status" id="profileAccountStatus">Guest</span></div>
+ <div class="profile-actions"><button class="primary" id="profileSignIn">Sign in / Create account</button><button class="outline-btn hidden" id="profileSignOut">Sign out</button></div>
+</section>
+<section class="profile-section-card"><div class="profile-section-heading"><span class="profile-section-icon">01</span><div><h3>Personal information</h3><p>Your registered DATOVA identity.</p></div></div>
+ <div class="profile-detail-row"><span>Full name</span><strong id="profileFullName">Not available</strong></div>
+ <div class="profile-detail-row"><span>Email address</span><strong id="profileEmailAddress">Not signed in</strong></div>
+</section>
+<section class="profile-section-card"><div class="profile-section-heading"><span class="profile-section-icon">02</span><div><h3>Account details</h3><p>Your unique DATOVA account number.</p></div></div>
+ <div class="datova-account-number-card profile-account-number"><div><small>YOUR DATOVA ACCOUNT NUMBER</small><strong id="profileAccountNumber">Sign in to view</strong><span>Share this number to receive money from another DATOVA user.</span></div><button type="button" id="profileAccountCopy" data-copy-account-number disabled>Copy</button></div>
+</section>
+<section class="profile-section-card"><div class="profile-section-heading"><span class="profile-section-icon">03</span><div><h3>Security</h3><p>Keep your account protected.</p></div></div>
+ <div class="profile-setting-row"><span class="setting-icon">⌑</span><div class="setting-copy"><b>Password</b><small>Reset your sign-in password using your email.</small></div><button class="outline-btn" id="profilePasswordHelp" type="button">Reset</button></div>
+ <div class="profile-setting-row"><span class="setting-icon">●</span><div class="setting-copy"><b>Transaction PIN</b><small>4-digit PIN protection for transfers.</small></div><span class="status-pill">Coming soon</span></div>
+</section>
+<section class="profile-section-card"><div class="profile-section-heading"><span class="profile-section-icon">04</span><div><h3>Preferences</h3><p>Make DATOVA comfortable to use.</p></div></div>
+ <div class="profile-setting-row"><span class="setting-icon">◐</span><div class="setting-copy"><b>Appearance</b><small id="profileThemeDescription">Choose light or dark mode.</small></div><button class="outline-btn" id="profileTheme">Dark mode</button></div>
+ <div class="profile-setting-row"><span class="setting-icon">↻</span><div class="setting-copy"><b>Welcome tour</b><small>Watch DATOVA’s introduction again.</small></div><button class="outline-btn" id="replayOnboarding" type="button">Replay</button></div>
+</section>
 </div>
 <div class="screen" id="screen-support">
 <div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">WE'RE HERE TO HELP</div><h1>Help & Support</h1><p>Find help with your DATOVA experience.</p></div>
