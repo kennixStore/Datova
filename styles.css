@@ -803,3 +803,39 @@ body.dark #screen-profile .profile-panel,body.dark #screen-profile .settings-pan
 .network-card>b{font-size:12px}
 .network-card>small{font-size:9px}
 body.dark .network-card .network-mark{box-shadow:0 3px 10px rgba(0,0,0,.18)}
+
+
+/* Compact, horizontally swipeable network selector on the dashboard. */
+.network-section{margin-top:24px}
+.network-rail{
+ display:flex;
+ gap:10px;
+ overflow-x:auto;
+ overflow-y:hidden;
+ padding:2px 2px 12px;
+ margin:0 -2px;
+ scroll-snap-type:x mandatory;
+ -webkit-overflow-scrolling:touch;
+ scrollbar-width:none;
+}
+.network-rail::-webkit-scrollbar{display:none}
+.network-rail .network-card{
+ flex:0 0 116px;
+ min-height:126px;
+ padding:10px;
+ gap:5px;
+ scroll-snap-align:start;
+}
+.network-rail .network-mark{width:54px;height:54px;border-radius:13px;overflow:hidden;margin-bottom:2px}
+.network-rail .network-card>b{font-size:12px}
+.network-rail .network-card>small{font-size:9px;line-height:1.3}
+@media(min-width:900px){
+ .network-rail .network-card{flex-basis:136px;min-height:138px;padding:12px}
+ .network-rail .network-mark{width:60px;height:60px}
+}
+@media(max-width:700px){
+ .network-rail{gap:9px}
+ .network-rail .network-card{flex-basis:108px;min-height:118px;padding:9px}
+ .network-rail .network-mark{width:48px;height:48px}
+ .network-rail .network-card>small{font-size:8px}
+}
