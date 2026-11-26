@@ -4,6 +4,61 @@
 @media(max-width:680px){.layout{display:block}.side{position:fixed;z-index:5;top:0;bottom:0;left:-250px;width:235px;transition:left .2s;box-shadow:8px 0 30px #06142d33}.side.open{left:0}.mobile-menu{display:inline-block;border:0;border-radius:7px;background:#eaf3ff;color:var(--blue);padding:7px;margin-right:8px}.top{height:58px;padding:0 13px}.content{padding:19px 13px}.heading{align-items:start;flex-direction:column;gap:8px}.grid{grid-template-columns:1fr}.service-grid,.form-grid{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:20px}.date{display:none}}
 
 .auth-gate{position:fixed;inset:0;z-index:50;background:linear-gradient(145deg,#07152f,#102e58);display:grid;place-items:center;padding:20px}.auth-card{width:min(100%,410px);background:#fff;border-radius:20px;padding:28px;box-shadow:0 24px 80px #0005}.auth-brand{font:800 22px Manrope;color:#07152f;letter-spacing:1px}.auth-card h1{font:800 22px Manrope;color:#07152f;margin:24px 0 7px}.auth-card p{font-size:12px;color:#8291a6;line-height:1.6}.auth-card label{display:block;font-size:11px;font-weight:700;margin:16px 0 6px}.auth-card input{width:100%;padding:13px;border:1px solid #dce5f0;border-radius:9px;font-size:13px}.auth-btn{width:100%;border:0;border-radius:9px;padding:13px;background:#1677ff;color:white;font-weight:800;margin-top:16px}.auth-google{background:#fff;color:#20334e;border:1px solid #dce5f0;margin-top:9px}.auth-error{color:#b42318;font-size:11px;min-height:18px;margin-top:10px}.auth-help{font-size:10px!important}.layout{display:none}.top-right{display:flex;align-items:center;gap:10px}.signout{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;font-size:10px;color:#53657c}
+
+/* Mobile layout refinement */
+@media(max-width:680px){
+ html,body{width:100%;overflow-x:hidden}
+ .layout{display:block!important;min-height:100dvh}
+ .main{width:100%;min-width:0}
+ .side{position:fixed;z-index:30;top:0;bottom:0;left:-260px;width:250px;max-width:85vw;height:100dvh;overflow-y:auto;padding:20px 15px;transition:left .22s ease;box-shadow:12px 0 35px #07152f30}
+ .side.open{left:0}
+ .top{height:60px;padding:0 12px;position:sticky;top:0;z-index:20;gap:8px}
+ .top>div:first-child{display:flex;align-items:center;min-width:0;white-space:nowrap}
+ .mobile-menu{flex:0 0 auto;font-size:16px;padding:8px 10px;margin-right:5px}
+ .top-right{gap:6px;min-width:0}
+ .pill{font-size:7px;padding:7px 8px;white-space:nowrap}
+ #adminIdentity{display:none}
+ .signout{font-size:9px;padding:8px}
+ .content{width:100%;max-width:none;padding:17px 12px 28px}
+ .heading{display:block;margin-bottom:15px}
+ .heading h1{font-size:22px;line-height:1.2}
+ .heading p{font-size:11px;line-height:1.5}
+ .date{display:block;margin-top:8px;font-size:9px}
+ .notice{font-size:10px;padding:11px;line-height:1.55}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .stat{padding:12px;min-width:0}
+ .stat label{font-size:9px}
+ .stat strong{font-size:20px;margin:8px 0 3px;overflow-wrap:anywhere}
+ .stat small{font-size:8px;line-height:1.4}
+ .grid{grid-template-columns:minmax(0,1fr);gap:10px}
+ .panel{padding:13px;border-radius:12px;min-width:0}
+ .panel-head{gap:8px;align-items:flex-start}
+ .panel h3,.panel-head h3{font-size:11px}
+ .panel-head small{font-size:8px;text-align:right}
+ .chart{height:135px;gap:7px;padding-left:0;padding-right:0}
+ .bar{width:min(22px,65%)}
+ .col small{font-size:7px}
+ .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+ table{min-width:560px}
+ th{font-size:8px;padding:9px 8px}
+ td{font-size:9px;padding:11px 8px}
+ .toolbar{display:grid;grid-template-columns:minmax(0,1fr) 125px;gap:7px}
+ .toolbar input,.toolbar select{width:100%;min-width:0;padding:10px 8px;font-size:10px}
+ .service-grid,.form-grid{grid-template-columns:minmax(0,1fr);gap:9px}
+ .service{padding:14px}
+ .empty{padding:30px 10px;line-height:1.5}
+ .auth-gate{padding:14px}
+ .auth-card{padding:23px 19px;border-radius:16px}
+ .auth-card h1{font-size:21px;margin-top:20px}
+}
+@media(max-width:360px){
+ .content{padding-left:9px;padding-right:9px}
+ .stats{gap:7px}
+ .stat{padding:10px}
+ .stat strong{font-size:18px}
+ .toolbar{grid-template-columns:minmax(0,1fr) 112px}
+ .top{padding:0 8px}
+}
 </style></head><body><div class="auth-gate" id="authGate"><form class="auth-card" id="adminLogin"><div class="auth-brand">DATOVA</div><h1>Admin sign in</h1><p>Sign in with your DATOVA administrator account. Access is checked against the secure admin role in Supabase.</p><label for="adminEmail">Email address</label><input id="adminEmail" type="email" autocomplete="username" required><label for="adminPassword">Password</label><input id="adminPassword" type="password" autocomplete="current-password" required><button class="auth-btn" type="submit">Sign in securely</button><button class="auth-btn auth-google" id="adminGoogle" type="button">Continue with Google</button><div class="auth-error" id="authError" role="alert"></div><p class="auth-help">Only approved DATOVA administrators can enter this dashboard.</p></form></div><div class="layout"><aside class="side" id="side"><div class="brand"><div class="logo">D</div><div><b>DATOVA</b><small>ADMIN CONSOLE</small></div></div><div class="label">MANAGEMENT</div><button class="nav active" data-page="overview"><span>⌂</span>Overview</button><button class="nav" data-page="orders"><span>▤</span>Orders & transactions</button><button class="nav" data-page="customers"><span>◎</span>Customers</button><button class="nav" data-page="pricing"><span>₦</span>Service pricing</button><div class="label">OPERATIONS</div><button class="nav" data-page="providers"><span>⌁</span>Provider monitoring</button><button class="nav" data-page="failed"><span>!</span>Failed transactions</button><button class="nav" data-page="wallet"><span>◈</span>Wallet records</button><div class="label">CONFIGURATION</div><button class="nav" data-page="settings"><span>⚙</span>Settings</button><div class="side-note"><b>Preview environment</b>Sample information only. This interface is not connected to live records or protected by admin authentication yet.</div></aside><main class="main"><header class="top"><div><button class="mobile-menu" id="menu">☰</button>DATOVA / <b id="crumb">Overview</b></div><div class="top-right"><span class="pill">DEMO DATA</span><span id="adminIdentity" style="font-size:10px"></span><button class="signout" id="adminSignout">Sign out</button></div></header><div class="content">
 <section class="page active" id="page-overview"><div class="heading"><div><div class="eyebrow">CONTROL CENTRE</div><h1>Good day, Admin.</h1><p>A snapshot of your DATOVA operations.</p></div><div class="date" id="today"></div></div><div class="notice">DEMO DATA: All figures and order references below are illustrative placeholders, not real customers, payments or transactions.</div><div class="stats"><div class="stat"><label>Total orders</label><strong>1,284</strong><small>Sample lifetime orders</small></div><div class="stat"><label>Successful orders</label><strong>1,246</strong><small>97.0% sample success rate</small></div><div class="stat"><label>Pending orders</label><strong>12</strong><small>Illustrative pending count</small></div><div class="stat"><label>Failed orders</label><strong>26</strong><small>Sample failed count</small></div></div><div class="grid"><div class="panel"><div class="panel-head"><h3>Order activity</h3><small>Sample weekly volume</small></div><div class="chart"><div class="col"><i class="bar" style="height:35%"></i><small>Mon</small></div><div class="col"><i class="bar" style="height:57%"></i><small>Tue</small></div><div class="col"><i class="bar" style="height:44%"></i><small>Wed</small></div><div class="col"><i class="bar" style="height:75%"></i><small>Thu</small></div><div class="col"><i class="bar" style="height:62%"></i><small>Fri</small></div><div class="col"><i class="bar" style="height:90%"></i><small>Sat</small></div><div class="col"><i class="bar" style="height:51%"></i><small>Sun</small></div></div></div><div class="panel"><div class="panel-head"><h3>Provider status</h3><small>Not tested</small></div><div class="provider">MTN <span class="badge">NOT CONNECTED</span></div><div class="provider">Airtel <span class="badge">NOT CONNECTED</span></div><div class="provider">Glo <span class="badge">NOT CONNECTED</span></div><div class="provider">9mobile <span class="badge">NOT CONNECTED</span></div></div></div><div class="panel"><div class="panel-head"><h3>Recent orders</h3><small>Example records</small></div><div class="table-wrap"><table><thead><tr><th>REFERENCE</th><th>SERVICE</th><th>AMOUNT</th><th>STATUS</th><th>DATE</th></tr></thead><tbody><tr><td>DTV-EXAMPLE-001</td><td>MTN Data</td><td>₦1,000</td><td><span class="badge ok">SUCCESS</span></td><td>Demo</td></tr><tr><td>DTV-EXAMPLE-002</td><td>Airtel Airtime</td><td>₦500</td><td><span class="badge">PENDING</span></td><td>Demo</td></tr><tr><td>DTV-EXAMPLE-003</td><td>Glo Data</td><td>₦2,000</td><td><span class="badge">FAILED</span></td><td>Demo</td></tr></tbody></table></div></div></section>
 <section class="page" id="page-orders"><div class="heading"><div><div class="eyebrow">ORDER MANAGEMENT</div><h1>Orders & transactions</h1><p>Review purchases and payment status.</p></div></div><div class="notice">Search and filters work on sample rows only. Refunds, retries, updates and exports require secure backend integration.</div><div class="toolbar"><input id="search" placeholder="Search reference or service"><select id="filter"><option value="all">All statuses</option><option>SUCCESS</option><option>PENDING</option><option>FAILED</option></select></div><div class="panel table-wrap"><table id="orders"><thead><tr><th>REFERENCE</th><th>CUSTOMER</th><th>SERVICE</th><th>AMOUNT</th><th>STATUS</th></tr></thead><tbody><tr><td>DTV-EXAMPLE-001</td><td>Sample customer</td><td>MTN Data</td><td>₦1,000</td><td>SUCCESS</td></tr><tr><td>DTV-EXAMPLE-002</td><td>Sample customer</td><td>Airtel Airtime</td><td>₦500</td><td>PENDING</td></tr><tr><td>DTV-EXAMPLE-003</td><td>Sample customer</td><td>Glo Data</td><td>₦2,000</td><td>FAILED</td></tr></tbody></table></div></section>
