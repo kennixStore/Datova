@@ -319,13 +319,14 @@ $("#walletTransferClose")?.addEventListener("click",()=>{
 });
 $("#walletTransferForm")?.addEventListener("submit",event=>{
   event.preventDefault();
-  const recipient=$("#transferRecipient").value.trim().toUpperCase();
+  const recipientInput=$("#transferRecipient").value.trim().toUpperCase();
+  const recipient=recipientInput.replace(/[\s-]/g,"");
   const amount=Number($("#transferAmount").value);
   const message=$("#transferPreviewMessage");
   message.classList.remove("error","success");
   if(!currentUser){message.textContent="Please sign in before preparing a transfer.";message.classList.add("error");openAuth("login");return;}
-  if(!/^DTV-\d{8}$/.test(recipient)){message.textContent="Enter a valid DATOVA account number in the format DTV-12345678.";message.classList.add("error");return;}
-  if(recipient===String(accountNumberValue||"").toUpperCase()){message.textContent="You cannot send money to your own DATOVA account.";message.classList.add("error");return;}
+  if(!/^DTV\d{8}$/.test(recipient)){message.textContent="Enter a valid DATOVA account number, for example DTV-12345678.";message.classList.add("error");return;}
+  if(recipient===String(accountNumberValue||"").toUpperCase().replace(/[\s-]/g,"")){message.textContent="You cannot send money to your own DATOVA account.";message.classList.add("error");return;}
   if(!Number.isFinite(amount)||amount<=0||Math.round(amount*100)!==amount*100){message.textContent="Enter a valid amount with no more than 2 decimal places.";message.classList.add("error");return;}
   if(walletBalanceState!=="ready"){message.textContent="Your wallet balance is not ready. Refresh your balance and try again.";message.classList.add("error");return;}
   if(amount>walletBalanceValue){message.textContent="Insufficient wallet balance for this amount.";message.classList.add("error");return;}
