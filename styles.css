@@ -1004,3 +1004,24 @@ body.dark .wallet-hero-main{background:linear-gradient(125deg,#071b3d 0%,#103f80
  .wallet-action-primary,.wallet-action-muted{grid-template-columns:30px minmax(0,1fr) auto;gap:8px}
  .wallet-action-symbol{width:30px;height:30px}
 }
+
+
+/* DATOVA payment instructions shown after a funding request is created */
+.wallet-payment-instructions{display:flex;flex-direction:column;gap:12px}
+.wallet-instruction-top{display:flex;align-items:center;gap:11px;padding-bottom:12px;border-bottom:1px solid rgba(22,119,255,.16)}
+.wallet-instruction-check{display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:50%;background:#dff7e8;color:#16743b;font-weight:900}
+.wallet-instruction-top>div{display:flex;flex-direction:column;gap:3px}
+.wallet-instruction-top strong{font-size:13px}
+.wallet-instruction-top small,.wallet-instruction-foot{font-size:9px;line-height:1.5;opacity:.78}
+.wallet-instruction-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:10px}
+.wallet-instruction-row>span{opacity:.75}
+.wallet-instruction-row>b{font-size:11px;overflow-wrap:anywhere;text-align:right}
+.wallet-reference-row{padding:10px;border:1px dashed rgba(22,119,255,.35);border-radius:10px;background:rgba(22,119,255,.045)}
+.wallet-copy-reference{padding:7px 11px;border:1px solid rgba(22,119,255,.35);border-radius:8px;background:transparent;color:#1677ff;font-size:9px;font-weight:800;cursor:pointer}
+.wallet-pending-status{color:#9a6700}
+.wallet-bank-unavailable{padding:12px;border:1px solid #f0d49b;border-radius:10px;background:#fff8e8;color:#76510a}
+.wallet-bank-unavailable b{font-size:10px}
+.wallet-bank-unavailable p{margin:5px 0 0;font-size:9px;line-height:1.6}
+.wallet-instruction-foot{display:block}
+body.dark .wallet-bank-unavailable{background:#332b1a;border-color:#665126;color:#f1d89e}
+body.dark .wallet-instruction-check{background:#163c2a;color:#a9e7bf}
