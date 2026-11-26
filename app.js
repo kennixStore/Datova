@@ -491,22 +491,23 @@ function showFirstVisitOnboarding(){
 }
 sessionCheck.then(signedInUser=>{
  if(signedInUser)renderAccount(signedInUser);
- if(openingPlayedThisSession){
-  if(returningVisitor||signedInUser)showApp();
-  else showFirstVisitOnboarding();
-  return;
- }
+ // Keep the main DATOVA app accessible on every visit; onboarding remains available
+ // only through the explicit Replay introduction control in Profile.
  markOpeningPlayedThisSession();
- if(returningVisitor||signedInUser)startOpeningAnimation(showApp);
- else startOpeningAnimation(showFirstVisitOnboarding);
-}).catch(()=>{
- if(openingPlayedThisSession){
-  if(returningVisitor)showApp();
-  else showFirstVisitOnboarding();
-  return;
- }
+ markOnboardingComplete();
+ stopOriginalIntroSound();
+ $("#introSplash")?.classList.add("hidden");
+ intro?.classList.add("hidden");
+ $("#welcomeGate")?.classList.add("hidden");
+ showApp();
+}).catch(error=>{
+ console.error("DATOVA startup:",error);
  markOpeningPlayedThisSession();
- if(returningVisitor)startOpeningAnimation(showApp);
- else startOpeningAnimation(showFirstVisitOnboarding);
+ markOnboardingComplete();
+ stopOriginalIntroSound();
+ $("#introSplash")?.classList.add("hidden");
+ intro?.classList.add("hidden");
+ $("#welcomeGate")?.classList.add("hidden");
+ showApp();
 });
 window.datovaAppStarted=true;
