@@ -6,6 +6,8 @@ const slides=[
 {step:"AIRTIME MADE SIMPLE",title:"Recharge Without<br><span>Stress.</span>",text:"Top up your phone in a few simple steps.",art:"airtime"}];
 let slide=0;
 let screenHistoryReady=false,screenStack=["overview"];
+function savedScreen(){try{const saved=sessionStorage.getItem("datova_current_screen");return saved&&document.querySelector("#screen-"+saved)?saved:"overview"}catch(error){return "overview"}}
+function restoreSavedScreen(){const screen=savedScreen();$(".screen").forEach(el=>el.classList.toggle("active",el.id==="screen-"+screen));syncNavigation(screen)}
 function initScreenHistory(){if(screenHistoryReady)return;screenHistoryReady=true;const current=document.querySelector(".screen.active")?.id.replace("screen-","")||"overview";screenStack=[current];history.replaceState({datovaScreen:"root",datovaRoot:true},"",location.href);history.pushState({datovaScreen:current,datovaApp:true},"",location.href)}
 function goBack(){if(history.state?.datovaApp){history.back();return}if(screenStack.length>1){screenStack.pop();const previous=screenStack[screenStack.length-1]||"overview";go(previous,{fromPopState:true});return}if($(".screen.active")?.id!=="screen-overview"){go("overview");return}toast("You're already on the DATOVA home screen.")}
 let onboardingReplayMode=false;
@@ -101,7 +103,7 @@ function openAuth(mode="login"){
  requestAnimationFrame(()=>$("#authModal").scrollTo({top:0,behavior:"auto"}));
 }
 function syncNavigation(screen){$$("[data-screen]").forEach(button=>{const active=button.dataset.screen===screen;button.classList.toggle("active",active);button.setAttribute("aria-current",active?"page":"false")})}
-function go(screen,options={}){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}const current=$(".screen.active");if(current===target){syncNavigation(screen);return}if(!options.fromPopState&&screenHistoryReady){screenStack.push(screen);history.pushState({datovaScreen:screen,datovaApp:true},"",location.href)}else if(options.fromPopState){const index=screenStack.lastIndexOf(screen);if(index>=0)screenStack=screenStack.slice(0,index+1);else screenStack.push(screen)}if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);syncNavigation(screen);window.scrollTo({top:0,behavior:"smooth"})}
+function go(screen,options={}){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}try{sessionStorage.setItem("datova_current_screen",screen)}catch(error){}const current=$(".screen.active");if(current===target){syncNavigation(screen);return}if(!options.fromPopState&&screenHistoryReady){screenStack.push(screen);history.pushState({datovaScreen:screen,datovaApp:true},"",location.href)}else if(options.fromPopState){const index=screenStack.lastIndexOf(screen);if(index>=0)screenStack=screenStack.slice(0,index+1);else screenStack.push(screen)}if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);syncNavigation(screen);window.scrollTo({top:0,behavior:"smooth"})}
 window.datovaNavigate=go;
 window.addEventListener("popstate",event=>{if(!screenHistoryReady)return;const screen=event.state?.datovaScreen;if(screen&&screen!=="root"&&$("#screen-"+screen)){go(screen,{fromPopState:true});return}screenStack=["overview"];go("overview",{fromPopState:true})});
 let introSliding=false;
@@ -263,8 +265,8 @@ const sessionCheck=supabaseReady
    ])
  : Promise.resolve(null);
 const returningVisitor=localStorage.getItem("datova_onboarding_complete")==="1"||localStorage.getItem("datova_intro_seen")==="1";
-// Play the short DATOVA brand reveal on every fresh site load.
-// First-time visitors continue to onboarding; returning visitors go to the app.
+// Play the DATOVA brand reveal once per browser tab session, not on every refresh.
+// Keep the last open app section when the visitor refreshes the page.
 // Play the user's original DATOVA intro audio uploaded to this repository.
 const introAudio=new Audio("./32439b6f2e2b412b255dcb33fc7f3710_1795639637398.mp4");
 introAudio.preload="auto";
