@@ -1037,3 +1037,20 @@ body.dark .wallet-instruction-check{background:#163c2a;color:#a9e7bf}
 .datova-account-number-card button:disabled{opacity:.45;cursor:not-allowed}
 .wallet-account-number-card{margin-top:20px}
 @media(max-width:520px){.datova-account-number-card{padding:15px;gap:10px}.datova-account-number-card strong{font-size:18px}.datova-account-number-card span{max-width:230px}}
+
+/* DATOVA-to-DATOVA transfer preparation form (preview only) */
+.datova-transfer-panel{margin:0 0 20px;scroll-margin-top:18px}
+.datova-transfer-panel.hidden{display:none}
+.transfer-close{width:32px;height:32px;border:1px solid var(--line);border-radius:9px;background:var(--surface-soft);color:var(--text);font-size:21px;line-height:1;cursor:pointer}
+.wallet-transfer-form{display:grid;gap:9px}
+.wallet-transfer-form label{margin-top:7px;font-size:10px;font-weight:800;color:var(--text)}
+.wallet-transfer-form>input{width:100%;height:49px;padding:0 13px;border:1px solid var(--line);border-radius:11px;background:var(--surface-soft);color:var(--text);font:600 13px "DM Sans",sans-serif;box-sizing:border-box}
+.wallet-transfer-form>input:focus{outline:2px solid #1677ff35;border-color:#1677ff}
+.wallet-transfer-form .wallet-amount-input{margin-bottom:7px}
+.transfer-preview-message{margin-top:12px;padding:12px;border-radius:10px;background:#fff7e6;color:#825b0b;font-size:10px;line-height:1.65}
+.transfer-preview-message.success{background:#eaf8ef;color:#176b3a}
+.transfer-preview-message.error{background:#fff0f0;color:#a52c2c}
+body.dark .transfer-preview-message{background:#332b1a;color:#f1d89e}
+body.dark .transfer-preview-message.success{background:#123522;color:#a9e7bf}
+body.dark .transfer-preview-message.error{background:#3a2024;color:#ffc0c0}
+.wallet-action-muted#\walletTransferOpen{cursor:pointer;color:var(--text)}
