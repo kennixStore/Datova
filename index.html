@@ -6,7 +6,7 @@
 <link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=49"><title>DATOVA — Digital services, made easy</title>
+<link rel="stylesheet" href="styles.css?v=50"><title>DATOVA — Digital services, made easy</title>
 </head>
 <body>
 <div id="introSplash" class="intro-splash hidden" aria-label="DATOVA opening animation"><button id="introSoundToggle" class="intro-sound-toggle" type="button" aria-label="Mute intro sound" aria-pressed="false" title="Mute intro sound"><span aria-hidden="true">🔊</span></button><div class="splash-light"></div><div class="splash-orbit orbit-a"></div><div class="splash-orbit orbit-b"></div><div class="splash-runner" aria-hidden="true"></div><div class="splash-core"><img src="datova-mark.svg" alt="" class="splash-mark"><div class="splash-word"><span>DAT</span><span class="splash-globe-slot"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="splashGlobeBlue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7ce4ff"/><stop offset=".52" stop-color="#1677ff"/><stop offset="1" stop-color="#1646b8"/></linearGradient></defs><circle cx="20" cy="20" r="17" fill="url(#splashGlobeBlue)"/><path d="M3 20h34M20 3c-6 6-8 11-8 17s2 11 8 17m0-34c6 6 8 11 8 17s-2 11-8 17M7 11q13 7 26 0M7 29q13-7 26 0" fill="none" stroke="#eafaff" stroke-width="1.35" stroke-linecap="round" opacity=".92"/></svg></span><span>VA</span></div></div><div class="splash-floor"></div></div>
@@ -96,9 +96,54 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
 <div class="side-note-panel"><div class="note-illustration">◉</div><h3>A quick top-up, made simple.</h3><p>We are preparing a clear airtime flow with recipient confirmation before payment.</p><div class="mini-feature">✓ Confirm recipient</div><div class="mini-feature">✓ Review amount</div><div class="mini-feature">✓ Track transaction</div></div></div>
 </div>
 <div class="screen" id="screen-wallet">
-<div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">PAYMENT CENTRE</div><h1>My Wallet</h1><p>Your DATOVA payment overview.</p></div>
-<div class="wallet-overview"><div class="wallet-card"><div class="wallet-card-top"><span>WALLET BALANCE</span><button type="button" class="wallet-visibility-toggle" id="walletVisibility" aria-label="Show balance" aria-pressed="false" title="Show balance"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div><div class="wallet-amount">₦ <span id="walletAmountValue">••••••</span></div><p>Your live wallet balance will appear here after the wallet balance connection is completed.</p><div class="wallet-card-foot">DATOVA <span>•••• •••• ••••</span></div></div><div class="wallet-info wallet-funding-panel"><div class="quick-icon wallet-icon">◈</div><h3>Fund your wallet</h3><p>Enter the amount you want to add. DATOVA will create a bank-transfer request and give you a unique payment reference.</p><form id="walletFundingForm" class="wallet-funding-form"><label for="walletFundingAmount">Amount (NGN)<input id="walletFundingAmount" name="amount" type="number" inputmode="decimal" min="100" step="0.01" placeholder="e.g. 5000" required></label><button class="primary-btn full" id="walletFundingSubmit" type="submit">Request Bank Transfer <b>→</b></button></form><div id="walletFundingMessage" class="wallet-funding-message" role="status" aria-live="polite"></div><div class="notice-box wallet-funding-note">Your request will remain pending until DATOVA verifies the bank transfer. Do not make a payment until the official transfer instructions are provided.</div><span class="status-pill wallet-ready-pill">FUNDING REQUEST READY</span></div></div>
-<div class="section-head"><div><h2>Wallet activity</h2><p>Funding and debit records will appear here.</p></div></div><div class="table-panel"><div class="empty-state"><div class="empty-symbol">◈</div><b>No wallet activity</b><p>Your wallet history is not connected yet.</p></div></div>
+<div class="page-heading wallet-page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">YOUR MONEY, IN ONE PLACE</div><h1>My Wallet</h1><p>Manage your DATOVA balance and funding activity.</p></div>
+
+<section class="wallet-hero">
+ <div class="wallet-hero-main">
+  <div class="wallet-hero-top"><span class="wallet-overline"><i></i> DATOVA WALLET</span><button type="button" class="wallet-visibility-toggle" id="walletVisibility" aria-label="Show balance" aria-pressed="false" title="Show balance"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+  <span class="wallet-balance-label">Available balance</span>
+  <div class="wallet-amount">₦<span id="walletAmountValue">••••••</span></div>
+  <div class="wallet-balance-caption"><span class="wallet-balance-dot"></span> Balance connection is being completed</div>
+  <div class="wallet-hero-bottom"><span>DATOVA</span><span class="wallet-card-mark">D</span></div>
+ </div>
+ <div class="wallet-hero-actions">
+  <span class="wallet-actions-label">QUICK ACTIONS</span>
+  <button type="button" class="wallet-action-primary" id="walletAddMoney"><span class="wallet-action-symbol">＋</span><span><b>Add money</b><small>Fund your wallet</small></span><strong>→</strong></button>
+  <div class="wallet-action-muted"><span class="wallet-action-symbol">⇄</span><span><b>Transfer</b><small>Coming soon</small></span><em>SOON</em></div>
+  <div class="wallet-action-muted"><span class="wallet-action-symbol">↗</span><span><b>Withdraw</b><small>Coming soon</small></span><em>SOON</em></div>
+ </div>
+</section>
+
+<section class="wallet-content-grid">
+ <div class="wallet-panel wallet-fund-panel" id="walletFundPanel">
+  <div class="wallet-panel-heading"><div><span class="wallet-section-kicker">ADD FUNDS</span><h2>Fund your wallet</h2><p>Choose how you want to add money to DATOVA.</p></div><span class="wallet-panel-icon">＋</span></div>
+  <div class="wallet-method-card wallet-method-selected"><span class="wallet-method-icon">▤</span><span class="wallet-method-copy"><b>Bank transfer</b><small>Create a request and receive a payment reference.</small></span><span class="wallet-method-check">✓</span></div>
+  <div class="wallet-method-card wallet-method-disabled"><span class="wallet-method-icon">↗</span><span class="wallet-method-copy"><b>Payment gateway</b><small>Card and instant payment options.</small></span><span class="wallet-method-soon">COMING SOON</span></div>
+  <form id="walletFundingForm" class="wallet-funding-form">
+   <label for="walletFundingAmount">How much would you like to add?</label>
+   <div class="wallet-amount-input"><span>₦</span><input id="walletFundingAmount" name="amount" type="number" inputmode="decimal" min="100" step="0.01" placeholder="Enter amount (min. ₦100)" required></div>
+   <div class="wallet-amount-hint">Minimum funding amount: ₦100</div>
+   <button class="wallet-fund-submit" id="walletFundingSubmit" type="submit">Create bank transfer request <b>→</b></button>
+  </form>
+  <div id="walletFundingMessage" class="wallet-funding-message" role="status" aria-live="polite"></div>
+  <div class="wallet-security-note"><span>i</span><p>Your request stays pending until DATOVA verifies the transfer. Only pay using official bank details provided by DATOVA.</p></div>
+ </div>
+
+ <aside class="wallet-panel wallet-side-panel">
+  <span class="wallet-section-kicker">FUNDING GUIDE</span><h2>How it works</h2>
+  <ol class="wallet-steps">
+   <li><span>1</span><div><b>Enter an amount</b><small>Choose how much you want to add.</small></div></li>
+   <li><span>2</span><div><b>Create your request</b><small>DATOVA generates a unique reference.</small></div></li>
+   <li><span>3</span><div><b>Wait for verification</b><small>Your wallet is credited only after payment is confirmed.</small></div></li>
+  </ol>
+  <div class="wallet-help-box"><span>?</span><div><b>Need help funding?</b><small>Contact DATOVA support if you have questions about a payment.</small><button type="button" data-screen="support">Get support →</button></div></div>
+ </aside>
+</section>
+
+<section class="wallet-history-section">
+ <div class="wallet-history-heading"><div><span class="wallet-section-kicker">YOUR ACTIVITY</span><h2>Wallet activity</h2><p>Keep track of funding requests and wallet transactions.</p></div><span class="wallet-history-badge">RECENT ACTIVITY</span></div>
+ <div class="wallet-history-card"><div class="wallet-empty-icon">↗</div><div><b>No wallet activity yet</b><p>Your funding requests and wallet transactions will appear here.</p></div></div>
+</section>
 </div>
 <div class="screen" id="screen-transactions">
 <div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">YOUR ACTIVITY</div><h1>Transactions</h1><p>Keep track of your data, airtime and payment activity.</p></div>
