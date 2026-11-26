@@ -257,6 +257,44 @@ document.addEventListener("click",event=>{
  updateWalletBalanceVisibility();
 });
 updateWalletBalanceVisibility();
+
+// Create a secure bank-transfer funding request for the signed-in customer.
+$("#walletFundingForm")?.addEventListener("submit",async event=>{
+ event.preventDefault();
+ const amount=Number($("#walletFundingAmount").value);
+ const button=$("#walletFundingSubmit");
+ const message=$("#walletFundingMessage");
+ if(!supabaseReady||!supabaseClient){toast("Account service is unavailable. Refresh and try again.");return}
+ if(!currentUser){toast("Please sign in before funding your wallet.");openAuth("login");return}
+ if(!Number.isFinite(amount)||amount<100||Math.round(amount*100)!==amount*100){
+  message.textContent="Enter at least ₦100, using no more than 2 decimal places.";
+  message.classList.add("error");
+  return;
+ }
+ button.disabled=true;
+ button.textContent="Creating request…";
+ message.textContent="";
+ message.classList.remove("error","success");
+ try{
+  const {data,error}=await supabaseClient.rpc("create_bank_transfer_request",{p_amount:amount});
+  if(error)throw error;
+  const request=Array.isArray(data)?data[0]:data;
+  if(!request||!request.reference)throw new Error("The request was created but its reference could not be read. Contact DATOVA support before retrying.");
+  const reference=escapeText(request.reference);
+  const requestedAmount=Number(request.amount??amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+  message.innerHTML='<strong>Funding request created.</strong><br>Amount: ₦'+requestedAmount+'<br>Reference: <b>'+reference+'</b><br>Status: <b>Pending verification</b>';
+  message.classList.add("success");
+  $("#walletFundingAmount").value="";
+  toast("Your bank-transfer request is ready.");
+ }catch(error){
+  console.error("Wallet funding request failed:",error);
+  message.textContent=error.message||"Could not create your funding request. Please try again.";
+  message.classList.add("error");
+ }finally{
+  button.disabled=false;
+  button.innerHTML='Request Bank Transfer <b>→</b>';
+ }
+});
 renderSlide();
 // Do not let a slow or blocked auth request keep the splash screen open.
 const sessionCheck=supabaseReady
