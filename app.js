@@ -306,6 +306,29 @@ document.addEventListener("click",event=>{
  walletBalanceVisible=!walletBalanceVisible;
  updateWalletBalanceVisibility();
 });
+$("#walletTransferOpen")?.addEventListener("click",()=>{
+  const panel=$("#walletTransferPanel");
+  panel?.classList.remove("hidden");
+  panel?.scrollIntoView({behavior:"smooth",block:"start"});
+  setTimeout(()=>$("#transferRecipient")?.focus({preventScroll:true}),300);
+});
+$("#walletTransferClose")?.addEventListener("click",()=>{
+  $("#walletTransferPanel")?.classList.add("hidden");
+  $("#transferPreviewMessage")?.classList.remove("error","success");
+  $("#transferPreviewMessage").textContent="Preview only. Recipient verification, transaction PIN and secure transfer processing are not connected yet. No money will be moved.";
+});
+$("#walletTransferForm")?.addEventListener("submit",event=>{
+  event.preventDefault();
+  const recipient=$("#transferRecipient").value.trim().toUpperCase();
+  const amount=Number($("#transferAmount").value);
+  const message=$("#transferPreviewMessage");
+  message.classList.remove("error","success");
+  if(!currentUser){message.textContent="Please sign in before preparing a transfer.";message.classList.add("error");openAuth("login");return;}
+  if(!/^DTV-\\d{8}$/.test(recipient)){message.textContent="Enter a valid DATOVA account number in the format DTV-12345678.";message.classList.add("error");return;}
+  if(!Number.isFinite(amount)||amount<=0||Math.round(amount*100)!==amount*100){message.textContent="Enter a valid amount with no more than 2 decimal places.";message.classList.add("error");return;}
+  message.textContent="Your details are formatted correctly. Recipient lookup, PIN verification and the secure transfer backend still need to be connected. No money has been moved.";
+  message.classList.add("success");
+});
 $("#walletAddMoney")?.addEventListener("click",()=>{
  const panel=$("#walletFundPanel");
  panel?.scrollIntoView({behavior:"smooth",block:"start"});
