@@ -633,4 +633,36 @@ if(pinForm)pinForm.addEventListener("submit",async event=>{
  }
 });
 
+
+/* Manual verification test for the saved PIN; does not initiate a transfer. */
+const pinTestForm=$("#transactionPinTestForm");
+const pinTestMessage=$("#transactionPinTestMessage");
+if(pinTestForm)pinTestForm.addEventListener("submit",async event=>{
+ event.preventDefault();
+ if(!supabaseReady||!currentUser){pinTestMessage.textContent="Please sign in and try again.";pinTestMessage.className="pin-manager-message error";return;}
+ const pin=$("#testTransactionPin").value;
+ if(!/^\\d{4}$/.test(pin)){pinTestMessage.textContent="Enter exactly four digits.";pinTestMessage.className="pin-manager-message error";return;}
+ const button=$("#transactionPinTestButton");
+ button.disabled=true;button.textContent="Verifying…";
+ pinTestMessage.textContent="";pinTestMessage.className="pin-manager-message";
+ try{
+  const {data,error}=await supabaseClient.rpc("verify_datova_transaction_pin",{p_pin:pin});
+  if(error)throw error;
+  if(data===true){
+   pinTestMessage.textContent="PIN verified successfully. Your Supabase PIN check is working.";
+   pinTestMessage.className="pin-manager-message success";
+   pinTestForm.reset();
+  }else{
+   pinTestMessage.textContent="PIN not verified. Check the digits. Repeated failed attempts temporarily lock PIN verification.";
+   pinTestMessage.className="pin-manager-message error";
+  }
+ }catch(error){
+  console.error("Transaction PIN verification test failed:",error);
+  pinTestMessage.textContent=error.message||"PIN verification is unavailable. Please try again.";
+  pinTestMessage.className="pin-manager-message error";
+ }finally{
+  button.disabled=false;button.textContent="Verify PIN";
+ }
+});
+
 window.datovaAppStarted=true;
