@@ -122,10 +122,23 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
   <label for="transferRecipient">Recipient DATOVA account number</label>
   <input id="transferRecipient" name="recipient" type="text" inputmode="text" autocomplete="off" placeholder="e.g. DTV-12345678" maxlength="20" required>
   <label for="transferAmount">Amount to send</label>
-  <div class="wallet-amount-input"><span>₦</span><input id="transferAmount" name="amount" type="number" inputmode="decimal" min="1" step="0.01" placeholder="Enter amount" required></div>
-  <button class="wallet-fund-submit" id="transferPreviewButton" type="submit">Check transfer details</button>
+  <div class="wallet-amount-input"><span>₦</span><input id="transferAmount" name="amount" type="number" inputmode="decimal" min="100" step="0.01" placeholder="Minimum ₦100" required></div>
+  <div class="transfer-quick-amounts" aria-label="Quick amount choices">
+   <button type="button" data-transfer-amount="1000">₦1,000</button><button type="button" data-transfer-amount="2000">₦2,000</button><button type="button" data-transfer-amount="5000">₦5,000</button><button type="button" data-transfer-amount="10000">₦10,000</button>
+  </div>
+  <button class="wallet-fund-submit" id="transferPreviewButton" type="submit">Verify recipient</button>
  </form>
- <div id="transferPreviewMessage" class="transfer-preview-message" role="status" aria-live="polite">Preview only. Recipient verification, transaction PIN and secure transfer processing are not connected yet. No money will be moved.</div>
+ <section class="transfer-recipient-card hidden" id="transferRecipientCard" aria-live="polite">
+  <div class="transfer-recipient-avatar" id="transferRecipientInitials">--</div>
+  <div class="transfer-recipient-identity"><small>RECIPIENT FOUND</small><strong id="transferRecipientName">Recipient name</strong><span id="transferRecipientAccount">DTV-••••••••</span></div>
+  <span class="transfer-verified-badge">✓ Verified</span>
+ </section>
+ <section class="transfer-cost-card hidden" id="transferCostCard">
+  <div><span>Transfer amount</span><strong id="transferReviewAmount">₦0.00</strong></div>
+  <div><span>DATOVA transfer fee</span><strong>₦0.00</strong></div>
+  <div class="transfer-cost-total"><span>Total to debit</span><strong id="transferReviewTotal">₦0.00</strong></div>
+ </section>
+ <div id="transferPreviewMessage" class="transfer-preview-message" role="status" aria-live="polite">Preview only. This screen verifies recipient details; it does not send money. Secure transfer processing and transaction PIN are not connected.</div>
  <div class="wallet-security-note"><span>i</span><p>Real-money transfers will only be enabled after DATOVA connects an appropriately authorised payment provider and completes security testing.</p></div>
 </section>
 
