@@ -972,3 +972,35 @@ body.dark .wallet-security-note>span,body.dark .wallet-help-box>span{background:
  .wallet-history-heading{align-items:flex-start;flex-direction:column}
 }
 body.dark .wallet-hero-main{background:linear-gradient(125deg,#071b3d 0%,#103f80 55%,#1459bb 100%)}
+
+
+/* Wallet refinement: consistent alignment and meaningful outline icons */
+.wallet-icon-svg{display:block;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.wallet-action-symbol,.wallet-method-icon,.wallet-panel-icon,.wallet-security-note>span,.wallet-help-box>span,.wallet-empty-icon{display:grid;place-items:center;flex:none}
+.wallet-action-symbol .wallet-icon-svg{width:19px;height:19px}
+.wallet-method-icon .wallet-icon-svg{width:19px;height:19px}
+.wallet-panel-icon .wallet-icon-svg{width:19px;height:19px}
+.wallet-security-note>span .wallet-icon-svg,.wallet-help-box>span .wallet-icon-svg{width:15px;height:15px}
+.wallet-empty-icon .wallet-icon-svg{width:21px;height:21px}
+.wallet-hero-actions{align-items:stretch}
+.wallet-action-primary,.wallet-action-muted{box-sizing:border-box;min-width:0;display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;column-gap:11px}
+.wallet-action-primary>span:nth-child(2),.wallet-action-muted>span:nth-child(2){min-width:0}
+.wallet-action-primary b,.wallet-action-muted b,.wallet-action-primary small,.wallet-action-muted small{display:block;overflow-wrap:anywhere}
+.wallet-action-muted em{justify-self:end}
+.wallet-action-symbol{width:36px;height:36px;margin:0;border-radius:10px}
+.wallet-method-card{min-height:66px;box-sizing:border-box}
+.wallet-method-copy{align-self:center}
+.wallet-method-check{flex:none}
+.wallet-panel-heading{align-items:center}
+.wallet-fund-submit{gap:0}
+.wallet-history-card{align-items:center}
+@media(max-width:760px){
+ .wallet-hero-actions{grid-template-columns:1fr 1fr;align-items:stretch}
+ .wallet-action-primary,.wallet-action-muted{grid-template-columns:32px minmax(0,1fr) auto}
+ .wallet-action-symbol{width:32px;height:32px}
+ .wallet-action-muted:last-child{grid-column:1/-1}
+}
+@media(max-width:420px){
+ .wallet-action-primary,.wallet-action-muted{grid-template-columns:30px minmax(0,1fr) auto;gap:8px}
+ .wallet-action-symbol{width:30px;height:30px}
+}
