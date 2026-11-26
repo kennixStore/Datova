@@ -239,7 +239,7 @@ let walletBalanceVisible=false;
 function updateWalletBalanceVisibility(){
  const amount=$("#walletAmountValue");
  const control=$("#walletVisibility");
- if(amount)amount.textContent=walletBalanceVisible?"0.00":"••••••";
+ if(amount)amount.textContent=walletBalanceVisible?"Not connected":"••••••";
  if(control){
   control.setAttribute("aria-pressed",String(walletBalanceVisible));
   control.setAttribute("aria-label",walletBalanceVisible?"Hide balance":"Show balance");
@@ -255,6 +255,11 @@ document.addEventListener("click",event=>{
  event.preventDefault();
  walletBalanceVisible=!walletBalanceVisible;
  updateWalletBalanceVisibility();
+});
+$("#walletAddMoney")?.addEventListener("click",()=>{
+ const panel=$("#walletFundPanel");
+ panel?.scrollIntoView({behavior:"smooth",block:"start"});
+ setTimeout(()=>$("#walletFundingAmount")?.focus({preventScroll:true}),350);
 });
 updateWalletBalanceVisibility();
 
