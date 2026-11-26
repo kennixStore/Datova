@@ -1153,3 +1153,23 @@ body.dark .profile-account-status{background:#123522;color:#a9e7bf}
 
 /* DATOVA withdrawal preview */
 .withdraw-preview-card{padding:22px;border:1px solid #dce8fa;border-radius:18px;background:linear-gradient(135deg,#f1f6ff,#fff);margin:16px 0}.dark .withdraw-preview-card,body.dark .withdraw-preview-card{background:linear-gradient(135deg,#10284a,#0b1b32);border-color:#24466f}.withdraw-preview-label{font-size:10px;font-weight:800;letter-spacing:1.1px;color:#6680a4}.withdraw-preview-card>strong{display:block;font-size:24px;margin:9px 0;color:#176fff}.withdraw-preview-card p{font-size:13px;line-height:1.6;color:var(--muted,#7889a2);max-width:620px;margin:0}.withdraw-form-preview{margin-top:14px}.withdraw-form-preview select,.withdraw-form-preview input{width:100%;min-height:48px;border:1px solid var(--line,#e7edf5);border-radius:11px;padding:12px;background:#f7f9fc;color:#7b8799;font:inherit;margin:7px 0 15px}.withdraw-form-preview label{display:block;font-size:12px;font-weight:700;color:var(--text,#172b49)}.withdraw-form-preview .wallet-amount-input input{margin:0;border:0;background:transparent}.withdraw-preview-note{font-size:11px;line-height:1.6;padding:12px;border-radius:10px;background:#f1f5fb;color:#64748b;margin:3px 0 15px}.withdraw-form-preview button:disabled{opacity:.58;cursor:not-allowed}@media(max-width:520px){.withdraw-preview-card{padding:17px}}
+
+/* DATOVA secure transaction PIN settings */
+.pin-manager{margin:12px 0 4px;padding:17px;border:1px solid var(--line);border-radius:15px;background:var(--surface-soft)}
+.pin-manager.hidden{display:none}
+.pin-manager-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:15px}
+.pin-manager-heading>div{display:grid;gap:5px}
+.pin-manager-heading b{font:800 13px Manrope;color:var(--text)}
+.pin-manager-heading small{font-size:10px;line-height:1.55;color:var(--muted)}
+.pin-manager-close{width:30px;height:30px;flex:none;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--text);font-size:20px}
+.pin-manager-form{display:grid;gap:8px}
+.pin-manager-form label{margin-top:5px;font-size:10px;font-weight:800;color:var(--text)}
+.pin-manager-form label span{font-weight:500;color:var(--muted)}
+.pin-manager-form input{width:100%;height:47px;box-sizing:border-box;padding:0 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text);font:600 15px "DM Sans",sans-serif;letter-spacing:5px}
+.pin-manager-form input:focus{outline:2px solid #1677ff35;border-color:#1677ff}
+.pin-manager-form .wallet-fund-submit{margin-top:9px}
+.pin-manager-message{min-height:0;margin:2px 0 0;font-size:10px;line-height:1.6;color:var(--muted)}
+.pin-manager-message:empty{display:none}
+.pin-manager-message.success{color:#16824b}
+.pin-manager-message.error{color:#bd3434}
+body.dark .pin-manager{background:#101f34;border-color:#263b59}
