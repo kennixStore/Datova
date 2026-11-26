@@ -1119,3 +1119,31 @@ body.dark #walletFundingArea .wallet-fund-panel{border-color:#263b59}
 .transfer-cost-total strong{font:800 16px Manrope;color:#1677ff}
 body.dark .transfer-verified-badge{background:#123522;color:#a9e7bf}
 @media(max-width:420px){.transfer-quick-amounts{grid-template-columns:repeat(2,minmax(0,1fr))}.transfer-verified-badge{font-size:8px;padding:5px 6px}}
+
+
+/* DATOVA profile and settings refresh */
+.profile-hero-card,.profile-section-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;margin:0 0 14px;box-shadow:0 8px 28px rgba(20,45,85,.045)}
+.profile-hero-top{display:flex;align-items:center;gap:14px}
+.profile-hero-card .profile-avatar{width:58px;height:58px;flex:0 0 58px;border-radius:18px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#1677ff,#55b8ff);color:#fff;font:800 20px Manrope}
+.profile-hero-card .profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-hero-identity{min-width:0;flex:1}
+.profile-kicker{font-size:9px;font-weight:800;letter-spacing:1.2px;color:#1677ff}
+.profile-display-name{margin:4px 0 3px;color:var(--text);font:800 17px Manrope;overflow-wrap:anywhere}
+.profile-display-email{margin:0;color:var(--muted);font-size:11px;overflow-wrap:anywhere}
+.profile-account-status{white-space:nowrap;border-radius:30px;padding:6px 9px;background:#e9f8ef;color:#16824b;font-size:9px;font-weight:800}
+body.dark .profile-account-status{background:#123522;color:#a9e7bf}
+.profile-hero-card .profile-actions{display:flex;gap:9px;margin-top:17px;flex-wrap:wrap}
+.profile-section-heading{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.profile-section-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:11px;background:rgba(22,119,255,.09);color:#1677ff;font:800 11px Manrope}
+.profile-section-heading h3{margin:0;color:var(--text);font:800 14px Manrope}
+.profile-section-heading p{margin:3px 0 0;color:var(--muted);font-size:10px}
+.profile-detail-row,.profile-setting-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--line)}
+.profile-detail-row>span{width:110px;flex:0 0 110px;color:var(--muted);font-size:11px}
+.profile-detail-row>strong{min-width:0;color:var(--text);font-size:11px;font-weight:700;overflow-wrap:anywhere}
+.profile-setting-row .setting-copy{min-width:0;flex:1}
+.profile-setting-row .setting-copy b{display:block;color:var(--text);font-size:11px}
+.profile-setting-row .setting-copy small{display:block;margin-top:3px;color:var(--muted);font-size:10px;line-height:1.5}
+.profile-setting-row .setting-icon{width:32px;height:32px;flex:0 0 32px;display:grid;place-items:center;border-radius:10px;background:var(--surface-soft);color:#1677ff;font-size:16px}
+.profile-setting-row .outline-btn{white-space:nowrap}
+.profile-account-number{margin:0}
+@media(max-width:480px){.profile-hero-card,.profile-section-card{padding:15px;border-radius:15px}.profile-hero-card .profile-avatar{width:49px;height:49px;flex-basis:49px;border-radius:15px}.profile-display-name{font-size:15px}.profile-account-status{font-size:8px}.profile-detail-row>span{width:88px;flex-basis:88px}.profile-setting-row{gap:9px}}
