@@ -263,6 +263,14 @@ $("#walletAddMoney")?.addEventListener("click",()=>{
 });
 updateWalletBalanceVisibility();
 
+document.addEventListener("click",async event=>{
+ const copyButton=event.target.closest("[data-copy-reference]");
+ if(!copyButton)return;
+ const reference=copyButton.dataset.copyReference||"";
+ try{await navigator.clipboard.writeText(reference);copyButton.textContent="Copied";toast("Payment reference copied.");setTimeout(()=>{copyButton.textContent="Copy"},1800)}
+ catch(error){toast("Copy unavailable. Please select and copy the reference manually.");}
+});
+
 // Create a secure bank-transfer funding request for the signed-in customer.
 $("#walletFundingForm")?.addEventListener("submit",async event=>{
  event.preventDefault();
@@ -288,7 +296,7 @@ $("#walletFundingForm")?.addEventListener("submit",async event=>{
   const reference=escapeText(request.payment_reference);
   const requestedAmount=Number(request.payment_amount??amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
   const requestStatus=escapeText(request.payment_status||"pending");
-  message.innerHTML='<strong>Funding request created.</strong><br>Amount: ₦'+requestedAmount+'<br>Reference: <b>'+reference+'</b><br>Status: <b>'+requestStatus.charAt(0).toUpperCase()+requestStatus.slice(1)+'</b>';
+  message.innerHTML='<div class="wallet-payment-instructions"><div class="wallet-instruction-top"><span class="wallet-instruction-check">✓</span><div><strong>Funding request created</strong><small>Your request has been saved successfully.</small></div></div><div class="wallet-instruction-row"><span>Amount to pay</span><b>₦'+requestedAmount+'</b></div><div class="wallet-instruction-row wallet-reference-row"><span>Payment reference</span><b>'+reference+'</b><button type="button" class="wallet-copy-reference" data-copy-reference="'+reference+'">Copy</button></div><div class="wallet-instruction-row"><span>Request status</span><b class="wallet-pending-status">'+requestStatus.charAt(0).toUpperCase()+requestStatus.slice(1)+'</b></div><div class="wallet-bank-unavailable"><b>Bank transfer details are not available yet.</b><p>DATOVA has not configured its official receiving account. Do not transfer money to any personal or unverified account. Your request will remain pending until official payment instructions are provided.</p></div><small class="wallet-instruction-foot">Keep this reference. DATOVA will use it to identify your funding request.</small></div>';
   message.classList.add("success");
   $("#walletFundingAmount").value="";
   toast("Your bank-transfer request is ready.");
