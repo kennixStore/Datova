@@ -41,9 +41,11 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
  </div>
  <div class="date-pill"><span class="live-dot"></span> Your space is ready</div>
 </div>
-<section class="mini-account-row">
- <button class="mini-wallet-card" data-screen="wallet"><span class="mini-wallet-icon"><svg class="datova-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h15a2 2 0 0 1 2 2V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6.5Z"/><path d="M3.5 7V5a2 2 0 0 1 2-2h13"/><path d="M21 11h-5a2 2 0 0 0 0 4h5"/><path d="M16.5 13h.01"/></svg></span><span class="mini-wallet-copy"><small>YOUR DATOVA WALLET</small><strong id="miniWalletValue">Sign in to view balance</strong><em>Wallet overview <b>→</b></em></span><span class="mini-wallet-orbit" aria-hidden="true"></span></button>
- <div class="account-note"><span class="account-note-dot"></span><div><b>Stay in control</b><small>Keep track of your services and activity in one place.</small></div></div>
+<section class="dashboard-wallet-card" aria-label="DATOVA wallet balance">
+ <div class="dashboard-wallet-top"><span class="dashboard-wallet-label"><i></i> MY DATOVA WALLET</span><div class="dashboard-wallet-tools"><button type="button" class="dashboard-balance-toggle" id="dashboardWalletVisibility" aria-label="Hide balance" aria-pressed="true" title="Hide balance"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5.2 0 9 5 10 7-.4.8-1.4 2.1-3 3.3M6.2 6.2C3.8 7.7 2.4 10.3 2 12c1 2 4.8 7 10 7 1 0 2-.2 2.9-.6"/></svg></button><button type="button" class="dashboard-add-money" id="dashboardAddMoney">＋ Add Money</button></div></div>
+ <span class="dashboard-balance-caption">Available balance</span>
+ <div class="dashboard-balance-value">₦<strong id="dashboardWalletAmountValue">••••••</strong></div>
+ <div class="dashboard-wallet-foot"><span class="dashboard-live-indicator"></span><span id="dashboardWalletStatus">Sign in to view your wallet balance</span><button type="button" class="dashboard-wallet-open" data-screen="wallet">Wallet details <b>→</b></button></div>
 </section>
 <section class="dashboard-section service-showcase">
  <div class="section-head"><div><span class="section-kicker">DATOVA SERVICES</span><h2>What would you like to do?</h2><p>Swipe to explore our services.</p></div></div>
