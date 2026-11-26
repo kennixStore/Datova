@@ -27,6 +27,7 @@ function showApp(){
  intro.classList.add("hidden");
  $("#welcomeGate").classList.add("hidden");
  app.classList.remove("hidden");
+ restoreSavedScreen();
  initScreenHistory();
  updateGreeting();
 }
@@ -265,8 +266,11 @@ const sessionCheck=supabaseReady
    ])
  : Promise.resolve(null);
 const returningVisitor=localStorage.getItem("datova_onboarding_complete")==="1"||localStorage.getItem("datova_intro_seen")==="1";
-// Play the DATOVA brand reveal once per browser tab session, not on every refresh.
-// Keep the last open app section when the visitor refreshes the page.
+const openingPlayedThisSession=(()=>{try{return sessionStorage.getItem("datova_opening_seen")==="1"}catch(error){return false}})();
+// The brand reveal plays once per tab session. Refreshes restore the last app section
+// immediately, without replaying the animation or sending the visitor back Home.
+// A first-time visitor who refreshes during onboarding returns to onboarding.
+function markOpeningPlayedThisSession(){try{sessionStorage.setItem("datova_opening_seen","1")}catch(error){}}
 // Play the user's original DATOVA intro audio uploaded to this repository.
 const introAudio=new Audio("./32439b6f2e2b412b255dcb33fc7f3710_1795639637398.mp4");
 introAudio.preload="auto";
@@ -330,15 +334,22 @@ function showFirstVisitOnboarding(){
  intro.classList.add("intro-arrive");
 }
 sessionCheck.then(signedInUser=>{
- if(signedInUser){
-  renderAccount(signedInUser);
-  startOpeningAnimation(showApp);
- }else if(returningVisitor){
-  startOpeningAnimation(showApp);
- }else{
-  startOpeningAnimation(showFirstVisitOnboarding);
+ if(signedInUser)renderAccount(signedInUser);
+ if(openingPlayedThisSession){
+  if(returningVisitor||signedInUser)showApp();
+  else showFirstVisitOnboarding();
+  return;
  }
+ markOpeningPlayedThisSession();
+ if(returningVisitor||signedInUser)startOpeningAnimation(showApp);
+ else startOpeningAnimation(showFirstVisitOnboarding);
 }).catch(()=>{
+ if(openingPlayedThisSession){
+  if(returningVisitor)showApp();
+  else showFirstVisitOnboarding();
+  return;
+ }
+ markOpeningPlayedThisSession();
  if(returningVisitor)startOpeningAnimation(showApp);
  else startOpeningAnimation(showFirstVisitOnboarding);
 });
