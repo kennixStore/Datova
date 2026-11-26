@@ -62,6 +62,10 @@ function closeAuthModal(){
 function markOnboardingComplete(){
  writeStoredValue("datova_intro_seen","1");
  writeStoredValue("datova_onboarding_complete","1");
+ // Confirm the completion marker immediately so startup can use the latest state.
+ try{
+  if(localStorage.getItem("datova_onboarding_complete")!=="1")sessionStorage.setItem("datova_onboarding_complete","1");
+ }catch(error){}
 }
 function showApp(){
  markOnboardingComplete();
@@ -533,7 +537,9 @@ const sessionCheck=supabaseReady
      new Promise(resolve=>setTimeout(()=>resolve(null),2200))
    ])
  : Promise.resolve(null);
-const returningVisitor=readStoredValue("datova_onboarding_complete")==="1"||readStoredValue("datova_intro_seen")==="1";
+function hasCompletedOnboarding(){
+ return readStoredValue("datova_onboarding_complete")==="1"||readStoredValue("datova_intro_seen")==="1";
+}
 const openingPlayedThisSession=(()=>{try{return sessionStorage.getItem("datova_opening_seen")==="1"}catch(error){return false}})();
 // The brand reveal plays once per tab session. Refreshes restore the last app section
 // immediately, without replaying the animation or sending the visitor back Home.
@@ -606,7 +612,9 @@ function launchVisitorExperience(signedInUser){
  $("#welcomeGate")?.classList.add("hidden");
  // Every visit gets the DATOVA brand intro. Only first-time visitors see onboarding.
  startOpeningAnimation(()=>{
-  if(returningVisitor){
+  // Read the completion marker when the opening animation finishes, not only
+  // during initial script evaluation. This avoids using a stale startup value.
+  if(hasCompletedOnboarding()){
    showApp();
   }else{
    showFirstVisitOnboarding();
