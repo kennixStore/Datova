@@ -1099,3 +1099,23 @@ body.dark .wallet-account-number-card button{background:#172d4d;color:#b9d7ff;bo
 body.dark .wallet-funding-close{background:#15243a;color:#eaf2ff;border-color:#2c3f5c}
 body.dark #walletFundingArea .wallet-fund-panel{border-color:#263b59}
 @media(max-width:650px){.wallet-account-number-card{gap:12px;padding:16px}.wallet-account-number-card strong{font-size:16px}.wallet-account-number-card button{padding:9px 13px}}
+
+
+/* Transfer recipient confirmation and amount review */
+.transfer-quick-amounts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:-1px 0 8px}
+.transfer-quick-amounts button{border:1px solid var(--line);border-radius:9px;background:var(--surface-soft);color:var(--text);padding:9px 4px;font:700 10px "DM Sans",sans-serif}
+.transfer-quick-amounts button:active{border-color:#1677ff;color:#1677ff}
+.transfer-recipient-card{display:flex;align-items:center;gap:12px;margin-top:15px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface-soft)}
+.transfer-recipient-avatar{width:44px;height:44px;flex:0 0 44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#1677ff,#55b8ff);color:#fff;font:800 14px Manrope;letter-spacing:.4px}
+.transfer-recipient-identity{min-width:0;display:grid;gap:3px}
+.transfer-recipient-identity small{font-size:8px;font-weight:800;letter-spacing:1px;color:#16a36b}
+.transfer-recipient-identity strong{font:800 13px Manrope;color:var(--text);overflow-wrap:anywhere}
+.transfer-recipient-identity span{font-size:10px;color:var(--muted);letter-spacing:.5px}
+.transfer-verified-badge{margin-left:auto;white-space:nowrap;border-radius:20px;background:#e9f8ef;color:#16824b;padding:6px 8px;font-size:9px;font-weight:800}
+.transfer-cost-card{display:grid;gap:11px;margin-top:12px;padding:15px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+.transfer-cost-card>div{display:flex;justify-content:space-between;gap:12px;font-size:11px;color:var(--muted)}
+.transfer-cost-card strong{color:var(--text);font-weight:800}
+.transfer-cost-card .transfer-cost-total{padding-top:11px;border-top:1px solid var(--line);font-weight:800;color:var(--text)}
+.transfer-cost-total strong{font:800 16px Manrope;color:#1677ff}
+body.dark .transfer-verified-badge{background:#123522;color:#a9e7bf}
+@media(max-width:420px){.transfer-quick-amounts{grid-template-columns:repeat(2,minmax(0,1fr))}.transfer-verified-badge{font-size:8px;padding:5px 6px}}
