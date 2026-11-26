@@ -324,9 +324,12 @@ $("#walletTransferForm")?.addEventListener("submit",event=>{
   const message=$("#transferPreviewMessage");
   message.classList.remove("error","success");
   if(!currentUser){message.textContent="Please sign in before preparing a transfer.";message.classList.add("error");openAuth("login");return;}
-  if(!/^DTV-\\d{8}$/.test(recipient)){message.textContent="Enter a valid DATOVA account number in the format DTV-12345678.";message.classList.add("error");return;}
+  if(!/^DTV-\d{8}$/.test(recipient)){message.textContent="Enter a valid DATOVA account number in the format DTV-12345678.";message.classList.add("error");return;}
+  if(recipient===String(accountNumberValue||"").toUpperCase()){message.textContent="You cannot send money to your own DATOVA account.";message.classList.add("error");return;}
   if(!Number.isFinite(amount)||amount<=0||Math.round(amount*100)!==amount*100){message.textContent="Enter a valid amount with no more than 2 decimal places.";message.classList.add("error");return;}
-  message.textContent="Your details are formatted correctly. Recipient lookup, PIN verification and the secure transfer backend still need to be connected. No money has been moved.";
+  if(walletBalanceState!=="ready"){message.textContent="Your wallet balance is not ready. Refresh your balance and try again.";message.classList.add("error");return;}
+  if(amount>walletBalanceValue){message.textContent="Insufficient wallet balance for this amount.";message.classList.add("error");return;}
+  message.textContent="Your transfer details passed the basic checks. Secure recipient verification, server-side PIN authentication and an authorised real-money transfer provider are still required. No money has been moved.";
   message.classList.add("success");
 });
 $("#walletAddMoney")?.addEventListener("click",()=>{
