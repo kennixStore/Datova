@@ -131,7 +131,7 @@ function moveIntroSlide(direction){
 $("#introNext").addEventListener("click",()=>{if(introSliding)return;if(slide<slides.length-1)moveIntroSlide(1);else finishOnboarding()});
 $("#introBack").addEventListener("click",()=>moveIntroSlide(-1));
 $("#skipIntro").addEventListener("click",finishOnboarding);
-$("#replayOnboarding")?.addEventListener("click",replayOnboarding);
+// Replay control is bound once in the reliable controls block at the end of this file.
 $("#gateCreate").addEventListener("click",()=>openAuth("signup"));
 $("#gateLogin").addEventListener("click",()=>openAuth("login"));
 $("#exploreGuest").addEventListener("click",showApp);
@@ -260,11 +260,7 @@ $("#authForm").addEventListener("submit",async e=>{
  finally{submit.disabled=false;submit.innerHTML='Continue <b>→</b>';}
 });
 document.addEventListener("click",event=>{const backButton=event.target.closest("[data-datova-back]");if(backButton){event.preventDefault();goBack();}});
-$("#profileSignOut").addEventListener("click",async()=>{
- if(!supabaseReady){toast("Account service is unavailable.");return}
- const {error}=await supabaseClient.auth.signOut();
- if(error)toast(error.message);else{renderAccount(null);toast("You have signed out.");}
-});
+// Sign-out control is bound once in the reliable controls block at the end of this file.
 function applyTheme(isDark,save=true){
  document.body.classList.toggle("dark",isDark);
  const control=$("#themeToggle");
@@ -317,7 +313,7 @@ $("#walletTransferClose")?.addEventListener("click",()=>{
   $("#transferPreviewMessage")?.classList.remove("error","success");
   $("#transferPreviewMessage").textContent="Preview only. Recipient verification, transaction PIN and secure transfer processing are not connected yet. No money will be moved.";
 });
-$("#walletTransferForm")?.addEventListener("submit",event=>{
+$("#walletTransferForm")?.addEventListener("submit",async event=>{
   event.preventDefault();
   const recipientInput=$("#transferRecipient").value.trim().toUpperCase();
   const recipient=recipientInput.replace(/[\s-]/g,"");
