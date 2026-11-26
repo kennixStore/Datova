@@ -510,4 +510,21 @@ sessionCheck.then(signedInUser=>{
  $("#welcomeGate")?.classList.add("hidden");
  showApp();
 });
+
+/* Reliable direct controls: bind after the app functions and DOM are ready. */
+const themeControl=$("#themeToggle");
+if(themeControl)themeControl.onclick=()=>applyTheme(!document.body.classList.contains("dark"));
+const replayControl=$("#replayOnboarding");
+if(replayControl)replayControl.onclick=()=>replayOnboarding();
+const signInControl=$("#profileSignIn");
+if(signInControl)signInControl.onclick=()=>openAuth("login");
+const signOutControl=$("#profileSignOut");
+if(signOutControl)signOutControl.onclick=async()=>{
+ if(!supabaseReady||!supabaseClient){toast("Account service is unavailable. Please refresh and try again.");return;}
+ signOutControl.disabled=true;
+ try{const {error}=await supabaseClient.auth.signOut();if(error)throw error;renderAccount(null);showApp();toast("You have signed out.");}
+ catch(error){toast(error.message||"Could not sign out. Please try again.");}
+ finally{signOutControl.disabled=false;}
+};
+
 window.datovaAppStarted=true;
