@@ -583,4 +583,54 @@ if(signOutControl)signOutControl.onclick=async()=>{
  finally{signOutControl.disabled=false;}
 };
 
+
+/* DATOVA transaction PIN management — PINs are sent only to the protected Supabase RPC. */
+const pinManager=$("#pinManager");
+const pinOpen=$("#profilePinOpen");
+const pinClose=$("#pinManagerClose");
+const pinForm=$("#transactionPinForm");
+const pinMessage=$("#transactionPinMessage");
+if(pinOpen)pinOpen.addEventListener("click",()=>{
+ if(!currentUser){toast("Please sign in to manage your transaction PIN.");openAuth("login");return;}
+ pinManager?.classList.remove("hidden");
+ pinMessage.textContent="";
+ pinMessage.className="pin-manager-message";
+ pinForm?.reset();
+ $("#currentTransactionPin")?.focus();
+});
+if(pinClose)pinClose.addEventListener("click",()=>{pinManager?.classList.add("hidden");pinForm?.reset();pinMessage.textContent="";});
+if(pinForm)pinForm.addEventListener("submit",async event=>{
+ event.preventDefault();
+ if(!supabaseReady||!supabaseClient){pinMessage.textContent="Account service is unavailable. Refresh and try again.";pinMessage.className="pin-manager-message error";return;}
+ if(!currentUser){pinMessage.textContent="Please sign in again to continue.";pinMessage.className="pin-manager-message error";return;}
+ const currentPin=$("#currentTransactionPin").value;
+ const newPin=$("#newTransactionPin").value;
+ const confirmPin=$("#confirmTransactionPin").value;
+ if(!/^\\d{4}$/.test(newPin)){pinMessage.textContent="Your new PIN must contain exactly four digits.";pinMessage.className="pin-manager-message error";return;}
+ if(newPin!==confirmPin){pinMessage.textContent="The new PIN entries do not match.";pinMessage.className="pin-manager-message error";$("#confirmTransactionPin").focus();return;}
+ if(currentPin&&!/^\\d{4}$/.test(currentPin)){pinMessage.textContent="Your current PIN must contain exactly four digits.";pinMessage.className="pin-manager-message error";return;}
+ const button=$("#transactionPinSubmit");
+ button.disabled=true;button.textContent="Saving securely…";
+ pinMessage.textContent="";pinMessage.className="pin-manager-message";
+ try{
+  const {data,error}=await supabaseClient.rpc("set_datova_transaction_pin",{p_new_pin:newPin,p_current_pin:currentPin||null});
+  if(error)throw error;
+  if(data===true){
+   pinForm.reset();
+   pinMessage.textContent="Your transaction PIN has been saved successfully.";
+   pinMessage.className="pin-manager-message success";
+   toast("Transaction PIN updated.");
+  }else{
+   pinMessage.textContent="The current PIN may be incorrect, or PIN changes are temporarily locked. Check it and try again later.";
+   pinMessage.className="pin-manager-message error";
+  }
+ }catch(error){
+  console.error("Transaction PIN update failed:",error);
+  pinMessage.textContent=error.message||"Could not save your PIN. Please try again.";
+  pinMessage.className="pin-manager-message error";
+ }finally{
+  button.disabled=false;button.textContent="Save transaction PIN";
+ }
+});
+
 window.datovaAppStarted=true;
