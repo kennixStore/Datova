@@ -279,10 +279,11 @@ $("#walletFundingForm")?.addEventListener("submit",async event=>{
   const {data,error}=await supabaseClient.rpc("create_bank_transfer_request",{p_amount:amount});
   if(error)throw error;
   const request=Array.isArray(data)?data[0]:data;
-  if(!request||!request.reference)throw new Error("The request was created but its reference could not be read. Contact DATOVA support before retrying.");
-  const reference=escapeText(request.reference);
-  const requestedAmount=Number(request.amount??amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
-  message.innerHTML='<strong>Funding request created.</strong><br>Amount: ₦'+requestedAmount+'<br>Reference: <b>'+reference+'</b><br>Status: <b>Pending verification</b>';
+  if(!request||!request.payment_reference)throw new Error("The request was created, but its payment reference could not be read. Contact DATOVA support before retrying.");
+  const reference=escapeText(request.payment_reference);
+  const requestedAmount=Number(request.payment_amount??amount).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+  const requestStatus=escapeText(request.payment_status||"pending");
+  message.innerHTML='<strong>Funding request created.</strong><br>Amount: ₦'+requestedAmount+'<br>Reference: <b>'+reference+'</b><br>Status: <b>'+requestStatus.charAt(0).toUpperCase()+requestStatus.slice(1)+'</b>';
   message.classList.add("success");
   $("#walletFundingAmount").value="";
   toast("Your bank-transfer request is ready.");
