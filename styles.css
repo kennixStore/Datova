@@ -1194,3 +1194,6 @@ body.dark .pin-manager{background:#101f34;border-color:#263b59}
 /* Keep the Nigerian naira glyph on a system font if the display font lacks it. */
 .dashboard-balance-value,.wallet-hero-main .wallet-amount{font-family:Arial,"Noto Sans",sans-serif}
 .dashboard-balance-value strong,.wallet-hero-main .wallet-amount strong{font-family:Manrope,Arial,sans-serif}
+
+/* Noto Sans supplies a reliable Nigerian naira glyph when a display font omits it. */
+body,button,input,select,textarea{font-family:"DM Sans","Noto Sans",Arial,sans-serif}
