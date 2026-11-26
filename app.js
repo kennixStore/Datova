@@ -145,6 +145,9 @@ $("#greetingAvatar")?.addEventListener("click",()=>go("profile"));
 $("#loginSide").addEventListener("click",()=>openAuth("login"));
 $("#profileSignIn").addEventListener("click",()=>openAuth("login"));
 $("#profileTheme").addEventListener("click",()=>$("#themeToggle").click());
+ $("#profilePasswordHelp")?.addEventListener("click",()=>{openAuth("login");$("#forgotPassword")?.focus();});
+ const syncProfileThemeLabel=()=>{const dark=document.body.classList.contains("dark");const button=$("#profileTheme");if(button)button.textContent=dark?"Light mode":"Dark mode";const description=$("#profileThemeDescription");if(description)description.textContent=dark?"Dark appearance is active.":"Light appearance is active.";};
+ syncProfileThemeLabel();
 $("#closeAuth").addEventListener("click",closeAuthModal);
 $("#authModal").addEventListener("click",e=>{if(e.target.id==="authModal")closeAuthModal();});
 $$("[data-auth]").forEach(button=>button.addEventListener("click",event=>{event.preventDefault();openAuth(button.dataset.auth);}));
@@ -235,6 +238,12 @@ function renderAccount(user){
  $("#profileSignOut").classList.toggle("hidden",!signedIn);
  $(".profile-main h3").textContent=signedIn?(user.user_metadata?.full_name||user.email||"DATOVA customer"):"Guest account";
  $(".profile-main p").textContent=signedIn?(user.email||"You're signed in to DATOVA."):"Sign in or create an account to manage your DATOVA profile.";
+ const profileName=user?.user_metadata?.full_name||user?.user_metadata?.name||"DATOVA customer";
+ const profileFullName=$("#profileFullName");if(profileFullName)profileFullName.textContent=signedIn?profileName:"Not available";
+ const profileEmail=$("#profileEmailAddress");if(profileEmail)profileEmail.textContent=signedIn?(user.email||"Not provided"):"Not signed in";
+ const profileStatus=$("#profileAccountStatus");if(profileStatus)profileStatus.textContent=signedIn?"Active":"Guest";
+ const profileDisplayName=$(".profile-display-name");if(profileDisplayName)profileDisplayName.textContent=signedIn?profileName:"Guest account";
+ const profileDisplayEmail=$(".profile-display-email");if(profileDisplayEmail)profileDisplayEmail.textContent=signedIn?(user.email||"Email not available"):"Sign in to view your account details.";
  const displayName=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email||"").trim();const initials=signedIn?(displayName.split(/\s+/).slice(0,2).map(x=>x.charAt(0)).join("").toUpperCase()||"D"):"G";const photo=user?.user_metadata?.avatar_url||user?.user_metadata?.picture||"";const avatarMarkup=photo?`<img src="${escapeText(photo)}" alt="Profile picture" referrerpolicy="no-referrer">`:escapeText(initials);$("#accountBtn").innerHTML=avatarMarkup;const greetingAvatar=$("#greetingAvatar");if(greetingAvatar)greetingAvatar.innerHTML=avatarMarkup;const profileAvatar=$(".profile-avatar");if(profileAvatar)profileAvatar.innerHTML=avatarMarkup;
  if(currentUser){loadWalletBalance(currentUser);loadAccountNumber(currentUser);}else{updateWalletDisplays();loadAccountNumber(null);}
 }
