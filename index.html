@@ -176,7 +176,7 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
 <div class="screen" id="screen-transactions">
 <div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">YOUR ACTIVITY</div><h1>Transactions</h1><p>Keep track of your data, airtime and payment activity.</p></div>
 <div class="filter-row"><button class="filter-chip active">All activity</button><button class="filter-chip">Data</button><button class="filter-chip">Airtime</button><button class="filter-chip">Payments</button></div>
-<div class="table-panel"><div class="empty-state"><div class="empty-symbol">↗</div><b>Nothing to show yet</b><p>Your transaction history will appear here once purchases are enabled.</p></div></div>
+<div class="table-panel" id="walletHistoryPanel"><div class="empty-state"><div class="empty-symbol">↗</div><b>Sign in to view transactions</b><p>Your wallet activity will appear here after you sign in.</p></div></div>
 </div>
 <div class="screen" id="screen-notifications">
 <div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">UPDATES</div><h1>Notifications</h1><p>Important updates about your DATOVA account.</p></div>
