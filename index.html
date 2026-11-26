@@ -106,7 +106,7 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
   <span class="wallet-balance-label">Available balance</span>
   <div class="wallet-amount">₦<span id="walletAmountValue">••••••</span></div>
   <div class="wallet-balance-caption"><span class="wallet-balance-dot"></span> Balance connection is being completed</div>
-  <div class="wallet-hero-bottom"><span>DATOVA</span><span class="wallet-card-mark">D</span></div>
+  <div class="wallet-hero-bottom"><span class="wallet-brand-wordmark">DATOVA<span> • FINANCIAL</span></span><span class="wallet-card-chip" aria-hidden="true"></span></div>
  </div>
  <div class="wallet-hero-actions">
   <span class="wallet-actions-label">QUICK ACTIONS</span>
@@ -129,9 +129,9 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
  <div class="wallet-security-note"><span>i</span><p>Real-money transfers will only be enabled after DATOVA connects an appropriately authorised payment provider and completes security testing.</p></div>
 </section>
 
-<section class="wallet-content-grid">
+<section class="wallet-content-grid hidden" id="walletFundingArea">
  <div class="wallet-panel wallet-fund-panel" id="walletFundPanel">
-  <div class="wallet-panel-heading"><div><span class="wallet-section-kicker">ADD FUNDS</span><h2>Fund your wallet</h2><p>Choose how you want to add money to DATOVA.</p></div><span class="wallet-panel-icon"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg></span></div>
+  <div class="wallet-panel-heading"><div><span class="wallet-section-kicker">ADD FUNDS</span><h2>Fund your wallet</h2><p>Choose how you want to add money to DATOVA.</p></div><button type="button" class="wallet-funding-close" id="walletFundingClose" aria-label="Close funding panel">×</button><span class="wallet-panel-icon"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg></span></div>
   <div class="wallet-method-card wallet-method-selected"><span class="wallet-method-icon"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 20V9l7-5 7 5v11M9 20v-6h6v6"/></svg></span><span class="wallet-method-copy"><b>Bank transfer</b><small>Create a request and receive a payment reference.</small></span><span class="wallet-method-check">✓</span></div>
   <div class="wallet-method-card wallet-method-disabled"><span class="wallet-method-icon"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19M6.5 15h4"/></svg></span><span class="wallet-method-copy"><b>Payment gateway</b><small>Card and instant payment options.</small></span><span class="wallet-method-soon">COMING SOON</span></div>
   <form id="walletFundingForm" class="wallet-funding-form">
