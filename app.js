@@ -1,5 +1,35 @@
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const $=s=>document.querySelector(s),$=s=>[...document.querySelectorAll(s)];
 const intro=$("#onboarding"),app=$("#app");
+
+// Critical UI controls use early delegated handling so an unrelated startup
+// error cannot leave onboarding, profile accordions, navigation or funding inert.
+document.addEventListener("click",event=>{
+ const target=event.target instanceof Element?event.target:null;
+ if(!target)return;
+ const control=target.closest("#introNext,#introBack,#skipIntro,#replayOnboarding,[data-profile-toggle],#dashboardAddMoney,#walletAddMoney,[data-screen]");
+ if(!control)return;
+ event.preventDefault();
+ event.stopImmediatePropagation();
+ if(control.id==="introNext"){
+  if(introSliding)return;
+  if(slide<slides.length-1)moveIntroSlide(1);else finishOnboarding();
+  return;
+ }
+ if(control.id==="introBack"){moveIntroSlide(-1);return;}
+ if(control.id==="skipIntro"){finishOnboarding();return;}
+ if(control.id==="replayOnboarding"){replayOnboarding();return;}
+ if(control.matches("[data-profile-toggle]")){
+  const card=control.closest(".profile-section-card");
+  if(!card)return;
+  const expanded=control.getAttribute("aria-expanded")==="true";
+  control.setAttribute("aria-expanded",String(!expanded));
+  card.classList.toggle("is-collapsed",expanded);
+  return;
+ }
+ if(control.id==="dashboardAddMoney"){go("wallet");openWalletFunding();return;}
+ if(control.id==="walletAddMoney"){openWalletFunding();return;}
+ if(control.hasAttribute("data-screen"))go(control.dataset.screen);
+},true);
 const slides=[
 {step:"YOUR DIGITAL WORLD",title:"Your Digital<br><span>World, Made Easier.</span>",text:"Stay connected and enjoy the best services.",art:"globe"},
 {step:"BUY DATA EASILY",title:"Buy Data<br><span>Without Stress.</span>",text:"Get affordable data from your favourite networks.",art:"data"},
