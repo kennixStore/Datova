@@ -789,3 +789,17 @@ body.dark #screen-profile .profile-panel,body.dark #screen-profile .settings-pan
  .mobile-nav button.active{background:#edf5ff;color:#1677ff}
  body.dark .mobile-nav button.active{background:#18365b;color:#79baff}
 }
+
+
+/* Official network brand marks */
+.network-card .network-mark{width:58px;height:58px;flex:none;border-radius:14px;background:#fff;display:grid;place-items:center;overflow:hidden;padding:5px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.network-card .network-mark img{display:block;width:100%;height:100%;object-fit:contain}
+.network-mtn .network-mark{background:#ffcb05;padding:7px}
+.network-airtel .network-mark{background:#fff;padding:5px}
+.network-glo .network-mark{background:#fff;padding:4px}
+.network-glo .network-mark img{border-radius:50%;object-fit:cover}
+.network-t2 .network-mark{background:#ff5c05;padding:0}
+.network-t2 .network-mark img{object-fit:cover;object-position:center}
+.network-card>b{font-size:12px}
+.network-card>small{font-size:9px}
+body.dark .network-card .network-mark{box-shadow:0 3px 10px rgba(0,0,0,.18)}
