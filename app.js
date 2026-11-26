@@ -36,7 +36,20 @@ const slides=[
 {step:"AIRTIME MADE SIMPLE",title:"Recharge Without<br><span>Stress.</span>",text:"Top up your phone in a few simple steps.",art:"airtime"}];
 let slide=0;
 let screenHistoryReady=false,screenStack=["overview"];
-function savedScreen(){try{const saved=sessionStorage.getItem("datova_current_screen");return saved&&document.querySelector("#screen-"+saved)?saved:"overview"}catch(error){return "overview"}}
+function readStoredValue(key){
+ try{const value=localStorage.getItem(key);if(value!==null)return value;}catch(error){}
+ try{const item=document.cookie.split("; ").find(part=>part.startsWith(encodeURIComponent(key)+"="));if(item)return decodeURIComponent(item.slice(item.indexOf("=")+1));}catch(error){}
+ try{return sessionStorage.getItem(key)}catch(error){return null}
+}
+function writeStoredValue(key,value){
+ try{localStorage.setItem(key,value)}catch(error){}
+ try{document.cookie=encodeURIComponent(key)+"="+encodeURIComponent(value)+"; Max-Age=31536000; Path=/; SameSite=Lax; Secure"}catch(error){}
+ try{sessionStorage.setItem(key,value)}catch(error){}
+}
+function savedScreen(){
+ const saved=readStoredValue("datova_current_screen");
+ return saved&&document.querySelector("#screen-"+saved)?saved:"overview";
+}
 function restoreSavedScreen(){const screen=savedScreen();$(".screen").forEach(el=>el.classList.toggle("active",el.id==="screen-"+screen));syncNavigation(screen)}
 function initScreenHistory(){if(screenHistoryReady)return;screenHistoryReady=true;const current=document.querySelector(".screen.active")?.id.replace("screen-","")||"overview";screenStack=[current];history.replaceState({datovaScreen:"root",datovaRoot:true},"",location.href);history.pushState({datovaScreen:current,datovaApp:true},"",location.href)}
 function goBack(){if(history.state?.datovaApp){history.back();return}if(screenStack.length>1){screenStack.pop();const previous=screenStack[screenStack.length-1]||"overview";go(previous,{fromPopState:true});return}if($(".screen.active")?.id!=="screen-overview"){go("overview");return}toast("You're already on the DATOVA home screen.")}
@@ -47,8 +60,8 @@ function closeAuthModal(){
  document.body.classList.remove("auth-modal-open");
 }
 function markOnboardingComplete(){
- localStorage.setItem("datova_intro_seen","1");
- localStorage.setItem("datova_onboarding_complete","1");
+ writeStoredValue("datova_intro_seen","1");
+ writeStoredValue("datova_onboarding_complete","1");
 }
 function showApp(){
  markOnboardingComplete();
@@ -147,7 +160,7 @@ async function loadWalletHistory(){
   }).join("")+'</div>';
  }catch(error){console.error("Could not load wallet history:",error);panel.innerHTML='<div class="empty-state"><b>Could not load transactions</b><p>Please refresh and try again.</p></div>';}
 }
-function go(screen,options={}){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}try{sessionStorage.setItem("datova_current_screen",screen)}catch(error){}const current=$(".screen.active");if(current===target){syncNavigation(screen);return}if(!options.fromPopState&&screenHistoryReady){screenStack.push(screen);history.pushState({datovaScreen:screen,datovaApp:true},"",location.href)}else if(options.fromPopState){const index=screenStack.lastIndexOf(screen);if(index>=0)screenStack=screenStack.slice(0,index+1);else screenStack.push(screen)}if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);syncNavigation(screen);if(screen==="transactions")loadWalletHistory();window.scrollTo({top:0,behavior:"smooth"})}
+function go(screen,options={}){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}writeStoredValue("datova_current_screen",screen);const current=$(".screen.active");if(current===target){syncNavigation(screen);return}if(!options.fromPopState&&screenHistoryReady){screenStack.push(screen);history.pushState({datovaScreen:screen,datovaApp:true},"",location.href)}else if(options.fromPopState){const index=screenStack.lastIndexOf(screen);if(index>=0)screenStack=screenStack.slice(0,index+1);else screenStack.push(screen)}if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);syncNavigation(screen);if(screen==="transactions")loadWalletHistory();window.scrollTo({top:0,behavior:"smooth"})}
 window.datovaNavigate=go;
 window.addEventListener("popstate",event=>{if(!screenHistoryReady)return;const screen=event.state?.datovaScreen;if(screen&&screen!=="root"&&$("#screen-"+screen)){go(screen,{fromPopState:true});return}screenStack=["overview"];go("overview",{fromPopState:true})});
 let introSliding=false;
@@ -520,7 +533,7 @@ const sessionCheck=supabaseReady
      new Promise(resolve=>setTimeout(()=>resolve(null),2200))
    ])
  : Promise.resolve(null);
-const returningVisitor=localStorage.getItem("datova_onboarding_complete")==="1"||localStorage.getItem("datova_intro_seen")==="1";
+const returningVisitor=readStoredValue("datova_onboarding_complete")==="1"||readStoredValue("datova_intro_seen")==="1";
 const openingPlayedThisSession=(()=>{try{return sessionStorage.getItem("datova_opening_seen")==="1"}catch(error){return false}})();
 // The brand reveal plays once per tab session. Refreshes restore the last app section
 // immediately, without replaying the animation or sending the visitor back Home.
