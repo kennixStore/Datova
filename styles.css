@@ -757,3 +757,35 @@ body.dark #screen-profile .profile-panel,body.dark #screen-profile .settings-pan
  #screen-profile .setting-row .outline-btn{min-width:65px;padding:8px}
  #screen-profile .status-pill{letter-spacing:0}
 }
+
+
+/* Unified DATOVA icon system and aligned account avatars */
+.datova-icon{display:block;width:21px;height:21px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-item{gap:12px}
+.nav-item>.datova-icon{width:19px;height:19px;opacity:.94}
+.nav-item.active>.datova-icon{stroke-width:2}
+.help-orb .datova-icon{width:18px;height:18px}
+.quick-icon .datova-icon{width:21px;height:21px}
+.tile-icon .datova-icon{width:22px;height:22px}
+.service-icon .datova-icon{width:21px;height:21px}
+.mini-wallet-icon .datova-icon{width:21px;height:21px}
+.mobile-nav button span{display:grid;place-items:center;line-height:1}
+.mobile-nav button .datova-icon{width:21px;height:21px;stroke-width:1.8}
+.mobile-nav button.active .datova-icon{stroke-width:2.1}
+.mobile-nav button{flex:1;min-width:0;max-width:90px}
+.mobile-nav button:focus-visible,.nav-item:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+:root{--datova-avatar-fill:linear-gradient(140deg,#347cf2 0%,#5b62d4 58%,#7656b8 100%)}
+#accountBtn.avatar{width:42px;height:42px;min-width:42px;flex:0 0 42px;padding:0;border:1px solid rgba(120,166,255,.4);border-radius:50%;background:var(--datova-avatar-fill);color:#fff;display:grid;place-items:center;overflow:hidden;font:700 17px Manrope;line-height:1;box-shadow:0 4px 14px rgba(22,91,210,.18);vertical-align:middle;align-self:center}
+#accountBtn.avatar:focus-visible{outline:2px solid #55b8ff;outline-offset:3px}
+.greeting-avatar{background:var(--datova-avatar-fill);border:1px solid rgba(120,166,255,.4);box-shadow:0 5px 16px rgba(22,91,210,.2);color:#fff}
+#accountBtn.avatar img,.greeting-avatar img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%}
+.top-actions{align-items:center}
+@media(max-width:700px){
+ .top-actions .avatar,#accountBtn.avatar{width:40px;height:40px;min-width:40px;flex-basis:40px;border-radius:50%}
+ .mobile-nav{align-items:stretch;gap:2px}
+ .mobile-nav button{justify-content:center;min-width:0;flex:1;max-width:none;min-height:52px;padding:5px 2px;border-radius:12px;font-size:9px}
+ .mobile-nav button span{height:23px}
+ .mobile-nav button .datova-icon{width:21px;height:21px}
+ .mobile-nav button.active{background:#edf5ff;color:#1677ff}
+ body.dark .mobile-nav button.active{background:#18365b;color:#79baff}
+}
