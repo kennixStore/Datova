@@ -196,14 +196,24 @@ async function loadAccountNumber(user=currentUser){
 }
 
 let walletBalanceState="loading";
-let walletBalanceVisible=false;
+let walletBalanceVisible=true;
 const formatNaira=value=>"₦"+Number(value||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
 function updateWalletDisplays(){
- const amount=$("#walletAmountValue"),caption=$(".wallet-balance-caption"),mini=$("#miniWalletValue");
- if(!currentUser){if(amount)amount.textContent="••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Sign in to view your wallet balance';if(mini)mini.textContent="Sign in to view balance";return}
- if(walletBalanceState==="loading"){if(amount)amount.textContent="••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Loading your wallet balance…';if(mini)mini.textContent="Loading balance…"}
- else if(walletBalanceState==="error"){if(amount)amount.textContent=walletBalanceVisible?"Unavailable":"••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Balance could not be loaded. Refresh to try again.';if(mini)mini.textContent="Balance unavailable"}
- else{if(amount)amount.textContent=walletBalanceVisible?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):"••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Live wallet balance';if(mini)mini.textContent=formatNaira(walletBalanceValue)}
+ const amount=$("#walletAmountValue"),caption=$(".wallet-balance-caption"),dashboardAmount=$("#dashboardWalletAmountValue"),dashboardStatus=$("#dashboardWalletStatus");
+ const shown=walletBalanceVisible;
+ const display=walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…";
+ if(!currentUser){
+  if(amount)amount.textContent="••••••";
+  if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Sign in to view your wallet balance';
+  if(dashboardAmount)dashboardAmount.textContent="••••••";
+  if(dashboardStatus)dashboardStatus.textContent="Sign in to view your wallet balance";
+ }else{
+  if(amount)amount.textContent=shown?display:"••••••";
+  if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> '+(walletBalanceState==="ready"?"Live wallet balance":walletBalanceState==="error"?"Balance could not be loaded. Refresh to try again.":"Loading your wallet balance…");
+  if(dashboardAmount)dashboardAmount.textContent=shown?display:"••••••";
+  if(dashboardStatus)dashboardStatus.textContent=walletBalanceState==="ready"?"Live wallet balance":walletBalanceState==="error"?"Balance unavailable":"Loading your balance…";
+ }
+ updateWalletBalanceVisibility();
 }
 async function loadWalletBalance(user=currentUser){
  if(!user||!supabaseReady||!supabaseClient){walletBalanceValue=null;walletBalanceState="idle";updateWalletDisplays();return}
@@ -283,20 +293,22 @@ $("#airContinue").addEventListener("click",()=>{const n=$("#airNetwork").value,p
 $$(".filter-chip").forEach(b=>b.addEventListener("click",()=>{$$(".filter-chip").forEach(x=>x.classList.remove("active"));b.classList.add("active");toast("Transaction filters will work when account history is connected.")}));
 // Toggle visibility of the live wallet balance loaded from Supabase.
 function updateWalletBalanceVisibility(){
- const amount=$("#walletAmountValue");
- const control=$("#walletVisibility");
- if(amount)amount.textContent=walletBalanceVisible?(walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…"):"••••••";
- if(control){
-  control.setAttribute("aria-pressed",String(walletBalanceVisible));
-  control.setAttribute("aria-label",walletBalanceVisible?"Hide balance":"Show balance");
-  control.title=walletBalanceVisible?"Hide balance":"Show balance";
-  control.innerHTML=walletBalanceVisible
-   ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5.2 0 9 5 10 7- .4.8-1.4 2.1-3 3.3M6.2 6.2C3.8 7.7 2.4 10.3 2 12c1 2 4.8 7 10 7 1 0 2-.2 2.9-.6" /></svg>'
+ const amount=$("#walletAmountValue"),dashboardAmount=$("#dashboardWalletAmountValue");
+ const control=$("#walletVisibility"),dashboardControl=$("#dashboardWalletVisibility");
+ const display=walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…";
+ if(amount)amount.textContent=walletBalanceVisible?display:"••••••";
+ if(dashboardAmount)dashboardAmount.textContent=walletBalanceVisible?display:"••••••";
+ [control,dashboardControl].filter(Boolean).forEach(button=>{
+  button.setAttribute("aria-pressed",String(walletBalanceVisible));
+  button.setAttribute("aria-label",walletBalanceVisible?"Hide balance":"Show balance");
+  button.title=walletBalanceVisible?"Hide balance":"Show balance";
+  button.innerHTML=walletBalanceVisible
+   ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5.2 0 9 5 10 7-.4.8-1.4 2.1-3 3.3M6.2 6.2C3.8 7.7 2.4 10.3 2 12c1 2 4.8 7 10 7 1 0 2-.2 2.9-.6"/></svg>'
    : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
- }
+ });
 }
 document.addEventListener("click",event=>{
- const walletControl=event.target.closest("#walletVisibility");
+ const walletControl=event.target.closest("#walletVisibility, #dashboardWalletVisibility");
  if(!walletControl)return;
  event.preventDefault();
  walletBalanceVisible=!walletBalanceVisible;
@@ -348,6 +360,10 @@ $("#walletTransferForm")?.addEventListener("submit",async event=>{
     button.disabled=false;
     button.textContent="Check transfer details";
   }
+});
+$("#dashboardAddMoney")?.addEventListener("click",()=>{
+ go("wallet");
+ setTimeout(()=>$("#walletFundingAmount")?.focus({preventScroll:true}),350);
 });
 $("#walletAddMoney")?.addEventListener("click",()=>{
  const panel=$("#walletFundPanel");
