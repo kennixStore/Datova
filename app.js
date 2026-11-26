@@ -314,6 +314,10 @@ document.addEventListener("click",event=>{
  walletBalanceVisible=!walletBalanceVisible;
  updateWalletBalanceVisibility();
 });
+$("[data-transfer-amount]").forEach(button=>button.addEventListener("click",()=>{
+ const amountField=$("#transferAmount");
+ if(amountField){amountField.value=button.dataset.transferAmount;amountField.dispatchEvent(new Event("input",{bubbles:true}));}
+}));
 $("#walletTransferOpen")?.addEventListener("click",()=>{
   const panel=$("#walletTransferPanel");
   panel?.classList.remove("hidden");
@@ -331,6 +335,8 @@ $("#walletTransferForm")?.addEventListener("submit",async event=>{
   const recipient=recipientInput.replace(/[\s-]/g,"");
   const amount=Number($("#transferAmount").value);
   const message=$("#transferPreviewMessage");
+  $("#transferRecipientCard")?.classList.add("hidden");
+  $("#transferCostCard")?.classList.add("hidden");
   message.classList.remove("error","success");
   if(!currentUser){message.textContent="Please sign in before preparing a transfer.";message.classList.add("error");openAuth("login");return;}
   if(!/^DTV\d{8}$/.test(recipient)){message.textContent="Enter a valid DATOVA account number, for example DTV-12345678.";message.classList.add("error");return;}
@@ -350,7 +356,16 @@ $("#walletTransferForm")?.addEventListener("submit",async event=>{
       message.classList.add("error");
       return;
     }
-    message.textContent="Recipient found: "+recipientName+". Please confirm this is the correct person. This is recipient verification only; transaction PIN and secure transfer processing are not connected, so no money has been moved.";
+    const cleanName=String(recipientName).trim();
+    const initials=cleanName.split(/\s+/).filter(Boolean).slice(0,2).map(part=>part[0].toUpperCase()).join("")||"DT";
+    $("#transferRecipientInitials").textContent=initials;
+    $("#transferRecipientName").textContent=cleanName;
+    $("#transferRecipientAccount").textContent=formattedAccount;
+    $("#transferReviewAmount").textContent="₦"+amount.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+    $("#transferReviewTotal").textContent="₦"+amount.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+    $("#transferRecipientCard")?.classList.remove("hidden");
+    $("#transferCostCard")?.classList.remove("hidden");
+    message.textContent="Recipient verified. Review the details above. This is a preview only—no money has been moved.";
     message.classList.add("success");
   }catch(error){
     console.error("DATOVA recipient lookup failed:",error);
