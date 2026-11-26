@@ -1181,3 +1181,16 @@ body.dark .pin-manager{background:#101f34;border-color:#263b59}
 
 /* Profile section icons: use clear visual symbols instead of section numbers. */
 .profile-section-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
+
+
+/* Functional profile section controls */
+.profile-section-toggle{width:100%;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;font:inherit}
+.profile-section-toggle .profile-section-heading-copy{display:block;min-width:0;flex:1}
+.profile-section-toggle .profile-section-heading-copy h3{margin:0;color:var(--text);font:800 14px Manrope}
+.profile-section-toggle .profile-section-heading-copy p{margin:3px 0 0;color:var(--muted);font-size:10px}
+.profile-section-chevron{margin-left:auto;font-size:20px;line-height:1;transition:transform .18s ease}
+.profile-section-toggle[aria-expanded="false"] .profile-section-chevron{transform:rotate(-90deg)}
+.profile-section-card.is-collapsed>:not(.profile-section-heading){display:none!important}
+/* Keep the Nigerian naira glyph on a system font if the display font lacks it. */
+.dashboard-balance-value,.wallet-hero-main .wallet-amount{font-family:Arial,"Noto Sans",sans-serif}
+.dashboard-balance-value strong,.wallet-hero-main .wallet-amount strong{font-family:Manrope,Arial,sans-serif}
