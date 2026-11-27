@@ -719,21 +719,73 @@ $$("[data-profile-toggle]").forEach(button=>button.addEventListener("click",()=>
  card.classList.toggle("is-collapsed",expanded);
 }));
 
-/* DATOVA transaction PIN management — PINs are sent only to the protected Supabase RPC. */
+/* DATOVA transaction PIN management: first setup, verified change and email recovery. */
 const pinManager=$("#pinManager");
 const pinOpen=$("#profilePinOpen");
 const pinClose=$("#pinManagerClose");
 const pinForm=$("#transactionPinForm");
 const pinMessage=$("#transactionPinMessage");
-if(pinOpen)pinOpen.addEventListener("click",()=>{
+const pinCurrentGroup=$("#pinCurrentGroup");
+const pinForgot=$("#forgotTransactionPin");
+let datovaPinMode="create";
+
+function setPinMode(mode){
+ datovaPinMode=mode;
+ const recovery=mode==="recovery";
+ const creating=mode==="create";
+ pinCurrentGroup?.classList.toggle("hidden",creating||recovery);
+ $("#currentTransactionPin").required=mode==="change";
+ pinForgot?.classList.toggle("hidden",recovery);
+ $("#transactionPinSubmit").textContent=recovery?"Reset transaction PIN":creating?"Create transaction PIN":"Save PIN changes";
+ pinMessage.textContent=recovery?"Your email has been verified. Create a new 4-digit transaction PIN.":"";
+ pinMessage.className="pin-manager-message"+(recovery?" success":"");
+}
+
+async function openPinManager(){
  if(!currentUser){toast("Please sign in to manage your transaction PIN.");openAuth("login");return;}
  pinManager?.classList.remove("hidden");
- pinMessage.textContent="";
- pinMessage.className="pin-manager-message";
  pinForm?.reset();
- $("#currentTransactionPin")?.focus();
-});
+ const recoveryPending=localStorage.getItem("datova_pin_recovery_pending")==="1";
+ if(recoveryPending){
+  localStorage.removeItem("datova_pin_recovery_pending");
+  setPinMode("recovery");
+  $("#newTransactionPin")?.focus();
+  return;
+ }
+ pinMessage.textContent="Checking your PIN settings…";
+ pinMessage.className="pin-manager-message";
+ try{
+  const {data,error}=await supabaseClient.rpc("has_datova_transaction_pin");
+  if(error)throw error;
+  setPinMode(data===true?"change":"create");
+  if(data===true)$("#currentTransactionPin")?.focus();
+  else $("#newTransactionPin")?.focus();
+ }catch(error){
+  console.error("Could not check transaction PIN status:",error);
+  pinMessage.textContent="Could not check your PIN status. Please refresh and try again.";
+  pinMessage.className="pin-manager-message error";
+ }
+}
+if(pinOpen)pinOpen.addEventListener("click",openPinManager);
 if(pinClose)pinClose.addEventListener("click",()=>{pinManager?.classList.add("hidden");pinForm?.reset();pinMessage.textContent="";});
+if(pinForgot)pinForgot.addEventListener("click",async()=>{
+ if(!currentUser?.email){pinMessage.textContent="A verified email address is required to recover your PIN.";pinMessage.className="pin-manager-message error";return;}
+ pinForgot.disabled=true;
+ try{
+  const {error}=await supabaseClient.auth.signInWithOtp({
+   email:currentUser.email,
+   options:{shouldCreateUser:false,emailRedirectTo:window.location.origin+window.location.pathname}
+  });
+  if(error)throw error;
+  localStorage.setItem("datova_pin_recovery_pending","1");
+  pinMessage.textContent="A secure sign-in link has been sent to "+currentUser.email+". Open it on this device, then create a new PIN here.";
+  pinMessage.className="pin-manager-message success";
+ }catch(error){
+  console.error("Transaction PIN recovery email failed:",error);
+  pinMessage.textContent=error.message||"Could not send the recovery email. Please try again.";
+  pinMessage.className="pin-manager-message error";
+ }finally{pinForgot.disabled=false;}
+});
 if(pinForm)pinForm.addEventListener("submit",async event=>{
  event.preventDefault();
  if(!supabaseReady||!supabaseClient){pinMessage.textContent="Account service is unavailable. Refresh and try again.";pinMessage.className="pin-manager-message error";return;}
@@ -743,18 +795,24 @@ if(pinForm)pinForm.addEventListener("submit",async event=>{
  const confirmPin=$("#confirmTransactionPin").value;
  if(!/^\d{4}$/.test(newPin)){pinMessage.textContent="Your new PIN must contain exactly four digits.";pinMessage.className="pin-manager-message error";return;}
  if(newPin!==confirmPin){pinMessage.textContent="The new PIN entries do not match.";pinMessage.className="pin-manager-message error";$("#confirmTransactionPin").focus();return;}
- if(currentPin&&!/^\d{4}$/.test(currentPin)){pinMessage.textContent="Your current PIN must contain exactly four digits.";pinMessage.className="pin-manager-message error";return;}
+ if(datovaPinMode==="change"&&!/^\d{4}$/.test(currentPin)){pinMessage.textContent="Enter your current 4-digit PIN to change it.";pinMessage.className="pin-manager-message error";$("#currentTransactionPin").focus();return;}
  const button=$("#transactionPinSubmit");
  button.disabled=true;button.textContent="Saving securely…";
  pinMessage.textContent="";pinMessage.className="pin-manager-message";
  try{
-  const {data,error}=await supabaseClient.rpc("set_datova_transaction_pin",{p_new_pin:newPin,p_current_pin:currentPin||null});
-  if(error)throw error;
-  if(data===true){
+  let result;
+  if(datovaPinMode==="recovery"){
+   result=await supabaseClient.rpc("reset_datova_transaction_pin",{p_new_pin:newPin});
+  }else{
+   result=await supabaseClient.rpc("set_datova_transaction_pin",{p_new_pin:newPin,p_current_pin:datovaPinMode==="change"?currentPin:null});
+  }
+  if(result.error)throw result.error;
+  if(result.data===true){
    pinForm.reset();
-   pinMessage.textContent="Your transaction PIN has been saved successfully.";
+   pinMessage.textContent=datovaPinMode==="recovery"?"Your transaction PIN has been reset successfully.":"Your transaction PIN has been "+(datovaPinMode==="create"?"created":"changed")+" successfully.";
    pinMessage.className="pin-manager-message success";
-   toast("Transaction PIN updated.");
+   toast("Transaction PIN saved.");
+   setPinMode("change");
   }else{
    pinMessage.textContent="The current PIN may be incorrect, or PIN changes are temporarily locked. Check it and try again later.";
    pinMessage.className="pin-manager-message error";
@@ -764,7 +822,8 @@ if(pinForm)pinForm.addEventListener("submit",async event=>{
   pinMessage.textContent=error.message||"Could not save your PIN. Please try again.";
   pinMessage.className="pin-manager-message error";
  }finally{
-  button.disabled=false;button.textContent="Save transaction PIN";
+  button.disabled=false;
+  button.textContent=datovaPinMode==="recovery"?"Reset transaction PIN":datovaPinMode==="create"?"Create transaction PIN":"Save PIN changes";
  }
 });
 
