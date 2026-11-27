@@ -175,7 +175,7 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
 
 <section class="wallet-history-section">
  <div class="wallet-history-heading"><div><span class="wallet-section-kicker">YOUR ACTIVITY</span><h2>Wallet activity</h2><p>Keep track of funding requests and wallet transactions.</p></div><span class="wallet-history-badge">RECENT ACTIVITY</span></div>
- <div class="wallet-history-card"><div class="wallet-empty-icon"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v5h5M8 13h8M8 17h8"/></svg></div><div><b>No wallet activity yet</b><p>Your funding requests and wallet transactions will appear here.</p></div></div>
+ <div class="wallet-history-card" id="walletRecentActivityPanel"><div class="empty-state"><b>Sign in to view transactions</b><p>Your funding requests and wallet transactions will appear here.</p></div></div>
 </section>
 </div>
 <div class="screen" id="screen-transactions">
