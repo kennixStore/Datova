@@ -1253,3 +1253,20 @@ body.dark .wallet-action-muted .wallet-action-symbol{background:#193a63;color:#7
 .support-report-form{margin-top:14px;}.support-report-form label{display:block;margin:13px 0 6px;font-size:10px;font-weight:800;color:var(--ink);}.support-report-form label small{font-weight:500;color:var(--muted);}.support-report-form input,.support-report-form select,.support-report-form textarea{display:block;width:100%;max-width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:var(--surface);color:var(--ink);font:11px 'DM Sans',sans-serif;box-sizing:border-box;}.support-report-form textarea{resize:vertical;min-height:100px;line-height:1.5;}.support-report-form input:focus,.support-report-form select:focus,.support-report-form textarea:focus{outline:2px solid #1677ff30;border-color:var(--blue);}.support-report-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px;}.support-report-actions button{border:0;border-radius:10px;padding:12px 9px;font-size:10px;font-weight:800;}.support-send-whatsapp{background:#16834d;color:#fff;}.support-send-email{background:#176fe0;color:#fff;}.support-report-note{display:block;margin-top:11px;color:var(--muted);font-size:9px;line-height:1.55;}
 body.dark .support-channel{background:#142b47;border-color:#294563;}body.dark .support-whatsapp b{color:#79dba8;}body.dark .support-email b{color:#91c4ff;}body.dark .support-faq-list details{background:#0c1c32;border-color:#29415f;}body.dark .support-report-form input,body.dark .support-report-form select,body.dark .support-report-form textarea{background:#0c1c32;border-color:#29415f;color:#e9f1ff;}
 @media(max-width:700px){.support-contact-grid{grid-template-columns:1fr;}.support-card{padding:20px;}.support-report-actions{grid-template-columns:1fr;}}
+
+
+/* DATOVA support icon system and clear, arrow-free contact rows */
+.support-icon{width:58px;height:58px;border-radius:17px;display:grid;place-items:center;margin-bottom:22px;background:#eaf2ff;}
+.support-icon svg,.support-channel-icon svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.support-icon-contact{color:#176fe0;background:#eaf2ff;}
+.support-icon-faq{color:#7955d9;background:#f0eaff;}
+.support-icon-report{color:#d97706;background:#fff2df;}
+.support-channel{display:flex;align-items:center;gap:13px;padding:13px 15px;min-height:68px;box-sizing:border-box;}
+.support-channel-icon{width:40px;height:40px;flex:0 0 40px;border-radius:12px;display:grid;place-items:center;}
+.support-channel-copy{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.support-channel-copy b{font-size:12px;}.support-channel-copy small{font-size:10px;}
+.support-whatsapp .support-channel-icon{color:#16834d;background:#ddf8e9;}
+.support-email .support-channel-icon{color:#176fe0;background:#e4efff;}
+.support-channel>span[aria-hidden="true"]:last-child{display:none!important;}
+body.dark .support-icon-contact{color:#80b8ff;background:#132e52;}body.dark .support-icon-faq{color:#c1aaff;background:#302653;}body.dark .support-icon-report{color:#ffc477;background:#49331e;}
+body.dark .support-whatsapp .support-channel-icon{color:#78e0a8;background:#123b2b;}body.dark .support-email .support-channel-icon{color:#91c4ff;background:#17365c;}
