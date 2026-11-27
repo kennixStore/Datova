@@ -415,10 +415,16 @@ $("#walletTransferOpen")?.addEventListener("click",()=>{
   setTimeout(()=>$("#transferRecipient")?.focus({preventScroll:true}),300);
 });
 $("#walletWithdrawOpen")?.addEventListener("click",()=>go("withdraw"));
+let preparedTransferRequestId=null;
+let preparedTransferDetails=null;
 $("#walletTransferClose")?.addEventListener("click",()=>{
   $("#walletTransferPanel")?.classList.add("hidden");
+  $("#transferPinArea")?.classList.add("hidden");
+  $("#transferPin")&&( $("#transferPin").value="" );
+  preparedTransferRequestId=null;
+  preparedTransferDetails=null;
   $("#transferPreviewMessage")?.classList.remove("error","success");
-  $("#transferPreviewMessage").textContent="Preview only. Recipient verification, transaction PIN and secure transfer processing are not connected yet. No money will be moved.";
+  $("#transferPreviewMessage").textContent="Enter a recipient and amount to prepare a DATOVA transfer.";
 });
 $("#walletTransferForm")?.addEventListener("submit",async event=>{
   event.preventDefault();
@@ -456,7 +462,11 @@ $("#walletTransferForm")?.addEventListener("submit",async event=>{
     $("#transferReviewTotal").textContent="₦"+amount.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
     $("#transferRecipientCard")?.classList.remove("hidden");
     $("#transferCostCard")?.classList.remove("hidden");
-    message.textContent="Recipient verified. Review the details above. This is a preview only—no money has been moved.";
+    preparedTransferRequestId=crypto.randomUUID();
+    preparedTransferDetails={account:formattedAccount,amount};
+    $("#transferPinArea")?.classList.remove("hidden");
+    $("#transferPin")?.focus();
+    message.textContent="Recipient verified. Confirm the amount and enter your 4-digit transaction PIN to send.";
     message.classList.add("success");
   }catch(error){
     console.error("DATOVA recipient lookup failed:",error);
@@ -467,6 +477,48 @@ $("#walletTransferForm")?.addEventListener("submit",async event=>{
     button.textContent="Check transfer details";
   }
 });
+$("#walletTransferConfirm")?.addEventListener("click",async()=>{
+ const message=$("#transferPreviewMessage");
+ const button=$("#walletTransferConfirm");
+ const pin=$("#transferPin")?.value||"";
+ if(!currentUser||!supabaseReady||!supabaseClient){message.textContent="Please sign in and try again.";message.classList.add("error");return;}
+ if(!preparedTransferRequestId||!preparedTransferDetails){message.textContent="Please verify the recipient and amount again.";message.classList.add("error");return;}
+ if(!/^\\d{4}$/.test(pin)){message.textContent="Enter your 4-digit transaction PIN.";message.classList.add("error");$("#transferPin")?.focus();return;}
+ button.disabled=true;button.textContent="Processing securely…";
+ message.classList.remove("error","success");
+ try{
+  const {data,error}=await supabaseClient.rpc("transfer_datova_wallet",{
+   p_recipient_account_number:preparedTransferDetails.account,
+   p_amount:preparedTransferDetails.amount,
+   p_pin:pin,
+   p_request_id:preparedTransferRequestId
+  });
+  if(error)throw error;
+  if(!data?.success)throw new Error("Transfer could not be completed. Please try again.");
+  walletBalanceValue=Number(data.sender_balance);
+  walletBalanceState="ready";
+  updateWalletDisplays();
+  $("#transferPin").value="";
+  $("#transferPinArea")?.classList.add("hidden");
+  message.textContent="Transfer successful. Reference: "+data.reference;
+  message.classList.add("success");
+  toast("DATOVA transfer successful.");
+  preparedTransferRequestId=null;
+  preparedTransferDetails=null;
+  $("#transferRecipientCard")?.classList.add("hidden");
+  $("#transferCostCard")?.classList.add("hidden");
+  $("#walletTransferForm")?.reset();
+  await Promise.all([loadWalletBalance(currentUser),loadWalletHistory()]);
+ }catch(error){
+  console.error("DATOVA wallet transfer failed:",error);
+  message.textContent=error.message||"Transfer failed. Check your details and try again.";
+  message.classList.add("error");
+ }finally{
+  button.disabled=false;button.textContent="Confirm and send";
+ }
+});
+$("#transferRecipient")?.addEventListener("input",()=>{preparedTransferRequestId=null;preparedTransferDetails=null;$("#transferPinArea")?.classList.add("hidden");});
+$("#transferAmount")?.addEventListener("input",()=>{preparedTransferRequestId=null;preparedTransferDetails=null;$("#transferPinArea")?.classList.add("hidden");});
 function openWalletFunding(){
  if(!currentUser){toast("Sign in to add money to your DATOVA wallet.");openAuth("login");return;}
  const area=$("#walletFundingArea");
