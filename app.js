@@ -483,7 +483,7 @@ $("#walletTransferConfirm")?.addEventListener("click",async()=>{
  const pin=$("#transferPin")?.value||"";
  if(!currentUser||!supabaseReady||!supabaseClient){message.textContent="Please sign in and try again.";message.classList.add("error");return;}
  if(!preparedTransferRequestId||!preparedTransferDetails){message.textContent="Please verify the recipient and amount again.";message.classList.add("error");return;}
- if(!/^\\d{4}$/.test(pin)){message.textContent="Enter your 4-digit transaction PIN.";message.classList.add("error");$("#transferPin")?.focus();return;}
+ if(!/^\d{4}$/.test(pin)){message.textContent="Enter your 4-digit transaction PIN.";message.classList.add("error");$("#transferPin")?.focus();return;}
  button.disabled=true;button.textContent="Processing securely…";
  message.classList.remove("error","success");
  try{
