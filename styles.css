@@ -1172,6 +1172,8 @@ body.dark .profile-account-status{background:#123522;color:#a9e7bf}
 .pin-manager-message:empty{display:none}
 .pin-manager-message.success{color:#16824b}
 .pin-manager-message.error{color:#bd3434}
+.pin-recovery-link{justify-self:start;padding:5px 0;border:0;background:transparent;color:#1677ff;font:700 11px "DM Sans",sans-serif;text-decoration:underline;cursor:pointer}
+.pin-recovery-link:disabled{opacity:.55;cursor:wait}
 body.dark .pin-manager{background:#101f34;border-color:#263b59}
 
 .pin-verify-test{display:grid;gap:7px;margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}
