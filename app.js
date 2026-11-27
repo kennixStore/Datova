@@ -629,6 +629,7 @@ function launchVisitorExperience(signedInUser){
  startOpeningAnimation(()=>{
   // Read the completion marker when the opening animation finishes, not only
   // during initial script evaluation. This avoids using a stale startup value.
+  showStorageDiagnostic("AFTER REFRESH / STARTUP");
   if(hasCompletedOnboarding()){
    showApp();
   }else{
