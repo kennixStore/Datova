@@ -329,7 +329,7 @@ function renderAccount(user){
 }
 if(supabaseReady){
  supabaseClient.auth.getSession().then(({data,error})=>{if(error){console.error("DATOVA getSession error:",error);toast(error.message||"Could not restore account session.");}renderAccount(data?.session?.user||null)}).catch(error=>{console.error("DATOVA getSession rejected:",error);toast(error?.message||"Account session could not be restored. Check browser console.");});
- supabaseClient.auth.onAuthStateChange(async(event,session)=>{renderAccount(session?.user||null);if(session?.user&&event==="SIGNED_IN"){markOnboardingComplete();showApp();}if(event==="PASSWORD_RECOVERY"){const next=window.prompt("Enter your new DATOVA password (at least 8 characters):");if(next&&next.length>=8){const {error}=await supabaseClient.auth.updateUser({password:next});toast(error?error.message:"Your password has been updated.");}else if(next!==null){toast("Password must contain at least 8 characters.");}}});
+ supabaseClient.auth.onAuthStateChange(async(event,session)=>{renderAccount(session?.user||null);if(session?.user&&event==="SIGNED_IN"){markOnboardingComplete();showApp();if(localStorage.getItem("datova_pin_recovery_pending")==="1")setTimeout(()=>window.datovaOpenPinManager?.(),500);}if(event==="PASSWORD_RECOVERY"){const next=window.prompt("Enter your new DATOVA password (at least 8 characters):");if(next&&next.length>=8){const {error}=await supabaseClient.auth.updateUser({password:next});toast(error?error.message:"Your password has been updated.");}else if(next!==null){toast("Password must contain at least 8 characters.");}}});
 }else{renderAccount(null);}
 $("#forgotPassword").addEventListener("click",async()=>{const email=$("#authEmail").value.trim();if(!email){toast("Enter your email address first.");$("#authEmail").focus();return}if(!supabaseReady){toast("Account service is unavailable.");return}const b=$("#forgotPassword");b.disabled=true;try{const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});if(error)throw error;toast("Password reset link sent. Check your email.");}catch(err){toast(err.message||"Could not send password reset email.");}finally{b.disabled=false;}});
 $("#authForm").addEventListener("submit",async e=>{
@@ -766,6 +766,7 @@ async function openPinManager(){
   pinMessage.className="pin-manager-message error";
  }
 }
+window.datovaOpenPinManager=openPinManager;
 if(pinOpen)pinOpen.addEventListener("click",openPinManager);
 if(pinClose)pinClose.addEventListener("click",()=>{pinManager?.classList.add("hidden");pinForm?.reset();pinMessage.textContent="";});
 if(pinForgot)pinForgot.addEventListener("click",async()=>{
