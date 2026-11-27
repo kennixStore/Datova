@@ -1297,3 +1297,34 @@ body.dark{
 .wallet-history-info small{
   color:var(--muted);
 }
+
+/* Quick Actions: all actions remain visually clear and equally usable. */
+.wallet-action-muted{
+  background:#edf5ff!important;
+  border:1px solid #b9d5fb!important;
+  color:#123f79!important;
+  box-shadow:0 5px 16px rgba(22,119,255,.07);
+}
+.wallet-action-muted b{color:#123f79!important;opacity:1!important}
+.wallet-action-muted small{color:#49698f!important;opacity:1!important}
+.wallet-action-muted em{color:#2469bd!important}
+.wallet-action-muted .wallet-action-symbol{
+  background:#d8eaff!important;
+  color:#176fe0!important;
+}
+body.dark .wallet-action-muted{
+  background:#122d50!important;
+  border:1px solid #315d91!important;
+  color:#eaf3ff!important;
+  box-shadow:0 5px 18px rgba(0,0,0,.13);
+}
+body.dark .wallet-action-muted b{color:#f2f7ff!important;opacity:1!important}
+body.dark .wallet-action-muted small{color:#b8d0ee!important;opacity:1!important}
+body.dark .wallet-action-muted em{color:#8fc2ff!important}
+body.dark .wallet-action-muted .wallet-action-symbol{
+  background:#1c416d!important;
+  color:#8fc5ff!important;
+}
+.wallet-action-primary,.wallet-action-muted{
+  min-height:76px!important;
+}
