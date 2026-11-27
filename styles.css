@@ -1405,3 +1405,48 @@ body.dark .wallet-hero-actions #walletWithdrawOpen .wallet-action-symbol{
   background:#1a2a3d!important;
   color:#8497ad!important;
 }
+
+/* Final alignment fix for the transfer amount field. Use a two-column grid
+   so the currency mark and placeholder have independent, stable positions. */
+.wallet-transfer-form .wallet-amount-input{
+  display:grid!important;
+  grid-template-columns:max-content minmax(0,1fr)!important;
+  align-items:center!important;
+  column-gap:10px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  padding:0 14px!important;
+}
+.wallet-transfer-form #transferAmount{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:0!important;
+  justify-self:stretch!important;
+  text-align:left!important;
+  font:600 14px "DM Sans",sans-serif!important;
+}
+.wallet-transfer-form #transferAmount::placeholder{
+  display:block!important;
+  text-align:left!important;
+  text-indent:0!important;
+  color:var(--muted)!important;
+  opacity:1!important;
+  font:500 12px "DM Sans",sans-serif!important;
+}
+/* Explicit SVG stroke prevents inherited button/icon styles from tinting it. */
+.wallet-hero-actions #walletTransferOpen .wallet-action-symbol{
+  color:#fff!important;
+}
+.wallet-hero-actions #walletTransferOpen .wallet-action-symbol .wallet-icon-svg{
+  stroke:#fff!important;
+  fill:none!important;
+  opacity:1!important;
+}
+body:not(.dark) .wallet-hero-actions #walletTransferOpen .wallet-action-symbol .wallet-icon-svg,
+body.dark .wallet-hero-actions #walletTransferOpen .wallet-action-symbol .wallet-icon-svg{
+  stroke:#fff!important;
+}
