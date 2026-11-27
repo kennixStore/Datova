@@ -169,10 +169,17 @@ async function loadWalletHistory(){
   if(!data?.length){showEmpty("No wallet activity yet","Your funding requests and wallet transactions will appear here.");return;}
   const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const renderRows=rows=>'<div class="wallet-history-list">'+rows.map(row=>{
-   const credit=["credit","refund","adjustment"].includes(String(row.transaction_type||"").toLowerCase());
+   const type=String(row.transaction_type||"").toLowerCase();
+   const credit=["credit","refund","adjustment"].includes(type);
+   const rawDescription=String(row.description||row.transaction_type||"Wallet activity");
+   let title=rawDescription;
+   const directionLabel=credit?"CREDIT":"DEBIT";
+   if(type==="debit"&&/^DATOVA transfer to /i.test(rawDescription))title="Money sent to "+rawDescription.replace(/^DATOVA transfer to /i,"");
+   else if(type==="credit"&&/^DATOVA transfer from /i.test(rawDescription))title="Money received from "+rawDescription.replace(/^DATOVA transfer from /i,"");
+   else if(type==="credit"&&/DATOVA transfer/i.test(rawDescription))title="Money received from another DATOVA user";
    const amount=(credit?"+":"−")+"₦"+Number(row.amount||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
    const date=row.created_at?new Date(row.created_at).toLocaleString("en-NG",{dateStyle:"medium",timeStyle:"short"}):"Date unavailable";
-   return '<article class="wallet-history-item"><span class="wallet-history-mark '+(credit?"incoming":"outgoing")+'">'+(credit?"↓":"↑")+'</span><div class="wallet-history-info"><b>'+esc(row.description||row.transaction_type||"Wallet activity")+'</b><small>'+esc(date)+' · '+esc(row.reference||"No reference")+'</small></div><strong class="'+(credit?"incoming-text":"outgoing-text")+'">'+amount+'</strong></article>';
+   return '<article class="wallet-history-item"><span class="wallet-history-mark '+(credit?"incoming":"outgoing")+'">'+(credit?"↓":"↑")+'</span><div class="wallet-history-info"><b>'+esc(title)+'</b><small>'+esc(date)+' · <strong class="wallet-history-direction">'+directionLabel+'</strong> · '+esc(row.reference||"No reference")+'</small></div><strong class="'+(credit?"incoming-text":"outgoing-text")+'">'+amount+'</strong></article>';
   }).join("")+'</div>';
   if(panel)panel.innerHTML=renderRows(data);
   if(recentPanel)recentPanel.innerHTML=renderRows(data.slice(0,5));
