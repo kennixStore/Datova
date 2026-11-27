@@ -270,10 +270,11 @@ function updateWalletDisplays(){
  const shown=walletBalanceVisible;
  const display=walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…";
  if(!currentUser){
-  if(amount)amount.textContent="••••••";
-  if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Sign in to view your wallet balance';
-  if(dashboardAmount)dashboardAmount.textContent="••••••";
-  if(dashboardStatus)dashboardStatus.textContent="Sign in to view your wallet balance";
+  // Guests do not have a wallet balance to fetch; show a clear zero balance.
+  if(amount)amount.textContent="0.00";
+  if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Sign in to access your personal wallet';
+  if(dashboardAmount)dashboardAmount.textContent="0.00";
+  if(dashboardStatus)dashboardStatus.textContent="Guest wallet · Sign in to get started";
  }else{
   if(amount)amount.textContent=shown?display:"••••••";
   if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> '+(walletBalanceState==="ready"?"Live wallet balance":walletBalanceState==="error"?"Balance could not be loaded. Refresh to try again.":"Loading your wallet balance…");
@@ -403,6 +404,7 @@ $$("[data-transfer-amount]").forEach(button=>button.addEventListener("click",()=
  if(amountField){amountField.value=button.dataset.transferAmount;amountField.dispatchEvent(new Event("input",{bubbles:true}));}
 }));
 $("#walletTransferOpen")?.addEventListener("click",()=>{
+  if(!currentUser){toast("Sign in to transfer money.");openAuth("login");return;}
   const panel=$("#walletTransferPanel");
   panel?.classList.remove("hidden");
   panel?.scrollIntoView({behavior:"smooth",block:"start"});
@@ -462,6 +464,7 @@ $("#walletTransferForm")?.addEventListener("submit",async event=>{
   }
 });
 function openWalletFunding(){
+ if(!currentUser){toast("Sign in to add money to your DATOVA wallet.");openAuth("login");return;}
  const area=$("#walletFundingArea");
  if(!area)return;
  area.classList.remove("hidden");
