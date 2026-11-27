@@ -380,7 +380,7 @@ $$(".filter-chip").forEach(b=>b.addEventListener("click",()=>{$$(".filter-chip")
 function updateWalletBalanceVisibility(){
  const amount=$("#walletAmountValue"),dashboardAmount=$("#dashboardWalletAmountValue");
  const control=$("#walletVisibility"),dashboardControl=$("#dashboardWalletVisibility");
- const display=walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…";
+ const display=!currentUser?"0.00":walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…";
  if(amount)amount.textContent=walletBalanceVisible?display:"••••••";
  if(dashboardAmount)dashboardAmount.textContent=walletBalanceVisible?display:"••••••";
  [control,dashboardControl].filter(Boolean).forEach(button=>{
