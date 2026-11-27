@@ -1279,3 +1279,21 @@ body.dark .profile-account-number{--panel-bg:#10233e;--border-color:#29415f;--te
 .pin-recovery-captcha>small{display:block;color:var(--muted,#777);font-size:12px;line-height:1.45}
 #pinRecoveryCaptcha{min-height:65px;max-width:100%;overflow:hidden}
 #pinRecoveryCaptcha iframe{max-width:100%}
+
+/* DATOVA shared theme text tokens — keep every screen consistent. */
+body{
+  --text:var(--ink);
+  --surface-soft:#f5f8fd;
+}
+body.dark{
+  --text:var(--ink);
+  --surface-soft:#0c1c32;
+}
+/* Wallet activity and transaction history use the same theme tokens. */
+.wallet-history-info b,
+.wallet-history-item>strong{
+  color:var(--text);
+}
+.wallet-history-info small{
+  color:var(--muted);
+}
