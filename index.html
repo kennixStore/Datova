@@ -253,9 +253,12 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
 <script>
 window.datovaTurnstileToken="";
 window.datovaTurnstileWidget=null;
-window.onDatovaTurnstileLoad=function(){
+window.datovaTurnstileToken="";
+window.datovaTurnstileWidget=null;
+window.datovaRenderTurnstile=function(){
  const target=document.getElementById("pinRecoveryCaptcha");
  if(!target||!window.turnstile||window.datovaTurnstileWidget!==null)return;
+ if(document.getElementById("pinManager")?.classList.contains("hidden"))return;
  window.datovaTurnstileWidget=window.turnstile.render(target,{
   sitekey:"0x4AAAAAAGT0QxhQFW8x0emk",
   theme:"auto",
@@ -264,11 +267,11 @@ window.onDatovaTurnstileLoad=function(){
   "error-callback":function(){window.datovaTurnstileToken="";}
  });
 };
+window.onDatovaTurnstileLoad=function(){window.datovaRenderTurnstile();};
 window.datovaTurnstileReset=function(){
  if(window.turnstile&&window.datovaTurnstileWidget!==null)window.turnstile.reset(window.datovaTurnstileWidget);
  window.datovaTurnstileToken="";
-};
-</script>
+};</script>
 <script async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onDatovaTurnstileLoad&render=explicit"></script>
 <script defer src="app.js?v=75"></script>
 </body></html>
