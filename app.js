@@ -614,10 +614,14 @@ function showFirstVisitOnboarding(){
 function launchVisitorExperience(signedInUser){
  if(signedInUser)renderAccount(signedInUser);
  $("#welcomeGate")?.classList.add("hidden");
- if(hasCompletedOnboarding()){
-  showApp();
+ // A refresh in the same tab skips the opening animation and restores the
+ // last screen. A fresh tab/session gets the opening animation once.
+ if(openingPlayedThisSession){
+  if(hasCompletedOnboarding())showApp();
+  else showFirstVisitOnboarding();
   return;
  }
+ markOpeningPlayedThisSession();
  startOpeningAnimation(()=>{
   if(hasCompletedOnboarding())showApp();
   else showFirstVisitOnboarding();
