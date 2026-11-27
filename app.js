@@ -307,8 +307,8 @@ function renderAccount(user){
  updateGreeting();
  $("#profileSignIn").classList.toggle("hidden",signedIn);
  $("#profileSignOut").classList.toggle("hidden",!signedIn);
- $(".profile-main h3").textContent=signedIn?(user.user_metadata?.full_name||user.email||"DATOVA customer"):"Guest account";
- $(".profile-main p").textContent=signedIn?(user.email||"You're signed in to DATOVA."):"Sign in or create an account to manage your DATOVA profile.";
+ const profileHeading=$(".profile-main h3");if(profileHeading)profileHeading.textContent=signedIn?(user.user_metadata?.full_name||user.email||"DATOVA customer"):"Guest account";
+ const profileDescription=$(".profile-main p");if(profileDescription)profileDescription.textContent=signedIn?(user.email||"You're signed in to DATOVA."):"Sign in or create an account to manage your DATOVA profile.";
  const profileName=user?.user_metadata?.full_name||user?.user_metadata?.name||"DATOVA customer";
  const profileFullName=$("#profileFullName");if(profileFullName)profileFullName.textContent=signedIn?profileName:"Not available";
  const profileEmail=$("#profileEmailAddress");if(profileEmail)profileEmail.textContent=signedIn?(user.email||"Not provided"):"Not signed in";
