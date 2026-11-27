@@ -6,6 +6,10 @@ const intro=$("#onboarding"),app=$("#app");
 document.addEventListener("click",event=>{
  const target=event.target instanceof Element?event.target:null;
  if(!target)return;
+ const supportLink=target.closest("[data-support-link]");
+ if(supportLink){event.preventDefault();event.stopImmediatePropagation();const destination=supportLink.dataset.supportLink==="whatsapp"?"https://wa.me/2349135102119":"mailto:kennix2027@gmail.com";window.location.href=destination;return;}
+ const supportSend=target.closest("[data-support-channel]");
+ if(supportSend){event.preventDefault();event.stopImmediatePropagation();const form=$("#supportReportForm");if(!form||!form.reportValidity())return;const topic=$("#supportIssueType").value.trim(),reference=$("#supportReference").value.trim(),details=$("#supportIssueDetails").value.trim();const message=["DATOVA support request","Topic: "+topic,reference?"Transaction reference: "+reference:"","Details: "+details,"Do not reply asking for my password, transaction PIN or OTP."].filter(Boolean).join("\\n");if(supportSend.dataset.supportChannel==="whatsapp")window.location.href="https://wa.me/2349135102119?text="+encodeURIComponent(message);else window.location.href="mailto:kennix2027@gmail.com?subject="+encodeURIComponent("DATOVA support request — "+topic)+"&body="+encodeURIComponent(message);return;}
  const control=target.closest("#introNext,#introBack,#skipIntro,#replayOnboarding,[data-profile-toggle],#dashboardAddMoney,#walletAddMoney,[data-screen]");
  if(!control)return;
  event.preventDefault();
@@ -746,19 +750,3 @@ if(pinTestForm)pinTestForm.addEventListener("submit",async event=>{
 
 window.datovaAppStarted=true;
 
-/* DATOVA Help & Support: compose user-submitted reports for WhatsApp or email. */
-const supportReportForm=$("#supportReportForm");
-if(supportReportForm){
- supportReportForm.querySelectorAll("[data-support-channel]").forEach(button=>button.addEventListener("click",()=>{
-  if(!supportReportForm.reportValidity())return;
-  const topic=$("#supportIssueType").value.trim();
-  const reference=$("#supportReference").value.trim();
-  const details=$("#supportIssueDetails").value.trim();
-  const message=["DATOVA support request","Topic: "+topic,reference?"Transaction reference: "+reference:"", "Details: "+details,"", "I have not included any password, transaction PIN or OTP."].filter(Boolean).join("\n");
-  if(button.dataset.supportChannel==="whatsapp"){
-   window.open("https://wa.me/2349135102119?text="+encodeURIComponent(message),"_blank","noopener,noreferrer");
-  }else{
-   window.location.href="mailto:kennix2027@gmail.com?subject="+encodeURIComponent("DATOVA support request — "+topic)+"&body="+encodeURIComponent(message);
-  }
- }));
-}
