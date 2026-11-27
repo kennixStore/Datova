@@ -1172,6 +1172,8 @@ body.dark .profile-account-status{background:#123522;color:#a9e7bf}
 .pin-manager-message:empty{display:none}
 .pin-manager-message.success{color:#16824b}
 .pin-manager-message.error{color:#bd3434}
+.pin-recovery-link{justify-self:start;padding:5px 0;border:0;background:transparent;color:#1677ff;font:700 11px "DM Sans",sans-serif;text-decoration:underline;cursor:pointer}
+.pin-recovery-link:disabled{opacity:.55;cursor:wait}
 body.dark .pin-manager{background:#101f34;border-color:#263b59}
 
 .pin-verify-test{display:grid;gap:7px;margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}
@@ -1270,3 +1272,5 @@ body.dark .support-channel{background:#142b47;border-color:#294563;}body.dark .s
 .support-channel>span[aria-hidden="true"]:last-child{display:none!important;}
 body.dark .support-icon-contact{color:#80b8ff;background:#132e52;}body.dark .support-icon-faq{color:#c1aaff;background:#302653;}body.dark .support-icon-report{color:#ffc477;background:#49331e;}
 body.dark .support-whatsapp .support-channel-icon{color:#78e0a8;background:#123b2b;}body.dark .support-email .support-channel-icon{color:#91c4ff;background:#17365c;}
+
+body.dark .profile-account-number{--panel-bg:#10233e;--border-color:#29415f;--text:#e9f1ff;--muted:#9cacc3;background:#10233e;border-color:#29415f;box-shadow:0 8px 24px rgba(0,0,0,.18)}
