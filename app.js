@@ -745,3 +745,20 @@ if(pinTestForm)pinTestForm.addEventListener("submit",async event=>{
 });
 
 window.datovaAppStarted=true;
+
+/* DATOVA Help & Support: compose user-submitted reports for WhatsApp or email. */
+const supportReportForm=$("#supportReportForm");
+if(supportReportForm){
+ supportReportForm.querySelectorAll("[data-support-channel]").forEach(button=>button.addEventListener("click",()=>{
+  if(!supportReportForm.reportValidity())return;
+  const topic=$("#supportIssueType").value.trim();
+  const reference=$("#supportReference").value.trim();
+  const details=$("#supportIssueDetails").value.trim();
+  const message=["DATOVA support request","Topic: "+topic,reference?"Transaction reference: "+reference:"", "Details: "+details,"", "I have not included any password, transaction PIN or OTP."].filter(Boolean).join("\n");
+  if(button.dataset.supportChannel==="whatsapp"){
+   window.open("https://wa.me/2349135102119?text="+encodeURIComponent(message),"_blank","noopener,noreferrer");
+  }else{
+   window.location.href="mailto:kennix2027@gmail.com?subject="+encodeURIComponent("DATOVA support request — "+topic)+"&body="+encodeURIComponent(message);
+  }
+ }));
+}
