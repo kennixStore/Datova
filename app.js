@@ -54,7 +54,7 @@ function savedScreen(){
  const saved=readStoredValue("datova_current_screen");
  return saved&&document.querySelector("#screen-"+saved)?saved:"overview";
 }
-function restoreSavedScreen(){const screen=savedScreen();$(".screen").forEach(el=>el.classList.toggle("active",el.id==="screen-"+screen));syncNavigation(screen)}
+function restoreSavedScreen(){const screen=savedScreen();$$(".screen").forEach(el=>el.classList.toggle("active",el.id==="screen-"+screen));syncNavigation(screen)}
 function initScreenHistory(){if(screenHistoryReady)return;screenHistoryReady=true;const current=document.querySelector(".screen.active")?.id.replace("screen-","")||"overview";screenStack=[current];history.replaceState({datovaScreen:"root",datovaRoot:true},"",location.href);history.pushState({datovaScreen:current,datovaApp:true},"",location.href)}
 function goBack(){if(history.state?.datovaApp){history.back();return}if(screenStack.length>1){screenStack.pop();const previous=screenStack[screenStack.length-1]||"overview";go(previous,{fromPopState:true});return}if($(".screen.active")?.id!=="screen-overview"){go("overview");return}toast("You're already on the DATOVA home screen.")}
 let onboardingReplayMode=false;
@@ -424,7 +424,7 @@ document.addEventListener("click",event=>{
  walletBalanceVisible=!walletBalanceVisible;
  updateWalletBalanceVisibility();
 });
-$("[data-transfer-amount]").forEach(button=>button.addEventListener("click",()=>{
+$$("[data-transfer-amount]").forEach(button=>button.addEventListener("click",()=>{
  const amountField=$("#transferAmount");
  if(amountField){amountField.value=button.dataset.transferAmount;amountField.dispatchEvent(new Event("input",{bubbles:true}));}
 }));
