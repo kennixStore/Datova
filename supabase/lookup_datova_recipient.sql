@@ -1,12 +1,13 @@
--- DATOVA: secure recipient lookup for authenticated wallet users
--- Run this once in the Supabase SQL Editor.
+-- DATOVA: secure recipient lookup for authenticated wallet users.
+-- Uses the profile account number and falls back to the registered Auth name
+-- when profiles.full_name is blank. Apply in Supabase SQL Editor.
 
 create or replace function public.lookup_datova_recipient(p_account_number text)
 returns text
 language plpgsql
 security definer
 stable
-set search_path = public
+set search_path = public, auth, pg_temp
 as $$
 declare
   v_account text;
@@ -22,9 +23,19 @@ begin
     raise exception 'Invalid DATOVA account number';
   end if;
 
-  select nullif(btrim(p.full_name), '')
+  select coalesce(
+    nullif(btrim(p.full_name), ''),
+    nullif(btrim(u.raw_user_meta_data ->> 'full_name'), ''),
+    nullif(btrim(u.raw_user_meta_data ->> 'name'), ''),
+    nullif(btrim(concat_ws(' ',
+      u.raw_user_meta_data ->> 'first_name',
+      u.raw_user_meta_data ->> 'last_name'
+    )), ''),
+    'DATOVA User'
+  )
     into v_name
   from public.profiles p
+  left join auth.users u on u.id = p.id
   where upper(regexp_replace(coalesce(p.account_number, ''), '[[:space:]-]', '', 'g')) = v_account
     and p.id <> auth.uid()
   limit 1;
@@ -36,3 +47,6 @@ $$;
 revoke all on function public.lookup_datova_recipient(text) from public;
 revoke all on function public.lookup_datova_recipient(text) from anon;
 grant execute on function public.lookup_datova_recipient(text) to authenticated;
+
+comment on function public.lookup_datova_recipient(text) is
+  'Returns a DATOVA recipient display name using profile name with registered Auth metadata fallback.';
