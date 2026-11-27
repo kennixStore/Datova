@@ -37,9 +37,13 @@ const slides=[
 let slide=0;
 let screenHistoryReady=false,screenStack=["overview"];
 function readStoredValue(key){
- try{const value=localStorage.getItem(key);if(value!==null)return value;}catch(error){}
- try{const item=document.cookie.split("; ").find(part=>part.startsWith(encodeURIComponent(key)+"="));if(item)return decodeURIComponent(item.slice(item.indexOf("=")+1));}catch(error){}
- try{return sessionStorage.getItem(key)}catch(error){return null}
+ const values=[];
+ try{const value=localStorage.getItem(key);if(value!==null)values.push(value);}catch(error){}
+ try{const item=document.cookie.split("; ").find(part=>part.startsWith(encodeURIComponent(key)+"="));if(item)values.push(decodeURIComponent(item.slice(item.indexOf("=")+1)));}catch(error){}
+ try{const value=sessionStorage.getItem(key);if(value!==null)values.push(value);}catch(error){}
+ // A successful marker in any available store wins over a stale value in another.
+ if(values.includes("1"))return "1";
+ return values.length?values[0]:null;
 }
 function writeStoredValue(key,value){
  try{localStorage.setItem(key,value)}catch(error){}
