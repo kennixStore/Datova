@@ -744,6 +744,7 @@ function setPinMode(mode){
 async function openPinManager(){
  if(!currentUser){toast("Please sign in to manage your transaction PIN.");openAuth("login");return;}
  pinManager?.classList.remove("hidden");
+ window.datovaRenderTurnstile?.();
  pinForm?.reset();
  const recoveryPending=localStorage.getItem("datova_pin_recovery_pending")==="1";
  if(recoveryPending){
