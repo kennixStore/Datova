@@ -5,8 +5,8 @@
 <meta name="theme-color" content="#07152f"><meta name="description" content="DATOVA — Data Made Easy. Connections Made Better.">
 <link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=53"><title>DATOVA — Digital services, made easy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=59"><title>DATOVA — Digital services, made easy</title>
 </head>
 <body>
 <div id="introSplash" class="intro-splash hidden" aria-label="DATOVA opening animation"><button id="introSoundToggle" class="intro-sound-toggle" type="button" aria-label="Mute intro sound" aria-pressed="false" title="Mute intro sound"><span aria-hidden="true">🔊</span></button><div class="splash-light"></div><div class="splash-orbit orbit-a"></div><div class="splash-orbit orbit-b"></div><div class="splash-runner" aria-hidden="true"></div><div class="splash-core"><img src="datova-mark.svg" alt="" class="splash-mark"><div class="splash-word"><span>DAT</span><span class="splash-globe-slot"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="splashGlobeBlue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7ce4ff"/><stop offset=".52" stop-color="#1677ff"/><stop offset="1" stop-color="#1646b8"/></linearGradient></defs><circle cx="20" cy="20" r="17" fill="url(#splashGlobeBlue)"/><path d="M3 20h34M20 3c-6 6-8 11-8 17s2 11 8 17m0-34c6 6 8 11 8 17s-2 11-8 17M7 11q13 7 26 0M7 29q13-7 26 0" fill="none" stroke="#eafaff" stroke-width="1.35" stroke-linecap="round" opacity=".92"/></svg></span><span>VA</span></div></div><div class="splash-floor"></div></div>
@@ -41,9 +41,11 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
  </div>
  <div class="date-pill"><span class="live-dot"></span> Your space is ready</div>
 </div>
-<section class="mini-account-row">
- <button class="mini-wallet-card" data-screen="wallet"><span class="mini-wallet-icon"><svg class="datova-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h15a2 2 0 0 1 2 2V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6.5Z"/><path d="M3.5 7V5a2 2 0 0 1 2-2h13"/><path d="M21 11h-5a2 2 0 0 0 0 4h5"/><path d="M16.5 13h.01"/></svg></span><span class="mini-wallet-copy"><small>YOUR DATOVA WALLET</small><strong id="miniWalletValue">Sign in to view balance</strong><em>Wallet overview <b>→</b></em></span><span class="mini-wallet-orbit" aria-hidden="true"></span></button>
- <div class="account-note"><span class="account-note-dot"></span><div><b>Stay in control</b><small>Keep track of your services and activity in one place.</small></div></div>
+<section class="dashboard-wallet-card" aria-label="DATOVA wallet balance">
+ <div class="dashboard-wallet-top"><span class="dashboard-wallet-label"><i></i> MY DATOVA WALLET</span><div class="dashboard-wallet-tools"><button type="button" class="dashboard-balance-toggle" id="dashboardWalletVisibility" aria-label="Hide balance" aria-pressed="true" title="Hide balance"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5.2 0 9 5 10 7-.4.8-1.4 2.1-3 3.3M6.2 6.2C3.8 7.7 2.4 10.3 2 12c1 2 4.8 7 10 7 1 0 2-.2 2.9-.6"/></svg></button><button type="button" class="dashboard-add-money" id="dashboardAddMoney">＋ Add Money</button></div></div>
+ <span class="dashboard-balance-caption">Available balance</span>
+ <div class="dashboard-balance-value">₦<strong id="dashboardWalletAmountValue">••••••</strong></div>
+ <div class="dashboard-wallet-foot"><span class="dashboard-live-indicator"></span><span id="dashboardWalletStatus">Sign in to view your wallet balance</span><button type="button" class="dashboard-wallet-open" data-screen="wallet">Wallet details <b>→</b></button></div>
 </section>
 <section class="dashboard-section service-showcase">
  <div class="section-head"><div><span class="section-kicker">DATOVA SERVICES</span><h2>What would you like to do?</h2><p>Swipe to explore our services.</p></div></div>
@@ -104,13 +106,13 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
   <span class="wallet-balance-label">Available balance</span>
   <div class="wallet-amount">₦<span id="walletAmountValue">••••••</span></div>
   <div class="wallet-balance-caption"><span class="wallet-balance-dot"></span> Balance connection is being completed</div>
-  <div class="wallet-hero-bottom"><span>DATOVA</span><span class="wallet-card-mark">D</span></div>
+  <div class="wallet-hero-bottom"><span class="wallet-brand-wordmark">DATOVA<span> • FINANCIAL</span></span><span class="wallet-card-chip" aria-hidden="true"></span></div>
  </div>
  <div class="wallet-hero-actions">
   <span class="wallet-actions-label">QUICK ACTIONS</span>
   <button type="button" class="wallet-action-primary" id="walletAddMoney"><span class="wallet-action-symbol"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5h16a1.5 1.5 0 0 1 1.5 1.5v9A2 2 0 0 1 19.5 20h-15A2 2 0 0 1 2.5 18V6A2 2 0 0 1 4.5 4H18"/><path d="M12 10v6m-3-3h6"/></svg></span><span><b>Add money</b><small>Fund your wallet</small></span></button>
   <button type="button" class="wallet-action-muted" id="walletTransferOpen"><span class="wallet-action-symbol"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h14m0 0-3-3m3 3-3 3M20 17H6m0 0 3-3m-3 3 3 3"/></svg></span><span><b>Transfer</b><small>Send to a DATOVA user</small></span><em>PREVIEW</em></button>
-  <div class="wallet-action-muted"><span class="wallet-action-symbol"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 20V9l7-5 7 5v11M9 20v-6h6v6"/><path d="M9 9h.01M15 9h.01"/></svg></span><span><b>Withdraw</b><small>Coming soon</small></span><em>SOON</em></div>
+  <button type="button" class="wallet-action-muted" id="walletWithdrawOpen"><span class="wallet-action-symbol"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 20V9l7-5 7 5v11M9 20v-6h6v6"/><path d="M9 9h.01M15 9h.01"/></svg></span><span><b>Withdraw</b><small>Bank payout</small></span><em>SOON</em></button>
  </div>
 </section>
 <div class="datova-account-number-card wallet-account-number-card"><div><small>YOUR DATOVA ACCOUNT NUMBER</small><strong id="walletAccountNumber">Sign in to view</strong><span>Share this number to receive money from another DATOVA user.</span></div><button type="button" id="walletAccountCopy" data-copy-account-number disabled>Copy</button></div>
@@ -120,16 +122,29 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
   <label for="transferRecipient">Recipient DATOVA account number</label>
   <input id="transferRecipient" name="recipient" type="text" inputmode="text" autocomplete="off" placeholder="e.g. DTV-12345678" maxlength="20" required>
   <label for="transferAmount">Amount to send</label>
-  <div class="wallet-amount-input"><span>₦</span><input id="transferAmount" name="amount" type="number" inputmode="decimal" min="1" step="0.01" placeholder="Enter amount" required></div>
-  <button class="wallet-fund-submit" id="transferPreviewButton" type="submit">Check transfer details</button>
+  <div class="wallet-amount-input"><span>₦</span><input id="transferAmount" name="amount" type="number" inputmode="decimal" min="100" step="0.01" placeholder="Minimum ₦100" required></div>
+  <div class="transfer-quick-amounts" aria-label="Quick amount choices">
+   <button type="button" data-transfer-amount="1000">₦1,000</button><button type="button" data-transfer-amount="2000">₦2,000</button><button type="button" data-transfer-amount="5000">₦5,000</button><button type="button" data-transfer-amount="10000">₦10,000</button>
+  </div>
+  <button class="wallet-fund-submit" id="transferPreviewButton" type="submit">Verify recipient</button>
  </form>
- <div id="transferPreviewMessage" class="transfer-preview-message" role="status" aria-live="polite">Preview only. Recipient verification, transaction PIN and secure transfer processing are not connected yet. No money will be moved.</div>
+ <section class="transfer-recipient-card hidden" id="transferRecipientCard" aria-live="polite">
+  <div class="transfer-recipient-avatar" id="transferRecipientInitials">--</div>
+  <div class="transfer-recipient-identity"><small>RECIPIENT FOUND</small><strong id="transferRecipientName">Recipient name</strong><span id="transferRecipientAccount">DTV-••••••••</span></div>
+  <span class="transfer-verified-badge">✓ Verified</span>
+ </section>
+ <section class="transfer-cost-card hidden" id="transferCostCard">
+  <div><span>Transfer amount</span><strong id="transferReviewAmount">₦0.00</strong></div>
+  <div><span>DATOVA transfer fee</span><strong>₦0.00</strong></div>
+  <div class="transfer-cost-total"><span>Total to debit</span><strong id="transferReviewTotal">₦0.00</strong></div>
+ </section>
+ <div id="transferPreviewMessage" class="transfer-preview-message" role="status" aria-live="polite">Preview only. This screen verifies recipient details; it does not send money. Secure transfer processing and transaction PIN are not connected.</div>
  <div class="wallet-security-note"><span>i</span><p>Real-money transfers will only be enabled after DATOVA connects an appropriately authorised payment provider and completes security testing.</p></div>
 </section>
 
-<section class="wallet-content-grid">
+<section class="wallet-content-grid hidden" id="walletFundingArea">
  <div class="wallet-panel wallet-fund-panel" id="walletFundPanel">
-  <div class="wallet-panel-heading"><div><span class="wallet-section-kicker">ADD FUNDS</span><h2>Fund your wallet</h2><p>Choose how you want to add money to DATOVA.</p></div><span class="wallet-panel-icon"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg></span></div>
+  <div class="wallet-panel-heading"><div><span class="wallet-section-kicker">ADD FUNDS</span><h2>Fund your wallet</h2><p>Choose how you want to add money to DATOVA.</p></div><button type="button" class="wallet-funding-close" id="walletFundingClose" aria-label="Close funding panel">×</button><span class="wallet-panel-icon"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg></span></div>
   <div class="wallet-method-card wallet-method-selected"><span class="wallet-method-icon"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 20V9l7-5 7 5v11M9 20v-6h6v6"/></svg></span><span class="wallet-method-copy"><b>Bank transfer</b><small>Create a request and receive a payment reference.</small></span><span class="wallet-method-check">✓</span></div>
   <div class="wallet-method-card wallet-method-disabled"><span class="wallet-method-icon"><svg class="wallet-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19M6.5 15h4"/></svg></span><span class="wallet-method-copy"><b>Payment gateway</b><small>Card and instant payment options.</small></span><span class="wallet-method-soon">COMING SOON</span></div>
   <form id="walletFundingForm" class="wallet-funding-form">
@@ -161,21 +176,65 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
 <div class="screen" id="screen-transactions">
 <div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">YOUR ACTIVITY</div><h1>Transactions</h1><p>Keep track of your data, airtime and payment activity.</p></div>
 <div class="filter-row"><button class="filter-chip active">All activity</button><button class="filter-chip">Data</button><button class="filter-chip">Airtime</button><button class="filter-chip">Payments</button></div>
-<div class="table-panel"><div class="empty-state"><div class="empty-symbol">↗</div><b>Nothing to show yet</b><p>Your transaction history will appear here once purchases are enabled.</p></div></div>
+<div class="table-panel" id="walletHistoryPanel"><div class="empty-state"><div class="empty-symbol">↗</div><b>Sign in to view transactions</b><p>Your wallet activity will appear here after you sign in.</p></div></div>
 </div>
-<div class="screen" id="screen-notifications">
+<div class="screen" id="screen-withdraw"><div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back>← Back</button><div class="eyebrow">BANK PAYOUT</div><h1>Withdraw funds</h1><p>Send your available DATOVA wallet balance to a Nigerian bank account.</p></div><section class="withdraw-preview-card"><div class="withdraw-preview-label">WITHDRAWAL AVAILABILITY</div><strong>Coming soon</strong><p>Bank withdrawals are not enabled yet. Secure account verification, transaction PIN protection and an authorised payout connection must be completed first.</p></section><section class="wallet-panel withdraw-form-preview"><div class="wallet-panel-heading"><div><span class="wallet-section-kicker">NIGERIAN BANK ACCOUNT</span><h2>Withdrawal details</h2><p>This is a preview. Details are not submitted or saved.</p></div></div><form id="withdrawPreviewForm" class="wallet-transfer-form"><label for="withdrawBank">Select bank</label><select id="withdrawBank" disabled><option>Select a Nigerian bank</option><option>Access Bank</option><option>First Bank</option><option>GTBank</option><option>UBA</option><option>Zenith Bank</option><option>OPay</option><option>Moniepoint</option><option>Palmpay</option><option>Other Nigerian bank</option></select><label for="withdrawAccount">Account number</label><input id="withdrawAccount" type="text" inputmode="numeric" maxlength="10" placeholder="10-digit bank account number" disabled><label for="withdrawAmount">Amount to withdraw</label><div class="wallet-amount-input"><span>₦</span><input id="withdrawAmount" type="number" min="100" step="0.01" placeholder="Minimum ₦100" disabled></div><div class="withdraw-preview-note">Bank account name verification, applicable fees and your 4-digit transaction PIN will be required before a withdrawal can be submitted.</div><button type="button" class="wallet-fund-submit" disabled>Withdrawals not available yet</button></form></section></div><div class="screen" id="screen-notifications">
 <div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">UPDATES</div><h1>Notifications</h1><p>Important updates about your DATOVA account.</p></div>
-<div class="table-panel"><div class="empty-state"><div class="empty-symbol">♧</div><b>You're all caught up</b><p>Account alerts, payment updates and transaction notifications will appear here.</p></div></div>
+<div class="table-panel" id="notificationsPanel" aria-live="polite"><div class="empty-state" id="notificationsEmptyState"><div class="empty-symbol">♧</div><b>No notifications yet</b><p>Verified wallet and account updates will appear here when the in-app notification service is connected.</p></div></div>
 </div>
 <div class="screen" id="screen-profile">
 <div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">YOUR ACCOUNT</div><h1>My Profile</h1><p>Manage your personal information and preferences.</p></div>
-<div class="profile-panel"><div class="profile-avatar">G</div><div class="profile-main"><div class="profile-identity"><h3>Guest account</h3><p>Sign in or create an account to manage your DATOVA profile.</p></div><div class="profile-actions"><button class="primary" id="profileSignIn">Sign in / Create account</button><button class="outline-btn hidden" id="profileSignOut">Sign out</button></div></div></div>
-<div class="datova-account-number-card"><div><small>YOUR DATOVA ACCOUNT NUMBER</small><strong id="profileAccountNumber">Sign in to view</strong><span>Share this number to receive money from another DATOVA user.</span></div><button type="button" id="profileAccountCopy" data-copy-account-number disabled>Copy</button></div>
-<div class="form-panel settings-panel"><h3>Account preferences</h3><div class="setting-row"><span class="setting-icon">◐</span><div class="setting-copy"><b>Appearance</b><small>Switch between light and dark mode.</small></div><button class="outline-btn" id="profileTheme">Toggle theme</button></div><div class="setting-row"><span class="setting-icon">◇</span><div class="setting-copy"><b>Privacy and security</b><small>Security settings will be available with account authentication.</small></div><span class="status-pill">Coming soon</span></div><div class="setting-row"><span class="setting-icon">↻</span><div class="setting-copy"><b>Replay introduction</b><small>Watch DATOVA’s three onboarding screens again.</small></div><button class="outline-btn" id="replayOnboarding" type="button">Replay</button></div></div>
+<section class="profile-hero-card">
+ <div class="profile-hero-top"><div class="profile-avatar">G</div><div class="profile-hero-identity"><span class="profile-kicker">DATOVA ACCOUNT</span><h2 class="profile-display-name">Guest account</h2><p class="profile-display-email">Sign in to view your account details.</p></div><span class="profile-account-status" id="profileAccountStatus">Guest</span></div>
+ <div class="profile-actions"><button class="primary" id="profileSignIn">Sign in / Create account</button><button class="outline-btn hidden" id="profileSignOut">Sign out</button></div>
+</section>
+<section class="profile-section-card"><div class="profile-section-heading"><span class="profile-section-icon">01</span><div><h3>Personal information</h3><p>Your registered DATOVA identity.</p></div></div>
+ <div class="profile-detail-row"><span>Full name</span><strong id="profileFullName">Not available</strong></div>
+ <div class="profile-detail-row"><span>Email address</span><strong id="profileEmailAddress">Not signed in</strong></div>
+</section>
+<section class="profile-section-card"><div class="profile-section-heading"><span class="profile-section-icon">02</span><div><h3>Account details</h3><p>Your unique DATOVA account number.</p></div></div>
+ <div class="datova-account-number-card profile-account-number"><div><small>YOUR DATOVA ACCOUNT NUMBER</small><strong id="profileAccountNumber">Sign in to view</strong><span>Share this number to receive money from another DATOVA user.</span></div><button type="button" id="profileAccountCopy" data-copy-account-number disabled>Copy</button></div>
+</section>
+<section class="profile-section-card"><button class="profile-section-heading profile-section-toggle" type="button" data-profile-toggle aria-expanded="true"><span class="profile-section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="profile-section-heading-copy"><h3>Security</h3><p>Keep your account protected.</p></span><span class="profile-section-chevron" aria-hidden="true">⌄</span></button>
+ <div class="profile-setting-row"><span class="setting-icon">⌑</span><div class="setting-copy"><b>Password</b><small>Reset your sign-in password using your email.</small></div><button class="outline-btn" id="profilePasswordHelp" type="button">Reset</button></div>
+ <div class="profile-setting-row"><span class="setting-icon">●</span><div class="setting-copy"><b>Transaction PIN</b><small>Set or change the 4-digit PIN that will protect future DATOVA transactions.</small></div><button class="outline-btn" id="profilePinOpen" type="button">Manage PIN</button></div>
+ <div class="pin-manager hidden" id="pinManager" aria-live="polite"><div class="pin-manager-heading"><div><b>Transaction PIN</b><small>Your PIN is securely hashed before it is stored. Never share it with anyone.</small></div><button type="button" class="pin-manager-close" id="pinManagerClose" aria-label="Close PIN settings">×</button></div><form id="transactionPinForm" class="pin-manager-form"><label for="currentTransactionPin">Current PIN <span>(required only when changing an existing PIN)</span></label><input id="currentTransactionPin" type="password" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]{4}" placeholder="Enter current 4-digit PIN"><label for="newTransactionPin">New 4-digit PIN</label><input id="newTransactionPin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="4" pattern="[0-9]{4}" placeholder="Enter new PIN" required><label for="confirmTransactionPin">Confirm new PIN</label><input id="confirmTransactionPin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="4" pattern="[0-9]{4}" placeholder="Re-enter new PIN" required><button class="wallet-fund-submit" id="transactionPinSubmit" type="submit">Save transaction PIN</button><p class="pin-manager-message" id="transactionPinMessage" role="status"></p></form><div class="pin-verify-test"><b>Test your saved PIN</b><small>Enter your PIN once to confirm that Supabase can verify it. Incorrect attempts count toward the security lockout.</small><form id="transactionPinTestForm" class="pin-manager-form"><label for="testTransactionPin">Enter your 4-digit PIN</label><input id="testTransactionPin" type="password" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]{4}" placeholder="Enter PIN" required><button class="outline-btn" id="transactionPinTestButton" type="submit">Verify PIN</button><p class="pin-manager-message" id="transactionPinTestMessage" role="status"></p></form></div></div>
+</section>
+<section class="profile-section-card"><button class="profile-section-heading profile-section-toggle" type="button" data-profile-toggle aria-expanded="true"><span class="profile-section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2"/><circle cx="15" cy="17" r="2"/></svg></span><span class="profile-section-heading-copy"><h3>Preferences</h3><p>Make DATOVA comfortable to use.</p></span><span class="profile-section-chevron" aria-hidden="true">⌄</span></button>
+ <div class="profile-setting-row"><span class="setting-icon">◐</span><div class="setting-copy"><b>Appearance</b><small id="profileThemeDescription">Choose light or dark mode.</small></div><button class="outline-btn" id="profileTheme">Dark mode</button></div>
+ <div class="profile-setting-row"><span class="setting-icon">↻</span><div class="setting-copy"><b>Welcome tour</b><small>Watch DATOVA’s introduction again.</small></div><button class="outline-btn" id="replayOnboarding" type="button">Replay</button></div>
+</section>
 </div>
 <div class="screen" id="screen-support">
 <div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">WE'RE HERE TO HELP</div><h1>Help & Support</h1><p>Find help with your DATOVA experience.</p></div>
-<div class="support-grid"><div class="support-card"><span>✉</span><h3>Contact support</h3><p>Support contact details will be published before launch.</p><small>CONTACT DETAILS COMING SOON</small></div><div class="support-card"><span>❔</span><h3>Frequently asked questions</h3><p>Guides for payments, data purchases and transaction issues.</p><small>HELP CENTRE COMING SOON</small></div><div class="support-card"><span>♧</span><h3>Report a problem</h3><p>We'll provide a secure way to report failed or delayed transactions.</p><small>REPORTING COMING SOON</small></div></div>
+<div class="support-grid support-contact-grid">
+ <article class="support-card support-contact-card"><span class="support-icon support-icon-contact" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0v5a2 2 0 0 1-2 2h-2v-7h4M4 13v5a2 2 0 0 0 2 2h2v-7H4m4 7h4"/></svg></span><h3>Contact support</h3><p>Need help? Reach DATOVA through either channel.</p>
+  <a class="support-channel support-whatsapp" href="https://api.whatsapp.com/send?phone=2349135102119" target="_blank" rel="noopener noreferrer"><span class="support-channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-4.1A8.5 8.5 0 1 1 20 11.5Z"/><path d="M8.5 8.2c.4 2.6 2.2 4.4 4.8 5l1.1-1.1 2 1c-.2 1.3-1.2 2-2.5 1.8-3.5-.7-6.2-3.4-6.8-6.8-.2-1.2.5-2.3 1.8-2.5l1 2-1.4.6Z"/></svg></span><span class="support-channel-copy"><b>WhatsApp support</b><small>Chat with DATOVA</small></span></a>
+  <a class="support-channel support-email" href="mailto:kennix2027@gmail.com"><span class="support-channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span><span class="support-channel-copy"><b>Email support</b><small>kennix2027@gmail.com</small></span></a>
+ </article>
+ <article class="support-card support-faq-card"><span class="support-icon support-icon-faq" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.2 1.8c-1.1 1-1.8 1.3-1.8 2.7M12 17h.01"/></svg></span><h3>Frequently asked questions</h3><p>Answers about the features currently available in DATOVA.</p>
+  <div class="support-faq-list">
+   <details><summary>How do I create a DATOVA account?</summary><p>Open Profile, choose Create account, enter your name, email and password, then follow any email confirmation instructions.</p></details>
+   <details><summary>Why does my guest wallet show ₦0.00?</summary><p>A guest session does not have a personal wallet balance. Sign in to view the balance linked to your DATOVA account.</p></details>
+   <details><summary>How can I add money to my wallet?</summary><p>Sign in, open Wallet and choose Add money. Follow the bank-transfer instructions shown in the app. Your wallet should only be credited after the payment has been verified.</p></details>
+   <details><summary>Can I transfer money to another DATOVA user?</summary><p>The transfer screen is currently a preview. It can help verify the recipient details, but it does not send money yet.</p></details>
+   <details><summary>Can I buy airtime or data right now?</summary><p>Airtime and data screens are currently previews. They do not complete purchases or charge your account.</p></details>
+   <details><summary>What should I do if a payment is delayed or missing?</summary><p>Use Report a problem below or contact DATOVA through WhatsApp or email. Include the payment reference if you have one. Never send your password, transaction PIN or OTP.</p></details>
+  </div>
+ </article>
+ <article class="support-card support-report-card"><span class="support-icon support-icon-report" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 22 20H2L12 3Z"/><path d="M12 9v5m0 3h.01"/></svg></span><h3>Report a problem</h3><p>Tell us what happened. Choose WhatsApp or email to send your report.</p>
+  <form id="supportReportForm" class="support-report-form">
+   <label for="supportIssueType">What do you need help with?</label>
+   <select id="supportIssueType" required><option value="">Choose a topic</option><option>Wallet funding / payment</option><option>Wallet balance</option><option>Account / sign in</option><option>Transfer</option><option>Airtime or data</option><option>Other</option></select>
+   <label for="supportReference">Transaction reference <small>(optional)</small></label>
+   <input id="supportReference" type="text" maxlength="100" placeholder="Enter reference if available">
+   <label for="supportIssueDetails">Describe the problem</label>
+   <textarea id="supportIssueDetails" rows="4" maxlength="1500" placeholder="Tell us what happened. Do not include passwords, PINs or OTPs." required></textarea>
+   <div class="support-report-actions"><button type="button" class="support-send-whatsapp" data-support-channel="whatsapp">Send via WhatsApp</button><button type="button" class="support-send-email" data-support-channel="email">Send via Email</button></div>
+   <small class="support-report-note">Your message opens in your chosen app. DATOVA does not store this report in the website.</small>
+  </form>
+ </article>
+</div>
 </div>
 <footer>© <span id="year"></span> DATOVA. All rights reserved. <span>Data Made Easy. Connections Made Better.</span></footer>
 </section>
@@ -183,31 +242,8 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
 </div>
 <div class="modal-backdrop hidden" id="authModal"><div class="modal"><button class="modal-close" id="closeAuth">×</button><div class="modal-brand"><img class="brand-icon" src="icon.svg" alt=""> <span class="wordmark">DAT<svg class="wordmark-globe" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="globeBlue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7ce4ff"/><stop offset=".52" stop-color="#1677ff"/><stop offset="1" stop-color="#1646b8"/></linearGradient></defs><circle cx="20" cy="20" r="16" fill="url(#globeBlue)"/><path d="M5 20h30M20 4c-5 5-7 10-7 16s2 11 7 16m0-32c5 5 7 10 7 16s-2 11-7 16M8 11q12 7 24 0M8 29q12-7 24 0" fill="none" stroke="#eafaff" stroke-width="1.35" stroke-linecap="round" opacity=".9"/><path d="M7 27c6 4 20 4 26-2" fill="none" stroke="#fff" stroke-width="1.5" opacity=".7"/></svg>VA</span></div><div class="eyebrow">YOUR ACCOUNT</div><h2 id="authTitle">Welcome back</h2><p id="authDesc">Sign in to access your DATOVA account.</p><div class="auth-tabs"><button class="selected" data-auth="login">Log in</button><button data-auth="signup">Create account</button></div><form id="authForm"><label id="fullNameField">Full name<input id="fullName" placeholder="Your name" autocomplete="name"></label><label>Email address<input id="authEmail" type="email" placeholder="you@example.com" required autocomplete="email"></label><label>Password<span class="password-wrap"><input id="authPassword" type="password" placeholder="At least 8 characters" required minlength="8" autocomplete="current-password"><button class="password-toggle" type="button" data-toggle-password="authPassword" aria-label="Show password"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></span></label><label id="confirmPasswordField">Confirm password<span class="password-wrap"><input id="confirmPassword" type="password" placeholder="Re-enter your password" minlength="8" autocomplete="new-password"><button class="password-toggle" type="button" data-toggle-password="confirmPassword" aria-label="Show confirm password"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></span></label><button type="button" class="forgot-password" id="forgotPassword">Forgot password?</button><button class="primary full" type="submit">Continue <b>→</b></button></form><div class="auth-divider"><span>OR</span></div><button type="button" class="google-auth-button" id="authGoogleAuth" data-google-auth><span aria-hidden="true">G</span> Continue with Google</button><small class="demo-note" id="authNote">Secure email authentication.</small></div></div>
 <div class="toast" id="toast"></div>
-<script>
-/* Independent navigation safety net: keeps dashboard sections clickable if app.js fails to initialize. */
-(function(){
-  document.addEventListener("click",function(event){
-    var button=event.target.closest("[data-screen], [data-network-shortcut], #accountBtn, #greetingAvatar");
-    if(!button)return;
-    var screen=button.dataset.screen || (button.id==="accountBtn"||button.id==="greetingAvatar"?"profile":button.dataset.networkShortcut?"data":"");
-    if(!screen)return;
-    var target=document.getElementById("screen-"+screen);
-    if(!target)return;
-    if(typeof window.datovaNavigate==="function"){window.datovaNavigate(screen);return;}
-    var active=document.querySelector(".screen.active");
-    var current=active&&active.id.replace("screen-","");
-    if(current!==screen)history.pushState({datovaScreen:screen,datovaApp:true},"",location.href);
-    document.querySelectorAll(".screen").forEach(function(panel){panel.classList.toggle("active",panel===target);panel.classList.remove("screen-enter","screen-exit")});
-    document.querySelectorAll("[data-screen]").forEach(function(nav){nav.classList.toggle("active",nav.dataset.screen===screen)});
-    if(button.dataset.networkShortcut){
-      var select=document.getElementById("dataNetwork");
-      if(select){select.value=button.dataset.networkShortcut;select.dispatchEvent(new Event("change"));}
-    }
-    window.scrollTo({top:0,behavior:"smooth"});
-  });
-})();
-</script>
+
 
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script defer src="app.js?v=58"></script>
+<script defer src="app.js?v=74"></script>
 </body></html>

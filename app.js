@@ -1,13 +1,64 @@
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const intro=$("#onboarding"),app=$("#app");
+
+// Critical UI controls use early delegated handling so an unrelated startup
+// error cannot leave onboarding, profile accordions, navigation or funding inert.
+document.addEventListener("click",event=>{
+ const target=event.target instanceof Element?event.target:null;
+ if(!target)return;
+ const supportLink=target.closest("[data-support-link]");
+ if(supportLink){event.preventDefault();event.stopImmediatePropagation();const destination=supportLink.dataset.supportLink==="whatsapp"?"https://wa.me/2349135102119":"mailto:kennix2027@gmail.com";window.location.assign(destination);return;}
+ const supportSend=target.closest("[data-support-channel]");
+ if(supportSend){event.preventDefault();event.stopImmediatePropagation();const form=$("#supportReportForm");if(!form||!form.reportValidity())return;const topic=$("#supportIssueType").value.trim(),reference=$("#supportReference").value.trim(),details=$("#supportIssueDetails").value.trim();const message=["DATOVA support request","Topic: "+topic,reference?"Transaction reference: "+reference:"","Details: "+details,"Do not reply asking for my password, transaction PIN or OTP."].filter(Boolean).join("\n");const destination=supportSend.dataset.supportChannel==="whatsapp"?"https://wa.me/2349135102119?text="+encodeURIComponent(message):"mailto:kennix2027@gmail.com?subject="+encodeURIComponent("DATOVA support request — "+topic)+"&body="+encodeURIComponent(message);window.location.assign(destination);return;}
+ const control=target.closest("#introNext,#introBack,#skipIntro,#replayOnboarding,[data-profile-toggle],#dashboardAddMoney,#walletAddMoney,[data-screen]");
+ if(!control)return;
+ event.preventDefault();
+ event.stopImmediatePropagation();
+ if(control.id==="introNext"){
+  if(introSliding)return;
+  if(slide<slides.length-1)moveIntroSlide(1);else finishOnboarding();
+  return;
+ }
+ if(control.id==="introBack"){moveIntroSlide(-1);return;}
+ if(control.id==="skipIntro"){finishOnboarding();return;}
+ if(control.id==="replayOnboarding"){replayOnboarding();return;}
+ if(control.matches("[data-profile-toggle]")){
+  const card=control.closest(".profile-section-card");
+  if(!card)return;
+  const expanded=control.getAttribute("aria-expanded")==="true";
+  control.setAttribute("aria-expanded",String(!expanded));
+  card.classList.toggle("is-collapsed",expanded);
+  return;
+ }
+ if(control.id==="dashboardAddMoney"){go("wallet");openWalletFunding();return;}
+ if(control.id==="walletAddMoney"){openWalletFunding();return;}
+ if(control.hasAttribute("data-screen"))go(control.dataset.screen);
+},true);
 const slides=[
 {step:"YOUR DIGITAL WORLD",title:"Your Digital<br><span>World, Made Easier.</span>",text:"Stay connected and enjoy the best services.",art:"globe"},
 {step:"BUY DATA EASILY",title:"Buy Data<br><span>Without Stress.</span>",text:"Get affordable data from your favourite networks.",art:"data"},
 {step:"AIRTIME MADE SIMPLE",title:"Recharge Without<br><span>Stress.</span>",text:"Top up your phone in a few simple steps.",art:"airtime"}];
 let slide=0;
 let screenHistoryReady=false,screenStack=["overview"];
-function savedScreen(){try{const saved=sessionStorage.getItem("datova_current_screen");return saved&&document.querySelector("#screen-"+saved)?saved:"overview"}catch(error){return "overview"}}
-function restoreSavedScreen(){const screen=savedScreen();$(".screen").forEach(el=>el.classList.toggle("active",el.id==="screen-"+screen));syncNavigation(screen)}
+function readStoredValue(key){
+ const values=[];
+ try{const value=localStorage.getItem(key);if(value!==null)values.push(value);}catch(error){}
+ try{const item=document.cookie.split("; ").find(part=>part.startsWith(encodeURIComponent(key)+"="));if(item)values.push(decodeURIComponent(item.slice(item.indexOf("=")+1)));}catch(error){}
+ try{const value=sessionStorage.getItem(key);if(value!==null)values.push(value);}catch(error){}
+ // A successful marker in any available store wins over a stale value in another.
+ if(values.includes("1"))return "1";
+ return values.length?values[0]:null;
+}
+function writeStoredValue(key,value){
+ try{localStorage.setItem(key,value)}catch(error){}
+ try{document.cookie=encodeURIComponent(key)+"="+encodeURIComponent(value)+"; Max-Age=31536000; Path=/; SameSite=Lax; Secure"}catch(error){}
+ try{sessionStorage.setItem(key,value)}catch(error){}
+}
+function savedScreen(){
+ const saved=readStoredValue("datova_current_screen");
+ return saved&&document.querySelector("#screen-"+saved)?saved:"overview";
+}
+function restoreSavedScreen(){const screen=savedScreen();$$(".screen").forEach(el=>el.classList.toggle("active",el.id==="screen-"+screen));syncNavigation(screen)}
 function initScreenHistory(){if(screenHistoryReady)return;screenHistoryReady=true;const current=document.querySelector(".screen.active")?.id.replace("screen-","")||"overview";screenStack=[current];history.replaceState({datovaScreen:"root",datovaRoot:true},"",location.href);history.pushState({datovaScreen:current,datovaApp:true},"",location.href)}
 function goBack(){if(history.state?.datovaApp){history.back();return}if(screenStack.length>1){screenStack.pop();const previous=screenStack[screenStack.length-1]||"overview";go(previous,{fromPopState:true});return}if($(".screen.active")?.id!=="screen-overview"){go("overview");return}toast("You're already on the DATOVA home screen.")}
 let onboardingReplayMode=false;
@@ -17,8 +68,12 @@ function closeAuthModal(){
  document.body.classList.remove("auth-modal-open");
 }
 function markOnboardingComplete(){
- localStorage.setItem("datova_intro_seen","1");
- localStorage.setItem("datova_onboarding_complete","1");
+ writeStoredValue("datova_intro_seen","1");
+ writeStoredValue("datova_onboarding_complete","1");
+ // Confirm the completion marker immediately so startup can use the latest state.
+ try{
+  if(localStorage.getItem("datova_onboarding_complete")!=="1")sessionStorage.setItem("datova_onboarding_complete","1");
+ }catch(error){}
 }
 function showApp(){
  markOnboardingComplete();
@@ -40,12 +95,8 @@ function showWelcomeGate(){
 }
 function finishOnboarding(){
  markOnboardingComplete();
- if(onboardingReplayMode){
-  onboardingReplayMode=false;
-  showApp();
- }else{
-  showWelcomeGate();
- }
+ onboardingReplayMode=false;
+ showApp();
 }
 function replayOnboarding(){
  onboardingReplayMode=true;
@@ -104,7 +155,24 @@ function openAuth(mode="login"){
  requestAnimationFrame(()=>$("#authModal").scrollTo({top:0,behavior:"auto"}));
 }
 function syncNavigation(screen){$$("[data-screen]").forEach(button=>{const active=button.dataset.screen===screen;button.classList.toggle("active",active);button.setAttribute("aria-current",active?"page":"false")})}
-function go(screen,options={}){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}try{sessionStorage.setItem("datova_current_screen",screen)}catch(error){}const current=$(".screen.active");if(current===target){syncNavigation(screen);return}if(!options.fromPopState&&screenHistoryReady){screenStack.push(screen);history.pushState({datovaScreen:screen,datovaApp:true},"",location.href)}else if(options.fromPopState){const index=screenStack.lastIndexOf(screen);if(index>=0)screenStack=screenStack.slice(0,index+1);else screenStack.push(screen)}if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);syncNavigation(screen);window.scrollTo({top:0,behavior:"smooth"})}
+async function loadWalletHistory(){
+ const panel=document.querySelector("#walletHistoryPanel");if(!panel)return;
+ if(!currentUser||!supabaseReady||!supabaseClient){panel.innerHTML='<div class="empty-state"><div class="empty-symbol">↗</div><b>Sign in to view transactions</b><p>Your wallet activity will appear here after you sign in.</p></div>';return;}
+ panel.innerHTML='<div class="empty-state"><b>Loading your transactions…</b></div>';
+ try{
+  const {data,error}=await supabaseClient.from("wallet_transactions").select("id,transaction_type,amount,balance_before,balance_after,reference,description,created_at").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(50);
+  if(error)throw error;
+  if(!data?.length){panel.innerHTML='<div class="empty-state"><div class="empty-symbol">↗</div><b>No wallet activity yet</b><p>Your deposits and wallet activity will appear here.</p></div>';return;}
+  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  panel.innerHTML='<div class="wallet-history-list">'+data.map(row=>{
+   const credit=["credit","refund","adjustment"].includes(String(row.transaction_type||"").toLowerCase());
+   const amount=(credit?"+":"−")+"₦"+Number(row.amount||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+   const date=row.created_at?new Date(row.created_at).toLocaleString("en-NG",{dateStyle:"medium",timeStyle:"short"}):"Date unavailable";
+   return '<article class="wallet-history-item"><span class="wallet-history-mark '+(credit?"incoming":"outgoing")+'">'+(credit?"↓":"↑")+'</span><div class="wallet-history-info"><b>'+esc(row.description||row.transaction_type||"Wallet activity")+'</b><small>'+esc(date)+' · '+esc(row.reference||"No reference")+'</small></div><strong class="'+(credit?"incoming-text":"outgoing-text")+'">'+amount+'</strong></article>';
+  }).join("")+'</div>';
+ }catch(error){console.error("Could not load wallet history:",error);panel.innerHTML='<div class="empty-state"><b>Could not load transactions</b><p>Please refresh and try again.</p></div>';}
+}
+function go(screen,options={}){const target=$("#screen-"+screen);if(!target){toast("That section is not available yet.");return}writeStoredValue("datova_current_screen",screen);const current=$(".screen.active");if(current===target){syncNavigation(screen);return}if(!options.fromPopState&&screenHistoryReady){screenStack.push(screen);history.pushState({datovaScreen:screen,datovaApp:true},"",location.href)}else if(options.fromPopState){const index=screenStack.lastIndexOf(screen);if(index>=0)screenStack=screenStack.slice(0,index+1);else screenStack.push(screen)}if(current){current.classList.remove("active");current.classList.add("screen-exit");setTimeout(()=>current.classList.remove("screen-exit"),260)}target.classList.add("active","screen-enter");setTimeout(()=>target.classList.remove("screen-enter"),520);syncNavigation(screen);if(screen==="transactions")loadWalletHistory();window.scrollTo({top:0,behavior:"smooth"})}
 window.datovaNavigate=go;
 window.addEventListener("popstate",event=>{if(!screenHistoryReady)return;const screen=event.state?.datovaScreen;if(screen&&screen!=="root"&&$("#screen-"+screen)){go(screen,{fromPopState:true});return}screenStack=["overview"];go("overview",{fromPopState:true})});
 let introSliding=false;
@@ -145,6 +213,9 @@ $("#greetingAvatar")?.addEventListener("click",()=>go("profile"));
 $("#loginSide").addEventListener("click",()=>openAuth("login"));
 $("#profileSignIn").addEventListener("click",()=>openAuth("login"));
 $("#profileTheme").addEventListener("click",()=>$("#themeToggle").click());
+ $("#profilePasswordHelp")?.addEventListener("click",()=>{openAuth("login");$("#forgotPassword")?.focus();});
+ const syncProfileThemeLabel=()=>{const dark=document.body.classList.contains("dark");const button=$("#profileTheme");if(button)button.textContent=dark?"Light mode":"Dark mode";const description=$("#profileThemeDescription");if(description)description.textContent=dark?"Dark appearance is active.":"Light appearance is active.";};
+ syncProfileThemeLabel();
 $("#closeAuth").addEventListener("click",closeAuthModal);
 $("#authModal").addEventListener("click",e=>{if(e.target.id==="authModal")closeAuthModal();});
 $$("[data-auth]").forEach(button=>button.addEventListener("click",event=>{event.preventDefault();openAuth(button.dataset.auth);}));
@@ -196,20 +267,42 @@ async function loadAccountNumber(user=currentUser){
 }
 
 let walletBalanceState="loading";
-let walletBalanceVisible=false;
+let walletBalanceVisible=true;
 const formatNaira=value=>"₦"+Number(value||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
 function updateWalletDisplays(){
- const amount=$("#walletAmountValue"),caption=$(".wallet-balance-caption"),mini=$("#miniWalletValue");
- if(!currentUser){if(amount)amount.textContent="••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Sign in to view your wallet balance';if(mini)mini.textContent="Sign in to view balance";return}
- if(walletBalanceState==="loading"){if(amount)amount.textContent="••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Loading your wallet balance…';if(mini)mini.textContent="Loading balance…"}
- else if(walletBalanceState==="error"){if(amount)amount.textContent=walletBalanceVisible?"Unavailable":"••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Balance could not be loaded. Refresh to try again.';if(mini)mini.textContent="Balance unavailable"}
- else{if(amount)amount.textContent=walletBalanceVisible?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):"••••••";if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Live wallet balance';if(mini)mini.textContent=formatNaira(walletBalanceValue)}
+ const amount=$("#walletAmountValue"),caption=$(".wallet-balance-caption"),dashboardAmount=$("#dashboardWalletAmountValue"),dashboardStatus=$("#dashboardWalletStatus");
+ const shown=walletBalanceVisible;
+ const display=!currentUser?"0.00":walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…";
+ if(!currentUser){
+  // Guests do not have a wallet balance to fetch; show a clear zero balance.
+  if(amount)amount.textContent="0.00";
+  if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> Sign in to access your personal wallet';
+  if(dashboardAmount)dashboardAmount.textContent="0.00";
+  if(dashboardStatus)dashboardStatus.textContent="Guest wallet · Sign in to get started";
+ }else{
+  if(amount)amount.textContent=shown?display:"••••••";
+  if(caption)caption.innerHTML='<span class="wallet-balance-dot"></span> '+(walletBalanceState==="ready"?"Live wallet balance":walletBalanceState==="error"?"Balance could not be loaded. Refresh to try again.":"Loading your wallet balance…");
+  if(dashboardAmount)dashboardAmount.textContent=shown?display:"••••••";
+  if(dashboardStatus)dashboardStatus.textContent=walletBalanceState==="ready"?"Live wallet balance":walletBalanceState==="error"?"Balance unavailable":"Loading your balance…";
+ }
+ updateWalletBalanceVisibility();
 }
 async function loadWalletBalance(user=currentUser){
  if(!user||!supabaseReady||!supabaseClient){walletBalanceValue=null;walletBalanceState="idle";updateWalletDisplays();return}
  walletBalanceState="loading";updateWalletDisplays();
- try{const {data,error}=await supabaseClient.from("wallets").select("balance,currency").eq("user_id",user.id).maybeSingle();if(error)throw error;if(currentUser?.id!==user.id)return;walletBalanceValue=data?Number(data.balance||0):0;walletBalanceState="ready"}
- catch(error){console.error("Could not load DATOVA wallet balance:",error);if(currentUser?.id!==user.id)return;walletBalanceState="error"}
+ try{
+  const request=supabaseClient.from("wallets").select("balance,currency").eq("user_id",user.id).maybeSingle();
+  const timeout=new Promise((_,reject)=>setTimeout(()=>reject(new Error("Wallet balance request timed out. Check your connection and try again.")),12000));
+  const {data,error}=await Promise.race([request,timeout]);
+  if(error)throw error;
+  if(currentUser?.id!==user.id)return;
+  walletBalanceValue=data?Number(data.balance||0):0;
+  walletBalanceState="ready";
+ }catch(error){
+  console.error("Could not load DATOVA wallet balance:",error);
+  if(currentUser?.id!==user.id)return;
+  walletBalanceState="error";
+ }
  updateWalletDisplays();
 }
 function updateGreeting(){const user=currentUser;const parts=new Intl.DateTimeFormat("en-NG",{timeZone:"Africa/Lagos",hour:"2-digit",hourCycle:"h23"}).formatToParts(new Date());const hour=Number(parts.find(part=>part.type==="hour")?.value??new Date().getHours());const period=hour<5?"night":hour<12?"morning":hour<17?"afternoon":hour<21?"evening":"night";const full=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email?.split("@")[0]||"").trim();const first=full?full.split(/\s+/)[0]:"Guest";const title=$("#greetingTitle");if(title)title.textContent=`Good ${period}, ${first}`;const sub=$("#greetingSubtitle");if(sub)sub.textContent=user?"Your DATOVA space is ready. Let’s keep you connected.":"Explore DATOVA’s digital services and stay connected.";updateWalletDisplays();}
@@ -223,14 +316,20 @@ function renderAccount(user){
  updateGreeting();
  $("#profileSignIn").classList.toggle("hidden",signedIn);
  $("#profileSignOut").classList.toggle("hidden",!signedIn);
- $(".profile-main h3").textContent=signedIn?(user.user_metadata?.full_name||user.email||"DATOVA customer"):"Guest account";
- $(".profile-main p").textContent=signedIn?(user.email||"You're signed in to DATOVA."):"Sign in or create an account to manage your DATOVA profile.";
+ const profileHeading=$(".profile-main h3");if(profileHeading)profileHeading.textContent=signedIn?(user.user_metadata?.full_name||user.email||"DATOVA customer"):"Guest account";
+ const profileDescription=$(".profile-main p");if(profileDescription)profileDescription.textContent=signedIn?(user.email||"You're signed in to DATOVA."):"Sign in or create an account to manage your DATOVA profile.";
+ const profileName=user?.user_metadata?.full_name||user?.user_metadata?.name||"DATOVA customer";
+ const profileFullName=$("#profileFullName");if(profileFullName)profileFullName.textContent=signedIn?profileName:"Not available";
+ const profileEmail=$("#profileEmailAddress");if(profileEmail)profileEmail.textContent=signedIn?(user.email||"Not provided"):"Not signed in";
+ const profileStatus=$("#profileAccountStatus");if(profileStatus)profileStatus.textContent=signedIn?"Active":"Guest";
+ const profileDisplayName=$(".profile-display-name");if(profileDisplayName)profileDisplayName.textContent=signedIn?profileName:"Guest account";
+ const profileDisplayEmail=$(".profile-display-email");if(profileDisplayEmail)profileDisplayEmail.textContent=signedIn?(user.email||"Email not available"):"Sign in to view your account details.";
  const displayName=(user?.user_metadata?.full_name||user?.user_metadata?.name||user?.email||"").trim();const initials=signedIn?(displayName.split(/\s+/).slice(0,2).map(x=>x.charAt(0)).join("").toUpperCase()||"D"):"G";const photo=user?.user_metadata?.avatar_url||user?.user_metadata?.picture||"";const avatarMarkup=photo?`<img src="${escapeText(photo)}" alt="Profile picture" referrerpolicy="no-referrer">`:escapeText(initials);$("#accountBtn").innerHTML=avatarMarkup;const greetingAvatar=$("#greetingAvatar");if(greetingAvatar)greetingAvatar.innerHTML=avatarMarkup;const profileAvatar=$(".profile-avatar");if(profileAvatar)profileAvatar.innerHTML=avatarMarkup;
  if(currentUser){loadWalletBalance(currentUser);loadAccountNumber(currentUser);}else{updateWalletDisplays();loadAccountNumber(null);}
 }
 if(supabaseReady){
- supabaseClient.auth.getSession().then(({data,error})=>{if(error)toast(error.message);renderAccount(data?.session?.user||null)}).catch(()=>toast("Account service is temporarily unavailable."));
- supabaseClient.auth.onAuthStateChange(async(event,session)=>{renderAccount(session?.user||null);if(session?.user&&(event==="SIGNED_IN"||event==="INITIAL_SESSION")){markOnboardingComplete();showApp();}if(event==="PASSWORD_RECOVERY"){const next=window.prompt("Enter your new DATOVA password (at least 8 characters):");if(next&&next.length>=8){const {error}=await supabaseClient.auth.updateUser({password:next});toast(error?error.message:"Your password has been updated.");}else if(next!==null){toast("Password must contain at least 8 characters.");}}});
+ supabaseClient.auth.getSession().then(({data,error})=>{if(error){console.error("DATOVA getSession error:",error);toast(error.message||"Could not restore account session.");}renderAccount(data?.session?.user||null)}).catch(error=>{console.error("DATOVA getSession rejected:",error);toast(error?.message||"Account session could not be restored. Check browser console.");});
+ supabaseClient.auth.onAuthStateChange(async(event,session)=>{renderAccount(session?.user||null);if(session?.user&&event==="SIGNED_IN"){markOnboardingComplete();showApp();}if(event==="PASSWORD_RECOVERY"){const next=window.prompt("Enter your new DATOVA password (at least 8 characters):");if(next&&next.length>=8){const {error}=await supabaseClient.auth.updateUser({password:next});toast(error?error.message:"Your password has been updated.");}else if(next!==null){toast("Password must contain at least 8 characters.");}}});
 }else{renderAccount(null);}
 $("#forgotPassword").addEventListener("click",async()=>{const email=$("#authEmail").value.trim();if(!email){toast("Enter your email address first.");$("#authEmail").focus();return}if(!supabaseReady){toast("Account service is unavailable.");return}const b=$("#forgotPassword");b.disabled=true;try{const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});if(error)throw error;toast("Password reset link sent. Check your email.");}catch(err){toast(err.message||"Could not send password reset email.");}finally{b.disabled=false;}});
 $("#authForm").addEventListener("submit",async e=>{
@@ -247,7 +346,7 @@ $("#authForm").addEventListener("submit",async e=>{
   if(mode==="signup"){
    if(!fullName){toast("Enter your full name.");return}
    if(password!==confirmPassword){toast("Your passwords do not match.");$("#confirmPassword").focus();return}
-   const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:fullName}}});
+   const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:fullName},emailRedirectTo:window.location.origin+window.location.pathname}});
    if(error)throw error;
    if(data.session){renderAccount(data.user);closeAuthModal();toast("Your DATOVA account is ready.");}
    else{closeAuthModal();toast("Account created. Check your email to confirm your address, then log in.");}
@@ -283,31 +382,39 @@ $("#airContinue").addEventListener("click",()=>{const n=$("#airNetwork").value,p
 $$(".filter-chip").forEach(b=>b.addEventListener("click",()=>{$$(".filter-chip").forEach(x=>x.classList.remove("active"));b.classList.add("active");toast("Transaction filters will work when account history is connected.")}));
 // Toggle visibility of the live wallet balance loaded from Supabase.
 function updateWalletBalanceVisibility(){
- const amount=$("#walletAmountValue");
- const control=$("#walletVisibility");
- if(amount)amount.textContent=walletBalanceVisible?(walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…"):"••••••";
- if(control){
-  control.setAttribute("aria-pressed",String(walletBalanceVisible));
-  control.setAttribute("aria-label",walletBalanceVisible?"Hide balance":"Show balance");
-  control.title=walletBalanceVisible?"Hide balance":"Show balance";
-  control.innerHTML=walletBalanceVisible
-   ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5.2 0 9 5 10 7- .4.8-1.4 2.1-3 3.3M6.2 6.2C3.8 7.7 2.4 10.3 2 12c1 2 4.8 7 10 7 1 0 2-.2 2.9-.6" /></svg>'
+ const amount=$("#walletAmountValue"),dashboardAmount=$("#dashboardWalletAmountValue");
+ const control=$("#walletVisibility"),dashboardControl=$("#dashboardWalletVisibility");
+ const display=!currentUser?"0.00":walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…";
+ if(amount)amount.textContent=walletBalanceVisible?display:"••••••";
+ if(dashboardAmount)dashboardAmount.textContent=walletBalanceVisible?display:"••••••";
+ [control,dashboardControl].filter(Boolean).forEach(button=>{
+  button.setAttribute("aria-pressed",String(walletBalanceVisible));
+  button.setAttribute("aria-label",walletBalanceVisible?"Hide balance":"Show balance");
+  button.title=walletBalanceVisible?"Hide balance":"Show balance";
+  button.innerHTML=walletBalanceVisible
+   ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A10.8 10.8 0 0112 5c5.2 0 9 5 10 7-.4.8-1.4 2.1-3 3.3M6.2 6.2C3.8 7.7 2.4 10.3 2 12c1 2 4.8 7 10 7 1 0 2-.2 2.9-.6"/></svg>'
    : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
- }
+ });
 }
 document.addEventListener("click",event=>{
- const walletControl=event.target.closest("#walletVisibility");
+ const walletControl=event.target.closest("#walletVisibility, #dashboardWalletVisibility");
  if(!walletControl)return;
  event.preventDefault();
  walletBalanceVisible=!walletBalanceVisible;
  updateWalletBalanceVisibility();
 });
+$$("[data-transfer-amount]").forEach(button=>button.addEventListener("click",()=>{
+ const amountField=$("#transferAmount");
+ if(amountField){amountField.value=button.dataset.transferAmount;amountField.dispatchEvent(new Event("input",{bubbles:true}));}
+}));
 $("#walletTransferOpen")?.addEventListener("click",()=>{
+  if(!currentUser){toast("Sign in to transfer money.");openAuth("login");return;}
   const panel=$("#walletTransferPanel");
   panel?.classList.remove("hidden");
   panel?.scrollIntoView({behavior:"smooth",block:"start"});
   setTimeout(()=>$("#transferRecipient")?.focus({preventScroll:true}),300);
 });
+$("#walletWithdrawOpen")?.addEventListener("click",()=>go("withdraw"));
 $("#walletTransferClose")?.addEventListener("click",()=>{
   $("#walletTransferPanel")?.classList.add("hidden");
   $("#transferPreviewMessage")?.classList.remove("error","success");
@@ -319,11 +426,13 @@ $("#walletTransferForm")?.addEventListener("submit",async event=>{
   const recipient=recipientInput.replace(/[\s-]/g,"");
   const amount=Number($("#transferAmount").value);
   const message=$("#transferPreviewMessage");
+  $("#transferRecipientCard")?.classList.add("hidden");
+  $("#transferCostCard")?.classList.add("hidden");
   message.classList.remove("error","success");
   if(!currentUser){message.textContent="Please sign in before preparing a transfer.";message.classList.add("error");openAuth("login");return;}
   if(!/^DTV\d{8}$/.test(recipient)){message.textContent="Enter a valid DATOVA account number, for example DTV-12345678.";message.classList.add("error");return;}
   if(recipient===String(accountNumberValue||"").toUpperCase().replace(/[\s-]/g,"")){message.textContent="You cannot send money to your own DATOVA account.";message.classList.add("error");return;}
-  if(!Number.isFinite(amount)||amount<=0||Math.round(amount*100)!==amount*100){message.textContent="Enter a valid amount with no more than 2 decimal places.";message.classList.add("error");return;}
+  if(!Number.isFinite(amount)||amount<100||Math.round(amount*100)!==amount*100){message.textContent="Enter at least ₦100, using no more than 2 decimal places.";message.classList.add("error");return;}
   if(walletBalanceState!=="ready"){message.textContent="Your wallet balance is not ready. Refresh your balance and try again.";message.classList.add("error");return;}
   if(amount>walletBalanceValue){message.textContent="Insufficient wallet balance for this amount.";message.classList.add("error");return;}
   const button=$("#transferPreviewButton");
@@ -338,7 +447,16 @@ $("#walletTransferForm")?.addEventListener("submit",async event=>{
       message.classList.add("error");
       return;
     }
-    message.textContent="Recipient found: "+recipientName+". Please confirm this is the correct person. This is recipient verification only; transaction PIN and secure transfer processing are not connected, so no money has been moved.";
+    const cleanName=String(recipientName).trim();
+    const initials=cleanName.split(/\s+/).filter(Boolean).slice(0,2).map(part=>part[0].toUpperCase()).join("")||"DT";
+    $("#transferRecipientInitials").textContent=initials;
+    $("#transferRecipientName").textContent=cleanName;
+    $("#transferRecipientAccount").textContent=formattedAccount;
+    $("#transferReviewAmount").textContent="₦"+amount.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+    $("#transferReviewTotal").textContent="₦"+amount.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+    $("#transferRecipientCard")?.classList.remove("hidden");
+    $("#transferCostCard")?.classList.remove("hidden");
+    message.textContent="Recipient verified. Review the details above. This is a preview only—no money has been moved.";
     message.classList.add("success");
   }catch(error){
     console.error("DATOVA recipient lookup failed:",error);
@@ -349,11 +467,24 @@ $("#walletTransferForm")?.addEventListener("submit",async event=>{
     button.textContent="Check transfer details";
   }
 });
-$("#walletAddMoney")?.addEventListener("click",()=>{
- const panel=$("#walletFundPanel");
- panel?.scrollIntoView({behavior:"smooth",block:"start"});
- setTimeout(()=>$("#walletFundingAmount")?.focus({preventScroll:true}),350);
+function openWalletFunding(){
+ if(!currentUser){toast("Sign in to add money to your DATOVA wallet.");openAuth("login");return;}
+ const area=$("#walletFundingArea");
+ if(!area)return;
+ area.classList.remove("hidden");
+ // The wallet screen may still be transitioning from display:none.
+ requestAnimationFrame(()=>setTimeout(()=>{
+  area.scrollIntoView({behavior:"smooth",block:"start"});
+  setTimeout(()=>$("#walletFundingAmount")?.focus({preventScroll:true}),250);
+ },320));
+}
+$("#dashboardAddMoney")?.addEventListener("click",event=>{
+ event.preventDefault();
+ go("wallet");
+ openWalletFunding();
 });
+$("#walletAddMoney")?.addEventListener("click",openWalletFunding);
+$("#walletFundingClose")?.addEventListener("click",()=>$("#walletFundingArea")?.classList.add("hidden"));
 updateWalletBalanceVisibility();
 
 document.addEventListener("click",async event=>{
@@ -417,7 +548,9 @@ const sessionCheck=supabaseReady
      new Promise(resolve=>setTimeout(()=>resolve(null),2200))
    ])
  : Promise.resolve(null);
-const returningVisitor=localStorage.getItem("datova_onboarding_complete")==="1"||localStorage.getItem("datova_intro_seen")==="1";
+function hasCompletedOnboarding(){
+ return readStoredValue("datova_onboarding_complete")==="1"||readStoredValue("datova_intro_seen")==="1";
+}
 const openingPlayedThisSession=(()=>{try{return sessionStorage.getItem("datova_opening_seen")==="1"}catch(error){return false}})();
 // The brand reveal plays once per tab session. Refreshes restore the last app section
 // immediately, without replaying the animation or sending the visitor back Home.
@@ -485,27 +618,28 @@ function showFirstVisitOnboarding(){
  void intro.offsetWidth;
  intro.classList.add("intro-arrive");
 }
-sessionCheck.then(signedInUser=>{
+function launchVisitorExperience(signedInUser){
  if(signedInUser)renderAccount(signedInUser);
- // Keep the main DATOVA app accessible on every visit; onboarding remains available
- // only through the explicit Replay introduction control in Profile.
- markOpeningPlayedThisSession();
- markOnboardingComplete();
- stopOriginalIntroSound();
- $("#introSplash")?.classList.add("hidden");
- intro?.classList.add("hidden");
  $("#welcomeGate")?.classList.add("hidden");
- showApp();
-}).catch(error=>{
- console.error("DATOVA startup:",error);
+ // A refresh in the same tab skips the opening animation and restores the
+ // last screen. A fresh tab/session gets the opening animation once.
+ if(openingPlayedThisSession){
+  if(hasCompletedOnboarding())showApp();
+  else showFirstVisitOnboarding();
+  return;
+ }
  markOpeningPlayedThisSession();
- markOnboardingComplete();
- stopOriginalIntroSound();
- $("#introSplash")?.classList.add("hidden");
- intro?.classList.add("hidden");
- $("#welcomeGate")?.classList.add("hidden");
- showApp();
-});
+ startOpeningAnimation(()=>{
+  if(hasCompletedOnboarding())showApp();
+  else showFirstVisitOnboarding();
+ });
+}
+// Show the opening reveal immediately instead of waiting for Supabase to answer.
+// Restore the signed-in profile as soon as the session lookup completes.
+launchVisitorExperience(null);
+sessionCheck.then(user=>{
+ if(user)renderAccount(user);
+}).catch(error=>console.error("DATOVA session restore:",error));
 
 /* Reliable direct controls: bind after the app functions and DOM are ready. */
 const themeControl=$("#themeToggle");
@@ -523,4 +657,96 @@ if(signOutControl)signOutControl.onclick=async()=>{
  finally{signOutControl.disabled=false;}
 };
 
+
+/* Profile Security and Preferences panels can be expanded/collapsed on mobile. */
+$$("[data-profile-toggle]").forEach(button=>button.addEventListener("click",()=>{
+ const card=button.closest(".profile-section-card");
+ if(!card)return;
+ const expanded=button.getAttribute("aria-expanded")==="true";
+ button.setAttribute("aria-expanded",String(!expanded));
+ card.classList.toggle("is-collapsed",expanded);
+}));
+
+/* DATOVA transaction PIN management — PINs are sent only to the protected Supabase RPC. */
+const pinManager=$("#pinManager");
+const pinOpen=$("#profilePinOpen");
+const pinClose=$("#pinManagerClose");
+const pinForm=$("#transactionPinForm");
+const pinMessage=$("#transactionPinMessage");
+if(pinOpen)pinOpen.addEventListener("click",()=>{
+ if(!currentUser){toast("Please sign in to manage your transaction PIN.");openAuth("login");return;}
+ pinManager?.classList.remove("hidden");
+ pinMessage.textContent="";
+ pinMessage.className="pin-manager-message";
+ pinForm?.reset();
+ $("#currentTransactionPin")?.focus();
+});
+if(pinClose)pinClose.addEventListener("click",()=>{pinManager?.classList.add("hidden");pinForm?.reset();pinMessage.textContent="";});
+if(pinForm)pinForm.addEventListener("submit",async event=>{
+ event.preventDefault();
+ if(!supabaseReady||!supabaseClient){pinMessage.textContent="Account service is unavailable. Refresh and try again.";pinMessage.className="pin-manager-message error";return;}
+ if(!currentUser){pinMessage.textContent="Please sign in again to continue.";pinMessage.className="pin-manager-message error";return;}
+ const currentPin=$("#currentTransactionPin").value;
+ const newPin=$("#newTransactionPin").value;
+ const confirmPin=$("#confirmTransactionPin").value;
+ if(!/^\d{4}$/.test(newPin)){pinMessage.textContent="Your new PIN must contain exactly four digits.";pinMessage.className="pin-manager-message error";return;}
+ if(newPin!==confirmPin){pinMessage.textContent="The new PIN entries do not match.";pinMessage.className="pin-manager-message error";$("#confirmTransactionPin").focus();return;}
+ if(currentPin&&!/^\d{4}$/.test(currentPin)){pinMessage.textContent="Your current PIN must contain exactly four digits.";pinMessage.className="pin-manager-message error";return;}
+ const button=$("#transactionPinSubmit");
+ button.disabled=true;button.textContent="Saving securely…";
+ pinMessage.textContent="";pinMessage.className="pin-manager-message";
+ try{
+  const {data,error}=await supabaseClient.rpc("set_datova_transaction_pin",{p_new_pin:newPin,p_current_pin:currentPin||null});
+  if(error)throw error;
+  if(data===true){
+   pinForm.reset();
+   pinMessage.textContent="Your transaction PIN has been saved successfully.";
+   pinMessage.className="pin-manager-message success";
+   toast("Transaction PIN updated.");
+  }else{
+   pinMessage.textContent="The current PIN may be incorrect, or PIN changes are temporarily locked. Check it and try again later.";
+   pinMessage.className="pin-manager-message error";
+  }
+ }catch(error){
+  console.error("Transaction PIN update failed:",error);
+  pinMessage.textContent=error.message||"Could not save your PIN. Please try again.";
+  pinMessage.className="pin-manager-message error";
+ }finally{
+  button.disabled=false;button.textContent="Save transaction PIN";
+ }
+});
+
+
+/* Manual verification test for the saved PIN; does not initiate a transfer. */
+const pinTestForm=$("#transactionPinTestForm");
+const pinTestMessage=$("#transactionPinTestMessage");
+if(pinTestForm)pinTestForm.addEventListener("submit",async event=>{
+ event.preventDefault();
+ if(!supabaseReady||!currentUser){pinTestMessage.textContent="Please sign in and try again.";pinTestMessage.className="pin-manager-message error";return;}
+ const pin=$("#testTransactionPin").value;
+ if(!/^\d{4}$/.test(pin)){pinTestMessage.textContent="Enter exactly four digits.";pinTestMessage.className="pin-manager-message error";return;}
+ const button=$("#transactionPinTestButton");
+ button.disabled=true;button.textContent="Verifying…";
+ pinTestMessage.textContent="";pinTestMessage.className="pin-manager-message";
+ try{
+  const {data,error}=await supabaseClient.rpc("verify_datova_transaction_pin",{p_pin:pin});
+  if(error)throw error;
+  if(data===true){
+   pinTestMessage.textContent="PIN verified successfully. Your Supabase PIN check is working.";
+   pinTestMessage.className="pin-manager-message success";
+   pinTestForm.reset();
+  }else{
+   pinTestMessage.textContent="PIN not verified. Check the digits. Repeated failed attempts temporarily lock PIN verification.";
+   pinTestMessage.className="pin-manager-message error";
+  }
+ }catch(error){
+  console.error("Transaction PIN verification test failed:",error);
+  pinTestMessage.textContent=error.message||"PIN verification is unavailable. Please try again.";
+  pinTestMessage.className="pin-manager-message error";
+ }finally{
+  button.disabled=false;button.textContent="Verify PIN";
+ }
+});
+
 window.datovaAppStarted=true;
+

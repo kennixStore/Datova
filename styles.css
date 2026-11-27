@@ -1055,3 +1055,218 @@ body.dark .transfer-preview-message.success{background:#123522;color:#a9e7bf}
 body.dark .transfer-preview-message.error{background:#3a2024;color:#ffc0c0}
 .wallet-action-muted#\walletTransferOpen{cursor:pointer;color:var(--text)}
 
+
+/* Dashboard wallet card — first DATOVA fintech redesign pass */
+.dashboard-wallet-card{position:relative;overflow:hidden;margin:0 0 28px;padding:24px 26px 20px;border-radius:22px;color:#fff;background:linear-gradient(112deg,#071b3d 0%,#103b79 58%,#176fff 100%);box-shadow:0 18px 42px #0b367526;isolation:isolate}
+.dashboard-wallet-card:before,.dashboard-wallet-card:after{content:"";position:absolute;border:1px solid #ffffff20;border-radius:50%;pointer-events:none;z-index:-1}
+.dashboard-wallet-card:before{width:270px;height:270px;right:-76px;top:-190px;box-shadow:0 0 0 22px #ffffff08,0 0 0 48px #ffffff06}
+.dashboard-wallet-card:after{width:170px;height:170px;right:80px;bottom:-145px;box-shadow:0 0 0 18px #ffffff08}
+.dashboard-wallet-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px}
+.dashboard-wallet-label{display:flex;align-items:center;gap:8px;font-size:9px;font-weight:800;letter-spacing:1.7px;color:#d9eaff}
+.dashboard-wallet-label i,.dashboard-live-indicator{width:7px;height:7px;border-radius:50%;background:#69e0bd;box-shadow:0 0 0 4px #69e0bd20}
+.dashboard-wallet-tools{display:flex;align-items:center;gap:9px}
+.dashboard-balance-toggle{width:36px;height:36px;display:grid;place-items:center;border:1px solid #ffffff40;border-radius:50%;background:#ffffff12;color:#fff}
+.dashboard-balance-toggle svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.dashboard-add-money{border:0;border-radius:30px;background:#fff;color:#0b3675;padding:11px 17px;font-size:11px;font-weight:800;box-shadow:0 5px 16px #001b4530}
+.dashboard-balance-caption{display:block;font-size:11px;color:#c8dcf7;margin-bottom:7px}
+.dashboard-balance-value{display:flex;align-items:baseline;gap:7px;font:700 17px Manrope;color:#dceaff}
+.dashboard-balance-value strong{font:800 clamp(30px,5vw,43px)/1.15 Manrope;letter-spacing:-1.5px;color:#fff;overflow-wrap:anywhere}
+.dashboard-wallet-foot{display:flex;align-items:center;gap:9px;margin-top:20px;padding-top:14px;border-top:1px solid #ffffff22;color:#d0e2fb;font-size:10px}
+.dashboard-wallet-foot .dashboard-live-indicator{flex:0 0 7px}
+.dashboard-wallet-open{margin-left:auto;border:0;background:transparent;color:#fff;font-size:10px;font-weight:700}
+.dashboard-wallet-open b{margin-left:5px}
+body.dark .dashboard-wallet-card{box-shadow:0 18px 42px #0005}
+@media(max-width:600px){.dashboard-wallet-card{padding:20px 18px 17px;border-radius:19px;margin-bottom:24px}.dashboard-wallet-top{margin-bottom:23px}.dashboard-add-money{padding:10px 13px;font-size:10px}.dashboard-balance-value strong{font-size:34px}.dashboard-wallet-foot{font-size:9px}.dashboard-wallet-open{font-size:9px}}
+
+/* Wallet page refinement: brand, account number and progressive funding panel */
+.wallet-hero{gap:18px}
+.wallet-hero-main{background:linear-gradient(125deg,#071a39 0%,#103b79 58%,#176fff 100%);box-shadow:0 18px 40px #0c34752b}
+.wallet-brand-wordmark{font-size:15px;font-weight:900;letter-spacing:2px;color:#fff}
+.wallet-brand-wordmark span{font-size:8px;font-weight:700;letter-spacing:1.3px;color:#c7ddfb}
+.wallet-card-chip{width:31px;height:23px;border:1px solid #ffffff80;border-radius:6px;background:linear-gradient(135deg,#ffffff45,#ffffff08);position:relative}
+.wallet-card-chip:after{content:"";position:absolute;left:0;right:0;top:10px;border-top:1px solid #ffffff70}
+.wallet-account-number-card{border:1px solid #e2eaf6;background:#fff;border-radius:17px;box-shadow:0 8px 26px #0b28500a}
+.wallet-account-number-card strong{font-size:19px;letter-spacing:1.1px;color:#102c58}
+.wallet-account-number-card button{border-radius:11px;background:#edf4ff;color:#1555b8;border:1px solid #d8e7ff;font-weight:800;padding:10px 17px}
+.wallet-funding-close{width:34px;height:34px;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--ink);font-size:22px;line-height:1;display:grid;place-items:center}
+#walletFundingArea{scroll-margin-top:22px}
+#walletFundingArea .wallet-fund-panel{border-color:#dce8f8;box-shadow:0 12px 35px #123a700c}
+.wallet-action-primary,.wallet-action-muted{transition:transform .18s ease,box-shadow .18s ease}
+.wallet-action-primary:active,.wallet-action-muted:active{transform:scale(.985)}
+body.dark .wallet-account-number-card{background:#111d31;border-color:#263a58;box-shadow:0 12px 32px #0003}
+body.dark .wallet-account-number-card strong{color:#e8f1ff}
+body.dark .wallet-account-number-card button{background:#172d4d;color:#b9d7ff;border-color:#2d4d78}
+body.dark .wallet-funding-close{background:#15243a;color:#eaf2ff;border-color:#2c3f5c}
+body.dark #walletFundingArea .wallet-fund-panel{border-color:#263b59}
+@media(max-width:650px){.wallet-account-number-card{gap:12px;padding:16px}.wallet-account-number-card strong{font-size:16px}.wallet-account-number-card button{padding:9px 13px}}
+
+
+/* Transfer recipient confirmation and amount review */
+.transfer-quick-amounts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:-1px 0 8px}
+.transfer-quick-amounts button{border:1px solid var(--line);border-radius:9px;background:var(--surface-soft);color:var(--text);padding:9px 4px;font:700 10px "DM Sans",sans-serif}
+.transfer-quick-amounts button:active{border-color:#1677ff;color:#1677ff}
+.transfer-recipient-card{display:flex;align-items:center;gap:12px;margin-top:15px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface-soft)}
+.transfer-recipient-avatar{width:44px;height:44px;flex:0 0 44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#1677ff,#55b8ff);color:#fff;font:800 14px Manrope;letter-spacing:.4px}
+.transfer-recipient-identity{min-width:0;display:grid;gap:3px}
+.transfer-recipient-identity small{font-size:8px;font-weight:800;letter-spacing:1px;color:#16a36b}
+.transfer-recipient-identity strong{font:800 13px Manrope;color:var(--text);overflow-wrap:anywhere}
+.transfer-recipient-identity span{font-size:10px;color:var(--muted);letter-spacing:.5px}
+.transfer-verified-badge{margin-left:auto;white-space:nowrap;border-radius:20px;background:#e9f8ef;color:#16824b;padding:6px 8px;font-size:9px;font-weight:800}
+.transfer-cost-card{display:grid;gap:11px;margin-top:12px;padding:15px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+.transfer-cost-card>div{display:flex;justify-content:space-between;gap:12px;font-size:11px;color:var(--muted)}
+.transfer-cost-card strong{color:var(--text);font-weight:800}
+.transfer-cost-card .transfer-cost-total{padding-top:11px;border-top:1px solid var(--line);font-weight:800;color:var(--text)}
+.transfer-cost-total strong{font:800 16px Manrope;color:#1677ff}
+body.dark .transfer-verified-badge{background:#123522;color:#a9e7bf}
+@media(max-width:420px){.transfer-quick-amounts{grid-template-columns:repeat(2,minmax(0,1fr))}.transfer-verified-badge{font-size:8px;padding:5px 6px}}
+
+
+/* DATOVA profile and settings refresh */
+.profile-hero-card,.profile-section-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;margin:0 0 14px;box-shadow:0 8px 28px rgba(20,45,85,.045)}
+.profile-hero-top{display:flex;align-items:center;gap:14px}
+.profile-hero-card .profile-avatar{width:58px;height:58px;flex:0 0 58px;border-radius:18px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#1677ff,#55b8ff);color:#fff;font:800 20px Manrope}
+.profile-hero-card .profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-hero-identity{min-width:0;flex:1}
+.profile-kicker{font-size:9px;font-weight:800;letter-spacing:1.2px;color:#1677ff}
+.profile-display-name{margin:4px 0 3px;color:var(--text);font:800 17px Manrope;overflow-wrap:anywhere}
+.profile-display-email{margin:0;color:var(--muted);font-size:11px;overflow-wrap:anywhere}
+.profile-account-status{white-space:nowrap;border-radius:30px;padding:6px 9px;background:#e9f8ef;color:#16824b;font-size:9px;font-weight:800}
+body.dark .profile-account-status{background:#123522;color:#a9e7bf}
+.profile-hero-card .profile-actions{display:flex;gap:9px;margin-top:17px;flex-wrap:wrap}
+.profile-section-heading{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.profile-section-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:11px;background:rgba(22,119,255,.09);color:#1677ff;font:800 11px Manrope}
+.profile-section-heading h3{margin:0;color:var(--text);font:800 14px Manrope}
+.profile-section-heading p{margin:3px 0 0;color:var(--muted);font-size:10px}
+.profile-detail-row,.profile-setting-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--line)}
+.profile-detail-row>span{width:110px;flex:0 0 110px;color:var(--muted);font-size:11px}
+.profile-detail-row>strong{min-width:0;color:var(--text);font-size:11px;font-weight:700;overflow-wrap:anywhere}
+.profile-setting-row .setting-copy{min-width:0;flex:1}
+.profile-setting-row .setting-copy b{display:block;color:var(--text);font-size:11px}
+.profile-setting-row .setting-copy small{display:block;margin-top:3px;color:var(--muted);font-size:10px;line-height:1.5}
+.profile-setting-row .setting-icon{width:32px;height:32px;flex:0 0 32px;display:grid;place-items:center;border-radius:10px;background:var(--surface-soft);color:#1677ff;font-size:16px}
+.profile-setting-row .outline-btn{white-space:nowrap}
+.profile-account-number{margin:0}
+@media(max-width:480px){.profile-hero-card,.profile-section-card{padding:15px;border-radius:15px}.profile-hero-card .profile-avatar{width:49px;height:49px;flex-basis:49px;border-radius:15px}.profile-display-name{font-size:15px}.profile-account-status{font-size:8px}.profile-detail-row>span{width:88px;flex-basis:88px}.profile-setting-row{gap:9px}}
+
+/* Wallet transaction history */
+.wallet-history-list{display:flex;flex-direction:column}.wallet-history-item{display:flex;align-items:center;gap:12px;padding:15px 16px;border-bottom:1px solid var(--line,#e8edf5)}.wallet-history-item:last-child{border-bottom:0}.wallet-history-mark{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:18px;font-weight:700;flex:0 0 38px}.wallet-history-mark.incoming{background:#e8f8ef;color:#13854b}.wallet-history-mark.outgoing{background:#fff0ed;color:#d34d3d}.wallet-history-info{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1}.wallet-history-info b{font-size:13px;color:var(--text,#172b49)}.wallet-history-info small{font-size:10px;color:var(--muted,#7889a2);overflow-wrap:anywhere}.wallet-history-item>strong{font-size:13px;white-space:nowrap}.incoming-text{color:#13854b}.outgoing-text{color:#d34d3d}@media(max-width:420px){.wallet-history-item{padding:13px 10px;gap:9px}.wallet-history-info small{font-size:9px}.wallet-history-item>strong{font-size:11px}}
+
+/* DATOVA withdrawal preview */
+.withdraw-preview-card{padding:22px;border:1px solid #dce8fa;border-radius:18px;background:linear-gradient(135deg,#f1f6ff,#fff);margin:16px 0}.dark .withdraw-preview-card,body.dark .withdraw-preview-card{background:linear-gradient(135deg,#10284a,#0b1b32);border-color:#24466f}.withdraw-preview-label{font-size:10px;font-weight:800;letter-spacing:1.1px;color:#6680a4}.withdraw-preview-card>strong{display:block;font-size:24px;margin:9px 0;color:#176fff}.withdraw-preview-card p{font-size:13px;line-height:1.6;color:var(--muted,#7889a2);max-width:620px;margin:0}.withdraw-form-preview{margin-top:14px}.withdraw-form-preview select,.withdraw-form-preview input{width:100%;min-height:48px;border:1px solid var(--line,#e7edf5);border-radius:11px;padding:12px;background:#f7f9fc;color:#7b8799;font:inherit;margin:7px 0 15px}.withdraw-form-preview label{display:block;font-size:12px;font-weight:700;color:var(--text,#172b49)}.withdraw-form-preview .wallet-amount-input input{margin:0;border:0;background:transparent}.withdraw-preview-note{font-size:11px;line-height:1.6;padding:12px;border-radius:10px;background:#f1f5fb;color:#64748b;margin:3px 0 15px}.withdraw-form-preview button:disabled{opacity:.58;cursor:not-allowed}@media(max-width:520px){.withdraw-preview-card{padding:17px}}
+
+/* DATOVA secure transaction PIN settings */
+.pin-manager{margin:12px 0 4px;padding:17px;border:1px solid var(--line);border-radius:15px;background:var(--surface-soft)}
+.pin-manager.hidden{display:none}
+.pin-manager-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:15px}
+.pin-manager-heading>div{display:grid;gap:5px}
+.pin-manager-heading b{font:800 13px Manrope;color:var(--text)}
+.pin-manager-heading small{font-size:10px;line-height:1.55;color:var(--muted)}
+.pin-manager-close{width:30px;height:30px;flex:none;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--text);font-size:20px}
+.pin-manager-form{display:grid;gap:8px}
+.pin-manager-form label{margin-top:5px;font-size:10px;font-weight:800;color:var(--text)}
+.pin-manager-form label span{font-weight:500;color:var(--muted)}
+.pin-manager-form input{width:100%;height:47px;box-sizing:border-box;padding:0 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text);font:600 15px "DM Sans",sans-serif;letter-spacing:5px}
+.pin-manager-form input:focus{outline:2px solid #1677ff35;border-color:#1677ff}
+.pin-manager-form .wallet-fund-submit{margin-top:9px}
+.pin-manager-message{min-height:0;margin:2px 0 0;font-size:10px;line-height:1.6;color:var(--muted)}
+.pin-manager-message:empty{display:none}
+.pin-manager-message.success{color:#16824b}
+.pin-manager-message.error{color:#bd3434}
+body.dark .pin-manager{background:#101f34;border-color:#263b59}
+
+.pin-verify-test{display:grid;gap:7px;margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}
+.pin-verify-test>b{font-size:12px;color:var(--text)}
+.pin-verify-test>small{font-size:10px;line-height:1.55;color:var(--muted)}
+.pin-verify-test .outline-btn{min-height:42px;justify-self:start;padding:0 18px}
+
+/* Profile section icons: use clear visual symbols instead of section numbers. */
+.profile-section-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
+
+
+/* Functional profile section controls */
+.profile-section-toggle{width:100%;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;font:inherit}
+.profile-section-toggle .profile-section-heading-copy{display:block;min-width:0;flex:1}
+.profile-section-toggle .profile-section-heading-copy h3{margin:0;color:var(--text);font:800 14px Manrope}
+.profile-section-toggle .profile-section-heading-copy p{margin:3px 0 0;color:var(--muted);font-size:10px}
+.profile-section-chevron{margin-left:auto;font-size:20px;line-height:1;transition:transform .18s ease}
+.profile-section-toggle[aria-expanded="false"] .profile-section-chevron{transform:rotate(-90deg)}
+.profile-section-card.is-collapsed>:not(.profile-section-heading){display:none!important}
+/* Keep the Nigerian naira glyph on a system font if the display font lacks it. */
+.dashboard-balance-value,.wallet-hero-main .wallet-amount{font-family:Arial,"Noto Sans",sans-serif}
+.dashboard-balance-value strong,.wallet-hero-main .wallet-amount strong{font-family:Manrope,Arial,sans-serif}
+
+/* Noto Sans supplies a reliable Nigerian naira glyph when a display font omits it. */
+body,button,input,select,textarea{font-family:"DM Sans","Noto Sans",Arial,sans-serif}
+
+
+/* Wallet action hierarchy and mobile-safe funding form */
+.wallet-hero{grid-template-columns:minmax(0,1fr);gap:12px}
+.wallet-hero-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;padding:15px}
+.wallet-actions-label{grid-column:1/-1;font-size:10px;letter-spacing:1.5px;color:var(--text)}
+.wallet-action-primary,.wallet-action-muted{min-width:0;min-height:76px;padding:12px;gap:12px;border-radius:15px;transition:transform .16s ease,box-shadow .16s ease}
+.wallet-action-primary{background:linear-gradient(115deg,#1266d7,#1677ff);color:#fff;box-shadow:0 8px 18px rgba(22,119,255,.22)}
+.wallet-action-primary b,.wallet-action-muted b{font-size:13px;font-weight:800}
+.wallet-action-primary small,.wallet-action-muted small{font-size:10px;line-height:1.35;color:inherit;opacity:.78}
+.wallet-action-symbol{width:42px;height:42px;flex:0 0 42px;border-radius:12px;background:rgba(255,255,255,.17);color:inherit}
+.wallet-action-muted{border:1px solid rgba(22,119,255,.48);background:var(--surface-soft);color:var(--text)}
+.wallet-action-muted .wallet-action-symbol{background:rgba(22,119,255,.12);color:#4a9aff}
+.wallet-action-muted em{font-size:9px;color:var(--muted)}
+.wallet-action-primary:active,.wallet-action-muted:active{transform:scale(.985)}
+.wallet-funding-form{width:100%;min-width:0}
+.wallet-amount-input{box-sizing:border-box;width:100%;min-width:0;min-height:54px;height:54px;gap:10px;padding:0 15px;overflow:hidden}
+.wallet-amount-input>span{flex:0 0 auto;font-size:19px}
+.wallet-amount-input input{display:block;flex:1 1 auto;min-width:0;width:0;box-sizing:border-box;font-size:16px;line-height:normal}
+.wallet-panel{box-sizing:border-box;min-width:0}
+.wallet-method-card{box-sizing:border-box;min-width:0}
+.wallet-method-copy{overflow-wrap:anywhere}
+.wallet-funding-form label{font-size:12px;line-height:1.45}
+.wallet-amount-hint{font-size:10px;line-height:1.5}
+.wallet-fund-submit{min-height:54px;font-size:12px}
+body.dark .wallet-action-primary{background:linear-gradient(115deg,#1266d7,#1677ff);color:#fff}
+body.dark .wallet-action-muted{background:#102746;border-color:#315a8d;color:#e6f1ff}
+body.dark .wallet-action-muted .wallet-action-symbol{background:#193a63;color:#78b8ff}
+@media(max-width:520px){
+ .wallet-hero-actions{grid-template-columns:1fr;padding:13px}
+ .wallet-action-primary,.wallet-action-muted{min-height:72px}
+ .wallet-content-grid{grid-template-columns:minmax(0,1fr);gap:12px}
+ .wallet-panel{padding:16px}
+ .wallet-method-card{padding:11px;gap:9px}
+ .wallet-method-copy small{font-size:10px}
+ .wallet-method-soon{font-size:8px}
+
+/* Mobile wallet action spacing: keep icon tiles separate from their labels. */
+.wallet-action-primary,.wallet-action-muted{display:flex!important;align-items:center!important;gap:16px!important;padding:12px 16px!important;box-sizing:border-box!important;min-width:0!important;}
+.wallet-action-symbol{display:grid!important;place-items:center!important;flex:0 0 48px!important;width:48px!important;height:48px!important;min-width:48px!important;margin:0!important;}
+.wallet-action-primary>span:nth-child(2),.wallet-action-muted>span:nth-child(2){display:flex!important;flex:1 1 auto!important;flex-direction:column!important;min-width:0!important;gap:4px!important;margin:0!important;}
+.wallet-action-primary b,.wallet-action-muted b,.wallet-action-primary small,.wallet-action-muted small{white-space:normal!important;overflow-wrap:normal!important;word-break:normal!important;}
+.wallet-action-muted em{flex:0 0 auto!important;margin-left:auto!important;white-space:nowrap!important;}
+@media(max-width:520px){.wallet-action-primary,.wallet-action-muted{gap:16px!important;padding:12px 15px!important;min-height:76px!important}.wallet-action-symbol{flex-basis:48px!important;width:48px!important;height:48px!important;min-width:48px!important}.wallet-action-primary b,.wallet-action-muted b{font-size:13px!important}.wallet-action-primary small,.wallet-action-muted small{font-size:10px!important}}
+
+
+/* DATOVA Help & Support page */
+.support-contact-grid{align-items:start;}
+.support-contact-card,.support-faq-card,.support-report-card{min-width:0;}
+.support-channel{display:flex;align-items:center;gap:8px;padding:13px 12px;border:1px solid var(--line);border-radius:12px;text-decoration:none;margin-top:10px;color:var(--ink);background:var(--surface);}
+.support-channel b{font-size:11px;display:block;}.support-channel small{display:block;min-width:0;overflow-wrap:anywhere;font-size:9px;color:var(--muted);margin-top:3px;}.support-channel>span{margin-left:auto;color:var(--blue);font-size:15px;}
+.support-whatsapp{border-color:#b8e8cf;background:#f0fff6;}.support-whatsapp b{color:#137b49;}.support-email{border-color:#cfe1ff;background:#f4f8ff;}.support-email b{color:#145fc1;}
+.support-faq-list{display:grid;gap:8px;margin-top:15px;}.support-faq-list details{border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:var(--surface);}.support-faq-list summary{cursor:pointer;list-style:none;font-size:10px;font-weight:800;color:var(--ink);padding-right:18px;position:relative;}.support-faq-list summary::-webkit-details-marker{display:none;}.support-faq-list summary:after{content:'+';position:absolute;right:0;top:-2px;color:var(--blue);font-size:16px;}.support-faq-list details[open] summary:after{content:'−';}.support-faq-list details p{min-height:0;margin:10px 0 1px;font-size:10px;line-height:1.65;color:var(--muted);}
+.support-report-form{margin-top:14px;}.support-report-form label{display:block;margin:13px 0 6px;font-size:10px;font-weight:800;color:var(--ink);}.support-report-form label small{font-weight:500;color:var(--muted);}.support-report-form input,.support-report-form select,.support-report-form textarea{display:block;width:100%;max-width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:var(--surface);color:var(--ink);font:11px 'DM Sans',sans-serif;box-sizing:border-box;}.support-report-form textarea{resize:vertical;min-height:100px;line-height:1.5;}.support-report-form input:focus,.support-report-form select:focus,.support-report-form textarea:focus{outline:2px solid #1677ff30;border-color:var(--blue);}.support-report-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px;}.support-report-actions button{border:0;border-radius:10px;padding:12px 9px;font-size:10px;font-weight:800;}.support-send-whatsapp{background:#16834d;color:#fff;}.support-send-email{background:#176fe0;color:#fff;}.support-report-note{display:block;margin-top:11px;color:var(--muted);font-size:9px;line-height:1.55;}
+body.dark .support-channel{background:#142b47;border-color:#294563;}body.dark .support-whatsapp b{color:#79dba8;}body.dark .support-email b{color:#91c4ff;}body.dark .support-faq-list details{background:#0c1c32;border-color:#29415f;}body.dark .support-report-form input,body.dark .support-report-form select,body.dark .support-report-form textarea{background:#0c1c32;border-color:#29415f;color:#e9f1ff;}
+@media(max-width:700px){.support-contact-grid{grid-template-columns:1fr;}.support-card{padding:20px;}.support-report-actions{grid-template-columns:1fr;}}
+
+
+/* DATOVA support icon system and clear, arrow-free contact rows */
+.support-icon{width:58px;height:58px;border-radius:17px;display:grid;place-items:center;margin-bottom:22px;background:#eaf2ff;}
+.support-icon svg,.support-channel-icon svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.support-icon-contact{color:#176fe0;background:#eaf2ff;}
+.support-icon-faq{color:#7955d9;background:#f0eaff;}
+.support-icon-report{color:#d97706;background:#fff2df;}
+.support-channel{display:flex;align-items:center;gap:13px;padding:13px 15px;min-height:68px;box-sizing:border-box;}
+.support-channel-icon{width:40px;height:40px;flex:0 0 40px;border-radius:12px;display:grid;place-items:center;}
+.support-channel-copy{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.support-channel-copy b{font-size:12px;}.support-channel-copy small{font-size:10px;}
+.support-whatsapp .support-channel-icon{color:#16834d;background:#ddf8e9;}
+.support-email .support-channel-icon{color:#176fe0;background:#e4efff;}
+.support-channel>span[aria-hidden="true"]:last-child{display:none!important;}
+body.dark .support-icon-contact{color:#80b8ff;background:#132e52;}body.dark .support-icon-faq{color:#c1aaff;background:#302653;}body.dark .support-icon-report{color:#ffc477;background:#49331e;}
+body.dark .support-whatsapp .support-channel-icon{color:#78e0a8;background:#123b2b;}body.dark .support-email .support-channel-icon{color:#91c4ff;background:#17365c;}
