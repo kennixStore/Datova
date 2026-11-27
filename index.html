@@ -207,7 +207,34 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
 </div>
 <div class="screen" id="screen-support">
 <div class="page-heading"><button type="button" class="datova-back-btn" data-datova-back><span aria-hidden="true">←</span> Back</button><div class="eyebrow">WE'RE HERE TO HELP</div><h1>Help & Support</h1><p>Find help with your DATOVA experience.</p></div>
-<div class="support-grid"><div class="support-card"><span>✉</span><h3>Contact support</h3><p>Support contact details will be published before launch.</p><small>CONTACT DETAILS COMING SOON</small></div><div class="support-card"><span>❔</span><h3>Frequently asked questions</h3><p>Guides for payments, data purchases and transaction issues.</p><small>HELP CENTRE COMING SOON</small></div><div class="support-card"><span>♧</span><h3>Report a problem</h3><p>We'll provide a secure way to report failed or delayed transactions.</p><small>REPORTING COMING SOON</small></div></div>
+<div class="support-grid support-contact-grid">
+ <article class="support-card support-contact-card"><span aria-hidden="true">✉</span><h3>Contact support</h3><p>Need help? Reach DATOVA through either channel.</p>
+  <a class="support-channel support-whatsapp" href="https://wa.me/2349135102119" target="_blank" rel="noopener noreferrer"><b>WhatsApp support</b><small>Chat with DATOVA</small><span aria-hidden="true">↗</span></a>
+  <a class="support-channel support-email" href="mailto:kennix2027@gmail.com"><b>Email support</b><small>kennix2027@gmail.com</small><span aria-hidden="true">↗</span></a>
+ </article>
+ <article class="support-card support-faq-card"><span aria-hidden="true">❔</span><h3>Frequently asked questions</h3><p>Answers about the features currently available in DATOVA.</p>
+  <div class="support-faq-list">
+   <details><summary>How do I create a DATOVA account?</summary><p>Open Profile, choose Create account, enter your name, email and password, then follow any email confirmation instructions.</p></details>
+   <details><summary>Why does my guest wallet show ₦0.00?</summary><p>A guest session does not have a personal wallet balance. Sign in to view the balance linked to your DATOVA account.</p></details>
+   <details><summary>How can I add money to my wallet?</summary><p>Sign in, open Wallet and choose Add money. Follow the bank-transfer instructions shown in the app. Your wallet should only be credited after the payment has been verified.</p></details>
+   <details><summary>Can I transfer money to another DATOVA user?</summary><p>The transfer screen is currently a preview. It can help verify the recipient details, but it does not send money yet.</p></details>
+   <details><summary>Can I buy airtime or data right now?</summary><p>Airtime and data screens are currently previews. They do not complete purchases or charge your account.</p></details>
+   <details><summary>What should I do if a payment is delayed or missing?</summary><p>Use Report a problem below or contact DATOVA through WhatsApp or email. Include the payment reference if you have one. Never send your password, transaction PIN or OTP.</p></details>
+  </div>
+ </article>
+ <article class="support-card support-report-card"><span aria-hidden="true">♧</span><h3>Report a problem</h3><p>Tell us what happened. Choose WhatsApp or email to send your report.</p>
+  <form id="supportReportForm" class="support-report-form">
+   <label for="supportIssueType">What do you need help with?</label>
+   <select id="supportIssueType" required><option value="">Choose a topic</option><option>Wallet funding / payment</option><option>Wallet balance</option><option>Account / sign in</option><option>Transfer</option><option>Airtime or data</option><option>Other</option></select>
+   <label for="supportReference">Transaction reference <small>(optional)</small></label>
+   <input id="supportReference" type="text" maxlength="100" placeholder="Enter reference if available">
+   <label for="supportIssueDetails">Describe the problem</label>
+   <textarea id="supportIssueDetails" rows="4" maxlength="1500" placeholder="Tell us what happened. Do not include passwords, PINs or OTPs." required></textarea>
+   <div class="support-report-actions"><button type="button" class="support-send-whatsapp" data-support-channel="whatsapp">Send via WhatsApp</button><button type="button" class="support-send-email" data-support-channel="email">Send via Email</button></div>
+   <small class="support-report-note">Your message opens in your chosen app. DATOVA does not store this report in the website.</small>
+  </form>
+ </article>
+</div>
 </div>
 <footer>© <span id="year"></span> DATOVA. All rights reserved. <span>Data Made Easy. Connections Made Better.</span></footer>
 </section>
