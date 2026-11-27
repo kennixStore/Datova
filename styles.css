@@ -1450,3 +1450,23 @@ body:not(.dark) .wallet-hero-actions #walletTransferOpen .wallet-action-symbol .
 body.dark .wallet-hero-actions #walletTransferOpen .wallet-action-symbol .wallet-icon-svg{
   stroke:#fff!important;
 }
+
+/* Transfer action icon: use theme-specific icon tile and stroke colors. */
+body:not(.dark) .wallet-hero-actions #walletTransferOpen .wallet-action-symbol{
+  background:#eaf3ff!important;
+  color:#1266d7!important;
+  border:1px solid rgba(255,255,255,.75)!important;
+}
+body:not(.dark) .wallet-hero-actions #walletTransferOpen .wallet-action-symbol .wallet-icon-svg{
+  stroke:#1266d7!important;
+  stroke-width:2.1!important;
+}
+body.dark .wallet-hero-actions #walletTransferOpen .wallet-action-symbol{
+  background:#214b7b!important;
+  color:#c4e2ff!important;
+  border:1px solid rgba(190,220,255,.18)!important;
+}
+body.dark .wallet-hero-actions #walletTransferOpen .wallet-action-symbol .wallet-icon-svg{
+  stroke:#c4e2ff!important;
+  stroke-width:2.1!important;
+}
