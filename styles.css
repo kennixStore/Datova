@@ -1274,3 +1274,8 @@ body.dark .support-icon-contact{color:#80b8ff;background:#132e52;}body.dark .sup
 body.dark .support-whatsapp .support-channel-icon{color:#78e0a8;background:#123b2b;}body.dark .support-email .support-channel-icon{color:#91c4ff;background:#17365c;}
 
 body.dark .profile-account-number{--panel-bg:#10233e;--border-color:#29415f;--text:#e9f1ff;--muted:#9cacc3;background:#10233e;border-color:#29415f;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+
+.pin-recovery-captcha{display:grid;gap:9px;margin:12px 0;padding:12px;border:1px solid var(--border-color,rgba(128,128,128,.25));border-radius:12px;overflow:hidden}
+.pin-recovery-captcha>small{display:block;color:var(--muted,#777);font-size:12px;line-height:1.45}
+#pinRecoveryCaptcha{min-height:65px;max-width:100%;overflow:hidden}
+#pinRecoveryCaptcha iframe{max-width:100%}
