@@ -168,7 +168,14 @@ async function loadWalletHistory(){
    const credit=["credit","refund","adjustment"].includes(String(row.transaction_type||"").toLowerCase());
    const amount=(credit?"+":"−")+"₦"+Number(row.amount||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
    const date=row.created_at?new Date(row.created_at).toLocaleString("en-NG",{dateStyle:"medium",timeStyle:"short"}):"Date unavailable";
-   return '<article class="wallet-history-item"><span class="wallet-history-mark '+(credit?"incoming":"outgoing")+'">'+(credit?"↓":"↑")+'</span><div class="wallet-history-info"><b>'+esc(row.description||row.transaction_type||"Wallet activity")+'</b><small>'+esc(date)+' · '+esc(row.reference||"No reference")+'</small></div><strong class="'+(credit?"incoming-text":"outgoing-text")+'">'+amount+'</strong></article>';
+   const type=String(row.transaction_type||"").toLowerCase();
+   const rawDescription=String(row.description||row.transaction_type||"Wallet activity");
+   let title=rawDescription;
+   let directionLabel=credit?"CREDIT":"DEBIT";
+   if(type==="debit"&&/^DATOVA transfer to /i.test(rawDescription))title="Money sent to "+rawDescription.replace(/^DATOVA transfer to /i,"");
+   else if(type==="credit"&&/^DATOVA transfer from /i.test(rawDescription))title="Money received from "+rawDescription.replace(/^DATOVA transfer from /i,"");
+   else if(type==="credit"&&/DATOVA transfer/i.test(rawDescription))title="Money received from another DATOVA user";
+   return '<article class="wallet-history-item"><span class="wallet-history-mark '+(credit?"incoming":"outgoing")+'">'+(credit?"↓":"↑")+'</span><div class="wallet-history-info"><b>'+esc(title)+'</b><small>'+esc(date)+' · <strong class="wallet-history-direction">'+directionLabel+'</strong> · '+esc(row.reference||"No reference")+'</small></div><strong class="'+(credit?"incoming-text":"outgoing-text")+'">'+amount+'</strong></article>';
   }).join("")+'</div>';
  }catch(error){console.error("Could not load wallet history:",error);panel.innerHTML='<div class="empty-state"><b>Could not load transactions</b><p>Please refresh and try again.</p></div>';}
 }
