@@ -63,6 +63,17 @@ function closeAuthModal(){
  if(modal)modal.classList.add("hidden");
  document.body.classList.remove("auth-modal-open");
 }
+function showStorageDiagnostic(stage){
+ const read=(store,key)=>{try{return store.getItem(key)||"—"}catch(error){return "BLOCKED"}};
+ let cookie="—";
+ try{const item=document.cookie.split("; ").find(part=>part.startsWith("datova_onboarding_complete="));if(item)cookie=decodeURIComponent(item.slice(item.indexOf("=")+1));}catch(error){cookie="BLOCKED"}
+ const panel=document.getElementById("datova-storage-diagnostic")||document.createElement("div");
+ panel.id="datova-storage-diagnostic";
+ panel.style.cssText="position:fixed;z-index:999999;left:10px;right:10px;bottom:12px;padding:12px 14px;background:#171727;color:#fff;border:1px solid #7c5cff;border-radius:10px;font:12px/1.5 Arial,sans-serif;white-space:pre-wrap;box-shadow:0 4px 20px #0008";
+ panel.textContent="DATOVA STORAGE CHECK ("+stage+")\\nOrigin: "+location.origin+"\\nLocal: "+read(localStorage,"datova_onboarding_complete")+" | Cookie: "+cookie+" | Session: "+read(sessionStorage,"datova_onboarding_complete");
+ if(!panel.isConnected)document.body.appendChild(panel);
+ console.info(panel.textContent);
+}
 function markOnboardingComplete(){
  writeStoredValue("datova_intro_seen","1");
  writeStoredValue("datova_onboarding_complete","1");
