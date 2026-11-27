@@ -138,7 +138,12 @@ if("caches" in window){caches.keys().then(keys=>Promise.all(keys.filter(key=>key
   <div><span>DATOVA transfer fee</span><strong>₦0.00</strong></div>
   <div class="transfer-cost-total"><span>Total to debit</span><strong id="transferReviewTotal">₦0.00</strong></div>
  </section>
- <div id="transferPreviewMessage" class="transfer-preview-message" role="status" aria-live="polite">Preview only. This screen verifies recipient details; it does not send money. Secure transfer processing and transaction PIN are not connected.</div>
+ <div id="transferPinArea" class="transfer-pin-area hidden">
+  <label for="transferPin">Your 4-digit transaction PIN</label>
+  <input id="transferPin" type="password" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]{4}" placeholder="Enter transaction PIN">
+  <button type="button" class="wallet-fund-submit" id="walletTransferConfirm">Confirm and send</button>
+ </div>
+ <div id="transferPreviewMessage" class="transfer-preview-message" role="status" aria-live="polite">Enter a recipient and amount to prepare a DATOVA transfer.</div>
  <div class="wallet-security-note"><span>i</span><p>Real-money transfers will only be enabled after DATOVA connects an appropriately authorised payment provider and completes security testing.</p></div>
 </section>
 
