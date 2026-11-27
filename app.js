@@ -63,35 +63,9 @@ function closeAuthModal(){
  if(modal)modal.classList.add("hidden");
  document.body.classList.remove("auth-modal-open");
 }
-function showStorageDiagnostic(stage){
- const safeRead=kind=>{
-  try{
-   const store=kind==="local"?window.localStorage:window.sessionStorage;
-   return store.getItem("datova_onboarding_complete")||"—";
-  }catch(error){return "BLOCKED";}
- };
- let cookie="—";
- try{
-  const item=document.cookie.split("; ").find(part=>part.startsWith("datova_onboarding_complete="));
-  if(item)cookie=decodeURIComponent(item.slice(item.indexOf("=")+1));
- }catch(error){cookie="BLOCKED";}
- try{
-  let panel=document.getElementById("datova-storage-diagnostic");
-  if(!panel){
-   panel=document.createElement("pre");
-   panel.id="datova-storage-diagnostic";
-   panel.style.cssText="position:fixed!important;display:block!important;visibility:visible!important;opacity:1!important;z-index:2147483647!important;left:8px!important;right:8px!important;bottom:8px!important;margin:0!important;padding:12px!important;background:#171727!important;color:#fff!important;border:2px solid #9b7cff!important;border-radius:10px!important;font:12px/1.5 monospace!important;white-space:pre-wrap!important;max-height:35vh!important;overflow:auto!important";
-   (document.body||document.documentElement).appendChild(panel);
-  }
-  panel.textContent="DATOVA STORAGE CHECK ("+stage+")\nOrigin: "+location.origin+"\nLocal: "+safeRead("local")+" | Cookie: "+cookie+" | Session: "+safeRead("session");
-  console.info(panel.textContent);
- }catch(error){console.error("DATOVA diagnostic display failed:",error);try{alert("DATOVA diagnostic failed: "+error.message)}catch(_){}}
-}
-
 function markOnboardingComplete(){
  writeStoredValue("datova_intro_seen","1");
  writeStoredValue("datova_onboarding_complete","1");
- showStorageDiagnostic("AFTER SAVE");
  // Confirm the completion marker immediately so startup can use the latest state.
  try{
   if(localStorage.getItem("datova_onboarding_complete")!=="1")sessionStorage.setItem("datova_onboarding_complete","1");
@@ -640,17 +614,13 @@ function showFirstVisitOnboarding(){
 function launchVisitorExperience(signedInUser){
  if(signedInUser)renderAccount(signedInUser);
  $("#welcomeGate")?.classList.add("hidden");
- // Every visit gets the DATOVA brand intro. Only first-time visitors see onboarding.
+ if(hasCompletedOnboarding()){
+  showApp();
+  return;
+ }
  startOpeningAnimation(()=>{
-  // Read the completion marker when the opening animation finishes, not only
-  // during initial script evaluation. This avoids using a stale startup value.
-  showStorageDiagnostic("AFTER REFRESH / STARTUP");
-  showStorageDiagnostic("AFTER REFRESH / STARTUP");
-  if(hasCompletedOnboarding()){
-   showApp();
-  }else{
-   showFirstVisitOnboarding();
-  }
+  if(hasCompletedOnboarding())showApp();
+  else showFirstVisitOnboarding();
  });
 }
 // Show the opening reveal immediately instead of waiting for Supabase to answer.
