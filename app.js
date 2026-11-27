@@ -268,7 +268,7 @@ const formatNaira=value=>"₦"+Number(value||0).toLocaleString("en-NG",{minimumF
 function updateWalletDisplays(){
  const amount=$("#walletAmountValue"),caption=$(".wallet-balance-caption"),dashboardAmount=$("#dashboardWalletAmountValue"),dashboardStatus=$("#dashboardWalletStatus");
  const shown=walletBalanceVisible;
- const display=walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…";
+ const display=!currentUser?"0.00":walletBalanceState==="ready"?Number(walletBalanceValue||0).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2}):walletBalanceState==="error"?"Unavailable":"Loading…";
  if(!currentUser){
   // Guests do not have a wallet balance to fetch; show a clear zero balance.
   if(amount)amount.textContent="0.00";
