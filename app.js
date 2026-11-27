@@ -771,11 +771,12 @@ if(pinOpen)pinOpen.addEventListener("click",openPinManager);
 if(pinClose)pinClose.addEventListener("click",()=>{pinManager?.classList.add("hidden");pinForm?.reset();pinMessage.textContent="";});
 if(pinForgot)pinForgot.addEventListener("click",async()=>{
  if(!currentUser?.email){pinMessage.textContent="A verified email address is required to recover your PIN.";pinMessage.className="pin-manager-message error";return;}
+ if(!window.datovaTurnstileToken){pinMessage.textContent="Please complete the security check before requesting your recovery email.";pinMessage.className="pin-manager-message error";return;}
  pinForgot.disabled=true;
  try{
   const {error}=await supabaseClient.auth.signInWithOtp({
    email:currentUser.email,
-   options:{shouldCreateUser:false,emailRedirectTo:window.location.origin+window.location.pathname}
+   options:{shouldCreateUser:false,emailRedirectTo:window.location.origin+window.location.pathname,captchaToken:window.datovaTurnstileToken}
   });
   if(error)throw error;
   localStorage.setItem("datova_pin_recovery_pending","1");
@@ -785,7 +786,11 @@ if(pinForgot)pinForgot.addEventListener("click",async()=>{
   console.error("Transaction PIN recovery email failed:",error);
   pinMessage.textContent=error.message||"Could not send the recovery email. Please try again.";
   pinMessage.className="pin-manager-message error";
- }finally{pinForgot.disabled=false;}
+ }finally{
+  pinForgot.disabled=false;
+  window.datovaTurnstileToken="";
+  if(window.datovaTurnstileReset)window.datovaTurnstileReset();
+ }
 });
 if(pinForm)pinForm.addEventListener("submit",async event=>{
  event.preventDefault();
